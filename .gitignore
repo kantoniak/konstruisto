@@ -1,0 +1,9 @@
+# Build
+obj/*
+bin/*
+
+# Libraries
+ext/*
+
+# Visual Studio Code
+.vscode/*

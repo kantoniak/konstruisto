@@ -2,6 +2,14 @@
 
 Simple city-builder using OpenGL. For Windows and Linux.
 
+## Building
+
+Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`.
+
+`make help` will guide you.
+
+Makefile is written for clang++ using MinGW headers.
+
 ## Author and <img src="https://opensource.org/files/osi_symbol.png" height="20" alt="Open Source" /> license
 
 Copyright &copy; 2017 Krzysztof Antoniak.
