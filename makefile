@@ -40,7 +40,9 @@ ifeq ($(OS), Windows_NT)
 
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32
 else
+	INCLUDES += -I$(EXTDIR)/glm/
 
+	LIBS := -lglfw -lGLEW -lGL -lGLU
 endif
 
 DEFINES +=-DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
