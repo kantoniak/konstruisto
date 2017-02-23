@@ -59,6 +59,7 @@ CPPFLAGS += $(INCLUDES)
 
 # Targets
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+HPP_FILES := $(call rwildcard,$(SRCDIR),*.hpp)
 CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 
@@ -78,6 +79,9 @@ clean:
 	@echo "Removing $(OBJDIR)/*..."
 	@$(RM_R) ./$(OBJDIR)/*
 
+format-all:
+	clang-format -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
+
 build: $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
 
 rebuild: clean build
@@ -90,6 +94,6 @@ all: clean build run
 
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
-	@echo "Targets: clean, build, rebuild (clean + build), run, all, help"
+	@echo "Targets: clean, format-all, build, rebuild (clean + build), run, all, help"
 	@echo "CONFIG=[DEBUG|RELEASE]"
 	@echo "HIDE_CONSOLE=[TRUE|FALSE] (Windows)"
