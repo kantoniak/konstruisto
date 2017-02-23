@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 int main() {
 
@@ -52,6 +53,10 @@ int main() {
   }
 
   glfwTerminate();
+
+  glm::perspective(
+      45.f, 16.f/9.f, 0.1f, 100.f
+  );
 
   return 0;
 }

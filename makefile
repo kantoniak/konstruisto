@@ -28,6 +28,8 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/glew-2.0.0/include
 	LDFLAGS  += -L$(EXTDIR)/glew-2.0.0/lib
 
+	INCLUDES += -I$(EXTDIR)/glm/
+
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32
 else
 
