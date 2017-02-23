@@ -94,6 +94,14 @@ all: clean build run
 
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
-	@echo "Targets: clean, format-all, build, rebuild (clean + build), run, all, help"
-	@echo "CONFIG=[DEBUG|RELEASE]"
-	@echo "HIDE_CONSOLE=[TRUE|FALSE] (Windows)"
+	@echo -e "\nTargets:"
+	@echo "  clean"
+	@echo "  format-all"
+	@echo "  build"
+	@echo "  rebuild (clean + build)"
+	@echo "  run"
+	@echo "  all"
+	@echo "  help"
+	@echo "Flags:"
+	@echo "  CONFIG=[DEBUG|RELEASE]"
+	@echo "  HIDE_CONSOLE=[TRUE|FALSE] (Windows)"
