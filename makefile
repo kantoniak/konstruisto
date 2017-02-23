@@ -15,39 +15,47 @@ OBJDIR := obj
 BINDIR := bin
 EXTDIR := ext
 
-CC=clang++
+CC=clang
+CXX=clang++
 RM_R=rm -rf
 
 ifeq ($(OS), Windows_NT)
 	EXTENSION := .exe
+
+	INCLUDES += -I$(EXTDIR)/glfw-3.2.1/include
+	LDFLAGS  += -L$(EXTDIR)/glfw-3.2.1/lib
+
+	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32
 else
 
 endif
 
 DEFINES +=-DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
-CFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self
+CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path
 
 ifeq ($(CONFIG), DEBUG)
 	DEFINES +=-DDEBUG
-	CFLAGS +=-g
+	CPPFLAGS +=-g
 else
-	CFLAGS +=-O3
+	CPPFLAGS +=-O3
 endif
+
+CPPFLAGS += $(INCLUDES)
 
 # Targets
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 
-$(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJ_FILES)
+$(BINDIR)/$(PROJECT_NAME)$(EXTENSION):  $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
-	@echo "[LINK] $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
-	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+	@echo "[LINK] $(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
+	@$(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(@D)
 	@echo "[COMPILE] $< $@"
-	@$(CC) -c -o $@ $< $(CFLAGS) $(DEFINES)
+	@$(CXX) -c -o $@ $< $(CPPFLAGS) $(DEFINES)
 
 clean:
 	@echo "Removing $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)..."
