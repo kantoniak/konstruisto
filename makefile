@@ -7,6 +7,10 @@ ifneq ($(CONFIG), RELEASE)
    CONFIG=DEBUG
 endif
 
+ifneq ($(HIDE_CONSOLE), TRUE)
+   HIDE_CONSOLE=FALSE
+endif
+
 BUILD_DESC = $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT) $(CONFIG)
 
 # Paths and dependencies
@@ -21,6 +25,10 @@ RM_R=rm -rf
 
 ifeq ($(OS), Windows_NT)
 	EXTENSION := .exe
+
+	ifeq ($(HIDE_CONSOLE), TRUE)
+		LDFLAGS += -Wl,--subsystem,windows
+	endif
 
 	INCLUDES += -I$(EXTDIR)/glfw-3.2.1/include
 	LDFLAGS  += -L$(EXTDIR)/glfw-3.2.1/lib
@@ -79,6 +87,7 @@ run:
 all: clean build run
 
 help:
-	@echo $(PROJECT_NAME)
+	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
 	@echo "Targets: clean, build, rebuild (clean + build), run, all, help"
-	@echo "Possible CONFIG= values: DEBUG, RELEASE"
+	@echo "CONFIG=[DEBUG|RELEASE]"
+	@echo "HIDE_CONSOLE=[TRUE|FALSE] (Windows)"
