@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "GLFW/glfw3.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 int main() {
 
@@ -27,6 +28,14 @@ int main() {
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
+
+  glewExperimental = GL_TRUE;
+  GLint glewInitResult = glewInit();
+  if (glewInitResult != GLEW_OK) {
+    glfwTerminate();
+    return -1;
+  }
+
   glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
 
   /* Loop until the user closes the window */

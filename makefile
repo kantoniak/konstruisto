@@ -25,13 +25,16 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/glfw-3.2.1/include
 	LDFLAGS  += -L$(EXTDIR)/glfw-3.2.1/lib
 
-	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32
+	INCLUDES += -I$(EXTDIR)/glew-2.0.0/include
+	LDFLAGS  += -L$(EXTDIR)/glew-2.0.0/lib
+
+	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32
 else
 
 endif
 
 DEFINES +=-DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
-CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path
+CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path -DGLEW_STATIC
 
 ifeq ($(CONFIG), DEBUG)
 	DEFINES +=-DDEBUG

@@ -19,3 +19,4 @@ Contents of this repository is licensed under GNU General Public License, versio
 ### Used libraries
 
 * [GLFW 3.2.1](http://www.glfw.org/) under the zlib/libpng license
+* [GLEW 2.0.0](http://glew.sourceforge.net/) under the Modified BSD License, the Mesa 3-D License (MIT) and the Khronos License (MIT)
