@@ -2,6 +2,7 @@
 
 #include "engine/Engine.hpp"
 #include "engine/Logger.hpp"
+#include "rendering/WindowHandler.hpp"
 #include "states/TestState.hpp"
 
 int main() {
@@ -12,18 +13,16 @@ int main() {
   logger.setLoggingLevel(engine::LoggingLevel::DEBUG);
 
   engine::Engine engine(logger);
-  engine.init();
+  rendering::WindowHandler windowHandler(engine);
+  engine.init(windowHandler);
 
   states::TestState testState(engine);
-  testState.init();
   engine.changeState(testState);
 
-  while (engine.running() && engine.getDeltaSinceStart().count() < 2000) {
+  while (engine.running() && engine.getDeltaSinceStart().count() < 500) {
     engine.tick(std::chrono::high_resolution_clock::now());
   }
 
-  testState.cleanup();
   engine.cleanup();
-
   return 0;
 }

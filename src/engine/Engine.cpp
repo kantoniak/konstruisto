@@ -1,20 +1,37 @@
 #include "Engine.hpp"
 
+#include <cassert>
+
 namespace engine {
 
-Engine::Engine(Logger& logger) : logger(logger) {
+Engine::Engine(Logger& logger) : isRunning(true), logger(logger) {
 }
 
 Engine::~Engine() {
 }
 
-bool Engine::init() {
+bool Engine::running() {
+  return isRunning;
+}
+
+void Engine::stop() {
+  isRunning = false;
+}
+
+bool Engine::init(rendering::WindowHandler& windowHandler) {
   this->start = std::chrono::high_resolution_clock::now();
   this->current = this->start;
+
+  this->windowHandler = &windowHandler;
+
   return true;
 }
 
 void Engine::cleanup() {
+  while (!states.empty()) {
+    states.back()->cleanup();
+    states.pop_back();
+  }
 }
 
 void Engine::changeState(GameState& state) {
@@ -64,6 +81,15 @@ void Engine::tick(std::chrono::time_point<std::chrono::high_resolution_clock> no
 
 std::chrono::milliseconds Engine::getDeltaSinceStart() {
   return std::chrono::duration_cast<std::chrono::milliseconds>(current - start);
+}
+
+Logger& Engine::getLogger() const {
+  return logger;
+}
+
+rendering::WindowHandler& Engine::getWindowHandler() const {
+  assert(windowHandler != nullptr);
+  return *windowHandler;
 }
 
 void Engine::update(std::chrono::milliseconds delta) {

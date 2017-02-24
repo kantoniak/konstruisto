@@ -8,6 +8,10 @@
 #include "GameState.hpp"
 #include "Logger.hpp"
 
+namespace rendering {
+class WindowHandler;
+}
+
 namespace engine {
 
 class Engine {
@@ -16,7 +20,10 @@ public:
   Engine(Logger& logger);
   virtual ~Engine();
 
-  virtual bool init();
+  bool running();
+  void stop();
+
+  virtual bool init(rendering::WindowHandler& windowHandler);
   virtual void cleanup();
 
   void changeState(GameState& state);
@@ -28,16 +35,14 @@ public:
   void tick(std::chrono::time_point<std::chrono::high_resolution_clock> now);
   std::chrono::milliseconds getDeltaSinceStart();
 
-  bool running() const {
-    return true;
-  };
-
-  Logger& getLogger() {
-    return logger;
-  }
+  Logger& getLogger() const;
+  rendering::WindowHandler& getWindowHandler() const;
 
 protected:
+  bool isRunning;
+
   Logger& logger;
+  rendering::WindowHandler* windowHandler;
 
   std::vector<GameState*> states;
   std::chrono::time_point<std::chrono::high_resolution_clock> start;

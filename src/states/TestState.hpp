@@ -6,6 +6,7 @@
 
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
+#include "../rendering/WindowHandler.hpp"
 
 namespace states {
 
@@ -16,6 +17,13 @@ public:
     this->suspended = false;
   };
   virtual ~TestState(){};
+
+  virtual void init() {
+    if (!engine.getWindowHandler().createMainWindow()) {
+      engine.stop();
+      return;
+    }
+  };
 
   virtual void update(std::chrono::milliseconds delta) {
     engine.getLogger().debug("UPDATE %d ms", delta.count());
