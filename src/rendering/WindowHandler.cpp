@@ -61,7 +61,7 @@ bool WindowHandler::createMainWindow() {
   engine.getLogger().debug("GLEW initiated.");
 
   // Callbacks
-  glfwSetWindowCloseCallback(window, callbacks::onWindowClose);
+  // glfwSetWindowCloseCallback(window, callbacks::onWindowClose);
 
   return true;
 }

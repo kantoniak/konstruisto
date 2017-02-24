@@ -19,7 +19,7 @@ int main() {
   states::TestState testState(engine);
   engine.changeState(testState);
 
-  while (engine.running()) {
+  while (engine.running() && !glfwWindowShouldClose(&windowHandler.getWindow())) {
     windowHandler.update();
     engine.tick(std::chrono::high_resolution_clock::now());
   }
