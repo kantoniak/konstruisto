@@ -2,8 +2,14 @@
 
 #include <cassert>
 
+#include "../input/callbacks.hpp"
+
 namespace rendering {
 WindowHandler::WindowHandler(engine::Engine& engine) : engine(engine){};
+
+void WindowHandler::update() {
+  glfwPollEvents();
+}
 
 void WindowHandler::cleanup() {
   glfwMakeContextCurrent(nullptr);
@@ -53,11 +59,19 @@ bool WindowHandler::createMainWindow() {
     return false;
   }
   engine.getLogger().debug("GLEW initiated.");
+
+  // Callbacks
+  glfwSetWindowCloseCallback(window, callbacks::onWindowClose);
+
   return true;
 }
 
 GLFWwindow& WindowHandler::getWindow() {
   assert(window != nullptr);
   return *window;
+}
+
+void WindowHandler::onWindowClose() {
+  engine.stop();
 }
 }

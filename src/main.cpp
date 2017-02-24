@@ -19,10 +19,12 @@ int main() {
   states::TestState testState(engine);
   engine.changeState(testState);
 
-  while (engine.running() && engine.getDeltaSinceStart().count() < 500) {
+  while (engine.running()) {
+    windowHandler.update();
     engine.tick(std::chrono::high_resolution_clock::now());
   }
 
   engine.cleanup();
+  windowHandler.cleanup();
   return 0;
 }

@@ -13,10 +13,14 @@ class WindowHandler {
 public:
   WindowHandler(engine::Engine& engine);
 
+  void update();
   void cleanup();
 
   bool createMainWindow();
   GLFWwindow& getWindow();
+
+  // Event callbacks
+  void onWindowClose();
 
 protected:
   engine::Engine& engine;
