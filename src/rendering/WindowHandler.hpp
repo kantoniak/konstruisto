@@ -18,6 +18,7 @@ public:
 
   bool createMainWindow();
   GLFWwindow& getWindow();
+  float getViewportRatio();
 
   // Event callbacks
   void onWindowResize(int width, int height);

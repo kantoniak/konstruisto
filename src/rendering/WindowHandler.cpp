@@ -40,8 +40,8 @@ bool WindowHandler::createMainWindow() {
   windowTitle += std::string(" ") + BUILD_DESC;
 #endif
 
-  window = glfwCreateWindow(800, 600, windowTitle.c_str(), nullptr, nullptr);
-  glViewport(0, 0, 800, 600);
+  window = glfwCreateWindow(1600, 900, windowTitle.c_str(), nullptr, nullptr);
+  glViewport(0, 0, 1600, 900);
 
   glfwSetWindowUserPointer(window, this);
 
@@ -74,6 +74,12 @@ bool WindowHandler::createMainWindow() {
 GLFWwindow& WindowHandler::getWindow() {
   assert(window != nullptr);
   return *window;
+}
+
+float WindowHandler::getViewportRatio() {
+  int width, height;
+  glfwGetWindowSize(window, &width, &height);
+  return width / (float)height;
 }
 
 void WindowHandler::onWindowResize(int width, int height) {

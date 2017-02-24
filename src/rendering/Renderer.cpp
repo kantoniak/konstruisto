@@ -1,19 +1,24 @@
 #include "Renderer.hpp"
 
 namespace rendering {
-Renderer::Renderer(engine::Engine& engine) : engine(engine){};
+Renderer::Renderer(engine::Engine& engine, Camera& camera) : engine(engine), camera(camera) {
+}
 
 bool Renderer::init() {
 
+  this->camera = camera;
+
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 
+  // TODO(kantoniak): Handle compiler/linker failure
   GLuint vertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/terrain.vs", engine.getLogger());
   GLuint fragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/terrain.fs", engine.getLogger());
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
+  transformLoc = glGetUniformLocation(shaderProgram, "transform");
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  GLfloat vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f};
+  GLfloat vertices[] = {100, 0, -100, -100, 0, -100, 100, 0, 100, -100, 0, 100};
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -27,6 +32,8 @@ bool Renderer::init() {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
+  engine.getLogger().debug(glm::to_string(camera.getViewProjectionMatrix()));
 
   return true;
 }
@@ -43,6 +50,10 @@ void Renderer::renderWorld() {
   glClear(GL_COLOR_BUFFER_BIT);
 
   glUseProgram(shaderProgram);
+
+  glm::mat4 vp = camera.getViewProjectionMatrix();
+  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+
   glBindVertexArray(VAO);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glBindVertexArray(0);
