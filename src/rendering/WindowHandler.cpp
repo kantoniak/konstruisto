@@ -66,7 +66,7 @@ bool WindowHandler::createMainWindow() {
   engine.getLogger().debug("GLEW initiated.");
 
   // Callbacks
-  // glfwSetWindowCloseCallback(window, callbacks::onWindowClose);
+  glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
 
   return true;
 }
@@ -76,7 +76,8 @@ GLFWwindow& WindowHandler::getWindow() {
   return *window;
 }
 
-void WindowHandler::onWindowClose() {
-  engine.stop();
+void WindowHandler::onWindowResize(int width, int height) {
+  engine.getLogger().debug("Window resized to %dx%d", width, height);
+  glViewport(0, 0, width, height);
 }
 }

@@ -20,7 +20,7 @@ public:
   GLFWwindow& getWindow();
 
   // Event callbacks
-  void onWindowClose();
+  void onWindowResize(int width, int height);
 
 protected:
   engine::Engine& engine;

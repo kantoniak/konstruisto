@@ -5,9 +5,9 @@
 
 namespace callbacks {
 
-void onWindowClose(GLFWwindow* window) {
+void onWindowResize(GLFWwindow* window, int width, int height) {
   rendering::WindowHandler* windowHandler = (rendering::WindowHandler*)glfwGetWindowUserPointer(window);
-  windowHandler->onWindowClose();
+  windowHandler->onWindowResize(width, height);
 }
 }
 
