@@ -29,8 +29,9 @@ protected:
   glm::vec3 clearColor;
 
   GLuint shaderProgram;
-  GLint transformLoc;
+  GLuint transformLoc;
   GLuint VBO, VAO;
+  GLuint texture;
 };
 }
 
