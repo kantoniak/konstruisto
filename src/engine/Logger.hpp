@@ -35,10 +35,13 @@ public:
       return;
     }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
     size_t size = 1 + snprintf(nullptr, 0, message.c_str(), args...);
     std::unique_ptr<char[]> buf(new char[size]);
     snprintf(buf.get(), size, message.c_str(), args...);
     const std::string formattedMessage = std::string(buf.get(), buf.get() + size);
+#pragma clang diagnostic pop
 
     this->log(level, formattedMessage);
   }
