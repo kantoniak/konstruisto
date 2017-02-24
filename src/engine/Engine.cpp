@@ -2,6 +2,9 @@
 
 namespace engine {
 
+Engine::Engine(Logger& logger) : logger(logger) {
+}
+
 Engine::~Engine() {
 }
 

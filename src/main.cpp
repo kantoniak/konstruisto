@@ -9,14 +9,12 @@ int main() {
   engine::Logger logger(std::chrono::high_resolution_clock::now(), std::cout);
 
   logger.info("%s %s", PROJECT_NAME, BUILD_DESC);
-#ifdef DEBUG_CONFIG
-  logger.debug("It's debug.");
-#endif
+  logger.setLoggingLevel(engine::LoggingLevel::DEBUG);
 
-  engine::Engine engine;
+  engine::Engine engine(logger);
   engine.init();
 
-  states::TestState testState(logger);
+  states::TestState testState(engine);
   testState.init();
   engine.changeState(testState);
 

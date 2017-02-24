@@ -6,12 +6,14 @@
 #include <vector>
 
 #include "GameState.hpp"
+#include "Logger.hpp"
 
 namespace engine {
 
 class Engine {
 
 public:
+  Engine(Logger& logger);
   virtual ~Engine();
 
   virtual bool init();
@@ -30,7 +32,13 @@ public:
     return true;
   };
 
+  Logger& getLogger() {
+    return logger;
+  }
+
 protected:
+  Logger& logger;
+
   std::vector<GameState*> states;
   std::chrono::time_point<std::chrono::high_resolution_clock> start;
   std::chrono::time_point<std::chrono::high_resolution_clock> current;

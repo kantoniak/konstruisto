@@ -4,27 +4,24 @@
 #include <chrono>
 #include <iostream>
 
+#include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
-#include "../engine/Logger.hpp"
 
 namespace states {
 
 class TestState : public engine::GameState {
 
 public:
-  TestState(engine::Logger& logger) : logger(logger) {
+  TestState(engine::Engine& engine) : GameState(engine) {
     this->suspended = false;
   };
   virtual ~TestState(){};
 
   virtual void update(std::chrono::milliseconds delta) {
-    logger.debug("UPDATE %d ms", delta.count());
+    engine.getLogger().debug("UPDATE %d ms", delta.count());
   };
 
   virtual void render(){};
-
-private:
-  engine::Logger& logger;
 };
 }
 
