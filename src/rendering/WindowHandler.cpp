@@ -35,7 +35,12 @@ bool WindowHandler::createMainWindow() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  window = glfwCreateWindow(800, 600, "OpenGL Test", nullptr, nullptr);
+  std::string windowTitle(PROJECT_NAME);
+#ifdef DEBUG_CONFIG
+  windowTitle += std::string(" ") + BUILD_DESC;
+#endif
+
+  window = glfwCreateWindow(800, 600, windowTitle.c_str(), nullptr, nullptr);
   glViewport(0, 0, 800, 600);
 
   glfwSetWindowUserPointer(window, this);

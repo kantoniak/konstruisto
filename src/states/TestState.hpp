@@ -31,7 +31,7 @@ public:
   }
 
   virtual void update(std::chrono::milliseconds delta) {
-    engine.getLogger().debug("UPDATE %d ms", delta.count());
+    delta = delta;
   };
 
   virtual void render() {
