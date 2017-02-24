@@ -2,6 +2,9 @@
 obj/*
 bin/*
 
+# Build resources
+!bin/shaders
+
 # Libraries
 ext/*
 
