@@ -5,20 +5,26 @@
 #include <iostream>
 
 #include "../engine/GameState.hpp"
+#include "../engine/Logger.hpp"
 
 namespace states {
 
 class TestState : public engine::GameState {
 
 public:
-  TestState(){};
+  TestState(engine::Logger& logger) : logger(logger) {
+    this->suspended = false;
+  };
   virtual ~TestState(){};
 
   virtual void update(std::chrono::milliseconds delta) {
-    std::cout << "UPDATE " << delta.count() << " ms" << std::endl;
+    logger.debug("UPDATE %d ms", delta.count());
   };
 
   virtual void render(){};
+
+private:
+  engine::Logger& logger;
 };
 }
 

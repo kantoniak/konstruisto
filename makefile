@@ -49,7 +49,7 @@ DEFINES +=-DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VE
 CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path -DGLEW_STATIC
 
 ifeq ($(CONFIG), DEBUG)
-	DEFINES +=-DDEBUG
+	DEFINES +=-DDEBUG_CONFIG
 	CPPFLAGS +=-g
 else
 	CPPFLAGS +=-O3

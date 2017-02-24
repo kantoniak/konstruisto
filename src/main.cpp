@@ -1,25 +1,26 @@
 #include <iostream>
 
 #include "engine/Engine.hpp"
+#include "engine/Logger.hpp"
 #include "states/TestState.hpp"
 
 int main() {
+  std::cout.sync_with_stdio(false);
+  engine::Logger logger(std::chrono::high_resolution_clock::now(), std::cout);
 
-  // Test defines
-  std::cout << "Hello, " << PROJECT_NAME << " " << BUILD_DESC << "!" << std::endl;
-#ifdef DEBUG
-  std::cout << "It's debug." << std::endl;
+  logger.info("%s %s", PROJECT_NAME, BUILD_DESC);
+#ifdef DEBUG_CONFIG
+  logger.debug("It's debug.");
 #endif
 
   engine::Engine engine;
   engine.init();
 
-  states::TestState testState;
+  states::TestState testState(logger);
   testState.init();
-
   engine.changeState(testState);
 
-  while (engine.running() && engine.getDeltaSinceStart().count() < 200) {
+  while (engine.running() && engine.getDeltaSinceStart().count() < 2000) {
     engine.tick(std::chrono::high_resolution_clock::now());
   }
 
