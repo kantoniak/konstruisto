@@ -15,6 +15,7 @@ bool Renderer::init() {
   GLuint fragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/terrain.fs", engine.getLogger());
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
+  selectionLoc = glGetUniformLocation(shaderProgram, "selection");
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
@@ -149,6 +150,7 @@ void Renderer::renderWorld() {
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+  glUniform4i(selectionLoc, -5, -14, -3, -12);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glBindTexture(GL_TEXTURE_2D, 0);
