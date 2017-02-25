@@ -28,10 +28,16 @@ protected:
 
   glm::vec3 clearColor;
 
+  // Terrain
   GLuint shaderProgram;
   GLuint transformLoc;
   GLuint VBO, VAO;
   GLuint texture;
+
+  // Buildings
+  GLuint buildingsVAO, buildingsVBO;
+  GLuint buildingsShaderProgram;
+  GLuint buildingsTransformLoc;
 };
 }
 

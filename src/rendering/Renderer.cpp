@@ -66,31 +66,75 @@ bool Renderer::init() {
   glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0);
 
+  // Buildings
+  GLfloat building[] = { // 8x2
+    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f,
+    0.9f, 0.0f, 0.1f, 0.9f, 1.0f, 0.1f,
+    0.9f, 0.0f, 0.9f, 0.9f, 1.0f, 0.9f,
+    0.1f, 0.0f, 0.9f, 0.1f, 1.0f, 0.9f,
+    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f,
+    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, // Reset
+    0.9f, 1.0f, 0.1f, 0.1f, 1.0f, 0.1f,
+    0.9f, 1.0f, 0.9f, 0.1f, 1.0f, 0.9f
+  };
+  glGenVertexArrays(1, &buildingsVAO);
+  glGenBuffers(1, &buildingsVBO);
+  glBindVertexArray(buildingsVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, buildingsVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(building), building, GL_STATIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+  glBindVertexArray(0);
+
+  GLuint buildingsVertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/buildings.vs", engine.getLogger());
+  GLuint buildingsFragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/buildings.fs", engine.getLogger());
+  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, 0, buildingsFragmentShader, engine.getLogger());
+  buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+  glDeleteShader(buildingsVertexShader);
+  glDeleteShader(buildingsFragmentShader);
+
+  // Others
+  glEnable(GL_CULL_FACE);
+
   return true;
 }
 
 void Renderer::cleanup() {
+  glUseProgram(0);
+
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
-  glUseProgram(0);
   glDeleteProgram(this->shaderProgram);
+
+  glDeleteVertexArrays(1, &buildingsVAO);
+  glDeleteProgram(this->buildingsShaderProgram);
 }
 
 void Renderer::renderWorld() {
   glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glUseProgram(shaderProgram);
-
   glm::mat4 vp = camera.getViewProjectionMatrix();
-  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
 
+  // Terrain
+  glUseProgram(shaderProgram);
   glBindVertexArray(VAO);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
+  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glBindVertexArray(0);
 
   glBindTexture(GL_TEXTURE_2D, 0);
+  //glBindVertexArray(0);
+
+  // Buildings
+  glUseProgram(buildingsShaderProgram);
+  glBindVertexArray(buildingsVAO);
+
+  glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, 100);
+
+  glBindVertexArray(0);
 
   glfwSwapBuffers(&engine.getWindowHandler().getWindow());
 }
