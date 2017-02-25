@@ -106,16 +106,20 @@ bool Renderer::init() {
 
   GLuint buildingsVertexShader =
       ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/buildings.vs", engine.getLogger());
+  GLuint buildingsGeomShader =
+      ShaderManager::compileShader(GL_GEOMETRY_SHADER, "shaders/buildings.gs", engine.getLogger());
   GLuint buildingsFragmentShader =
       ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/buildings.fs", engine.getLogger());
-  this->buildingsShaderProgram =
-      ShaderManager::linkProgram(buildingsVertexShader, 0, buildingsFragmentShader, engine.getLogger());
+  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
+                                                            buildingsFragmentShader, engine.getLogger());
   buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
   glDeleteShader(buildingsVertexShader);
+  glDeleteShader(buildingsGeomShader);
   glDeleteShader(buildingsFragmentShader);
 
   // Others
   glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
 
   return true;
 }
@@ -135,7 +139,7 @@ void Renderer::cleanup() {
 
 void Renderer::renderWorld() {
   glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glm::mat4 vp = camera.getViewProjectionMatrix();
 
