@@ -144,13 +144,25 @@ void Renderer::renderWorld() {
 
   glm::mat4 vp = camera.getViewProjectionMatrix();
 
+  // TODO(kantoniak): Move out
+  // Selection
+  glm::vec3 cameraPos = camera.getPosition();
+  glm::vec3 ray = camera.getRay(engine.getWindowHandler().getMousePosition());
+  glm::vec3 onPlane = cameraPos - (cameraPos.y / ray.y) * ray;
+  if (onPlane.x < 0) {
+    onPlane.x--;
+  }
+  if (onPlane.z < 0) {
+    onPlane.z--;
+  }
+
   // Terrain
   glUseProgram(shaderProgram);
   glBindVertexArray(VAO);
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glUniform4i(selectionLoc, -5, -14, -3, -12);
+  glUniform4i(selectionLoc, onPlane.x, onPlane.z, onPlane.x + 1, onPlane.z + 1);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glBindTexture(GL_TEXTURE_2D, 0);

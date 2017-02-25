@@ -40,6 +40,7 @@ bool WindowHandler::createMainWindow() {
   windowTitle += std::string(" ") + BUILD_DESC;
 #endif
 
+  viewportSize = glm::vec2(1600, 900);
   window = glfwCreateWindow(1600, 900, windowTitle.c_str(), nullptr, nullptr);
   glViewport(0, 0, 1600, 900);
 
@@ -67,6 +68,7 @@ bool WindowHandler::createMainWindow() {
 
   // Callbacks
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
+  glfwSetCursorPosCallback(window, callbacks::onMouseMove);
 
   return true;
 }
@@ -77,13 +79,21 @@ GLFWwindow& WindowHandler::getWindow() {
 }
 
 float WindowHandler::getViewportRatio() {
-  int width, height;
-  glfwGetWindowSize(window, &width, &height);
-  return width / (float)height;
+  return viewportSize.x / viewportSize.y;
+}
+
+glm::vec2 WindowHandler::getMousePosition() {
+  return mousePosition;
 }
 
 void WindowHandler::onWindowResize(int width, int height) {
   engine.getLogger().debug("Window resized to %dx%d", width, height);
+  viewportSize.x = width;
+  viewportSize.y = height;
   glViewport(0, 0, width, height);
+}
+
+void WindowHandler::onMouseMove(double x, double y) {
+  mousePosition = (glm::vec2(x, y) / viewportSize * 2.f) - glm::vec2(1, 1);
 }
 }

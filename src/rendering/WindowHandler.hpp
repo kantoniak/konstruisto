@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include "../engine/Engine.hpp"
 
@@ -20,13 +21,19 @@ public:
   GLFWwindow& getWindow();
   float getViewportRatio();
 
+  glm::vec2 getMousePosition();
+
   // Event callbacks
   void onWindowResize(int width, int height);
+  void onMouseMove(double x, double y);
 
 protected:
   engine::Engine& engine;
 
   GLFWwindow* window = nullptr;
+
+  glm::vec2 mousePosition;
+  glm::vec2 viewportSize;
 };
 }
 
