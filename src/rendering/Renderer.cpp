@@ -67,28 +67,49 @@ bool Renderer::init() {
   glBindTexture(GL_TEXTURE_2D, 0);
 
   // Buildings
-  GLfloat building[] = { // 8x2
-    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f,
-    0.9f, 0.0f, 0.1f, 0.9f, 1.0f, 0.1f,
-    0.9f, 0.0f, 0.9f, 0.9f, 1.0f, 0.9f,
-    0.1f, 0.0f, 0.9f, 0.1f, 1.0f, 0.9f,
-    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f,
-    0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, // Reset
-    0.9f, 1.0f, 0.1f, 0.1f, 1.0f, 0.1f,
-    0.9f, 1.0f, 0.9f, 0.1f, 1.0f, 0.9f
-  };
+  GLfloat building[] = {// 8x2
+                        0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.9f, 0.0f, 0.1f, 0.9f, 1.0f, 0.1f,
+                        0.9f, 0.0f, 0.9f, 0.9f, 1.0f, 0.9f, 0.1f, 0.0f, 0.9f, 0.1f, 1.0f, 0.9f,
+                        0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, // Reset
+                        0.9f, 1.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.9f, 1.0f, 0.9f, 0.1f, 1.0f, 0.9f};
+
+  glm::vec3 positions[buildingsCount];
+  for (unsigned int i = 0; i < buildingsCount; i++) {
+    glm::vec3 position;
+    position.x = rand() % (sideSize + 1);
+    position.z = rand() % (sideSize + 1);
+    position.y = rand() % (maxHeight) + 1;
+    position -= glm::vec3(sideSize, 0, sideSize) / 2;
+    positions[i] = position;
+  }
+
   glGenVertexArrays(1, &buildingsVAO);
-  glGenBuffers(1, &buildingsVBO);
   glBindVertexArray(buildingsVAO);
+
+  glGenBuffers(1, &buildingsVBO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsVBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(building), building, GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+
+  glGenBuffers(1, &buildingsInstanceVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * buildingsCount, &positions[0], GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+  glVertexAttribDivisor(1, 1);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  GLuint buildingsVertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/buildings.vs", engine.getLogger());
-  GLuint buildingsFragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/buildings.fs", engine.getLogger());
-  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, 0, buildingsFragmentShader, engine.getLogger());
+  GLuint buildingsVertexShader =
+      ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/buildings.vs", engine.getLogger());
+  GLuint buildingsFragmentShader =
+      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/buildings.fs", engine.getLogger());
+  this->buildingsShaderProgram =
+      ShaderManager::linkProgram(buildingsVertexShader, 0, buildingsFragmentShader, engine.getLogger());
   buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
   glDeleteShader(buildingsVertexShader);
   glDeleteShader(buildingsFragmentShader);
@@ -107,6 +128,8 @@ void Renderer::cleanup() {
   glDeleteProgram(this->shaderProgram);
 
   glDeleteVertexArrays(1, &buildingsVAO);
+  glDeleteBuffers(1, &buildingsVBO);
+  glDeleteBuffers(1, &buildingsInstanceVBO);
   glDeleteProgram(this->buildingsShaderProgram);
 }
 
@@ -125,14 +148,13 @@ void Renderer::renderWorld() {
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glBindTexture(GL_TEXTURE_2D, 0);
-  //glBindVertexArray(0);
 
   // Buildings
   glUseProgram(buildingsShaderProgram);
   glBindVertexArray(buildingsVAO);
 
   glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, 100);
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, buildingsCount);
 
   glBindVertexArray(0);
 

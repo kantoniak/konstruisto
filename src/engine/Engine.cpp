@@ -19,6 +19,8 @@ void Engine::stop() {
 }
 
 bool Engine::init(rendering::WindowHandler& windowHandler) {
+  srand(time(nullptr));
+
   this->start = std::chrono::high_resolution_clock::now();
   this->current = this->start;
 

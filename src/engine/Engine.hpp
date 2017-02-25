@@ -1,6 +1,8 @@
 #ifndef ENGINE_ENGINE_HPP
 #define ENGINE_ENGINE_HPP
 
+#include <cstdlib>
+#include <ctime>
 #include <queue>
 #include <stack>
 #include <vector>

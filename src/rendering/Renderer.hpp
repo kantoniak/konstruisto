@@ -36,8 +36,12 @@ protected:
 
   // Buildings
   GLuint buildingsVAO, buildingsVBO;
+  GLuint buildingsInstanceVBO;
   GLuint buildingsShaderProgram;
   GLuint buildingsTransformLoc;
+  const unsigned int buildingsCount = 300;
+  const unsigned int sideSize = 20;
+  const unsigned int maxHeight = 6;
 };
 }
 

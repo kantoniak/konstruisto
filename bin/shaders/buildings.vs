@@ -6,8 +6,9 @@ layout (location = 1) in vec3 position;
 uniform mat4 transform;
 
 void main() {
-    vec3 v = vertex;
-    v.x += gl_InstanceID;
-    v.y *= 3 * (1 + sin(float(mod(71 * gl_InstanceID, 11))));
+    vec3 v;
+    v.x = vertex.x + position.x;
+    v.z = vertex.z + position.z;
+    v.y = vertex.y * 0.5f * position.y;
     gl_Position = transform * vec4(v, 1.0);
 }
