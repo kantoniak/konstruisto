@@ -32,7 +32,8 @@ public:
   void pushState(GameState& state);
   void popState();
 
-  GameState& getPreviousState();
+  GameState* getCurrentState();
+  GameState* getPreviousState();
 
   void tick(std::chrono::time_point<std::chrono::high_resolution_clock> now);
   std::chrono::milliseconds getDeltaSinceStart();

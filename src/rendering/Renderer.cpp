@@ -1,7 +1,8 @@
 #include "Renderer.hpp"
 
 namespace rendering {
-Renderer::Renderer(engine::Engine& engine, Camera& camera) : engine(engine), camera(camera) {
+Renderer::Renderer(engine::Engine& engine, Camera& camera, input::Selection& selection)
+    : engine(engine), camera(camera), selection(selection) {
 }
 
 bool Renderer::init() {
@@ -146,25 +147,14 @@ void Renderer::renderWorld() {
 
   glm::mat4 vp = camera.getViewProjectionMatrix();
 
-  // TODO(kantoniak): Move mouse picking out of renderer
-  // Selection
-  glm::vec3 cameraPos = camera.getPosition();
-  glm::vec3 ray = camera.getRay(engine.getWindowHandler().getMousePosition());
-  glm::vec3 onPlane = cameraPos - (cameraPos.y / ray.y) * ray;
-  if (onPlane.x < 0) {
-    onPlane.x--;
-  }
-  if (onPlane.z < 0) {
-    onPlane.z--;
-  }
-
   // Terrain
   glUseProgram(shaderProgram);
   glBindVertexArray(VAO);
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glUniform4i(selectionLoc, onPlane.x, onPlane.z, onPlane.x + 1, onPlane.z + 1);
+  glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
+              selection.getTo().y + 1);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glBindTexture(GL_TEXTURE_2D, 0);

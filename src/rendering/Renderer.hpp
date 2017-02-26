@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "../engine/Engine.hpp"
+#include "../input/Selection.hpp"
 #include "Camera.hpp"
 #include "ShaderManager.hpp"
 #include "WindowHandler.hpp"
@@ -15,7 +16,7 @@ namespace rendering {
 class Renderer {
 
 public:
-  Renderer(engine::Engine& engine, Camera& camera);
+  Renderer(engine::Engine& engine, Camera& camera, input::Selection& selection);
 
   bool init();
   void cleanup();
@@ -25,6 +26,7 @@ public:
 protected:
   engine::Engine& engine;
   Camera& camera;
+  input::Selection& selection;
 
   glm::vec3 clearColor;
 

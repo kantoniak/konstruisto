@@ -69,6 +69,7 @@ bool WindowHandler::createMainWindow() {
   // Callbacks
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
   glfwSetCursorPosCallback(window, callbacks::onMouseMove);
+  glfwSetMouseButtonCallback(window, callbacks::onMouseButton);
 
   return true;
 }
@@ -91,6 +92,10 @@ void WindowHandler::onWindowResize(int width, int height) {
   viewportSize.x = width;
   viewportSize.y = height;
   glViewport(0, 0, width, height);
+}
+
+void WindowHandler::onMouseButton(int button, int action, int mods) {
+  engine.getCurrentState()->onMouseButton(button, action, mods);
 }
 
 void WindowHandler::onMouseMove(double x, double y) {

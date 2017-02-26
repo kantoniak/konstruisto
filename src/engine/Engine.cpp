@@ -67,8 +67,18 @@ void Engine::popState() {
     states.back()->unsuspend();
 }
 
-GameState& Engine::getPreviousState() {
-  return *(states.at(states.size() - 2));
+GameState* Engine::getCurrentState() {
+  if (states.empty()) {
+    return nullptr;
+  }
+  return states.at(states.size() - 1);
+}
+
+GameState* Engine::getPreviousState() {
+  if (states.size() < 2) {
+    return nullptr;
+  }
+  return states.at(states.size() - 2);
 }
 
 void Engine::tick(std::chrono::time_point<std::chrono::high_resolution_clock> now) {

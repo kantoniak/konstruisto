@@ -25,6 +25,7 @@ public:
 
   // Event callbacks
   void onWindowResize(int width, int height);
+  void onMouseButton(int button, int action, int mods);
   void onMouseMove(double x, double y);
 
 protected:
