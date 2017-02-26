@@ -92,6 +92,9 @@ run:
 
 all: clean build run
 
+todos:
+	@grep -norwP src/ -e '(TODO|FIXME).*$''
+
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
 	@echo -e "\nTargets:"
@@ -101,6 +104,7 @@ help:
 	@echo "  rebuild (clean + build)"
 	@echo "  run"
 	@echo "  all"
+	@echo "  todos"
 	@echo "  help"
 	@echo "Flags:"
 	@echo "  CONFIG=[DEBUG|RELEASE]"

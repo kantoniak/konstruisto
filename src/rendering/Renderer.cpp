@@ -10,7 +10,7 @@ bool Renderer::init() {
 
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 
-  // TODO(kantoniak): Handle compiler/linker failure
+  // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
   GLuint vertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/terrain.vs", engine.getLogger());
   GLuint fragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/terrain.fs", engine.getLogger());
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
@@ -34,7 +34,7 @@ bool Renderer::init() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  // TODO(kantoniak): Load from file
+  // TODO(kantoniak): Load ground texture from file
   // TODO(kantoniak): Add option to turn off the infinite grid
   unsigned short size = 64;
   unsigned char* pixels = new unsigned char[size * size * 4];
@@ -144,7 +144,7 @@ void Renderer::renderWorld() {
 
   glm::mat4 vp = camera.getViewProjectionMatrix();
 
-  // TODO(kantoniak): Move out
+  // TODO(kantoniak): Move mouse picking out of renderer
   // Selection
   glm::vec3 cameraPos = camera.getPosition();
   glm::vec3 ray = camera.getRay(engine.getWindowHandler().getMousePosition());
