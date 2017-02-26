@@ -87,18 +87,18 @@ glm::vec2 WindowHandler::getMousePosition() {
   return mousePosition;
 }
 
-void WindowHandler::onWindowResize(int width, int height) {
-  engine.getLogger().debug("Window resized to %dx%d", width, height);
-  viewportSize.x = width;
-  viewportSize.y = height;
-  glViewport(0, 0, width, height);
-}
-
 void WindowHandler::onMouseButton(int button, int action, int mods) {
   engine.getCurrentState()->onMouseButton(button, action, mods);
 }
 
 void WindowHandler::onMouseMove(double x, double y) {
   mousePosition = (glm::vec2(x, y) / viewportSize * 2.f) - glm::vec2(1, 1);
+}
+
+void WindowHandler::onWindowResize(int width, int height) {
+  engine.getLogger().debug("Window resized to %dx%d", width, height);
+  viewportSize.x = width;
+  viewportSize.y = height;
+  glViewport(0, 0, width, height);
 }
 }
