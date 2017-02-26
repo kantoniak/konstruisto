@@ -69,17 +69,19 @@ bool Renderer::init() {
 
   // Buildings
   GLfloat building[] = {// 8x2
-                        0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.9f, 0.0f, 0.1f, 0.9f, 1.0f, 0.1f,
-                        0.9f, 0.0f, 0.9f, 0.9f, 1.0f, 0.9f, 0.1f, 0.0f, 0.9f, 0.1f, 1.0f, 0.9f,
-                        0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.1f, 0.0f, 0.1f, 0.1f, 1.0f, 0.1f, // Reset
-                        0.9f, 1.0f, 0.1f, 0.1f, 1.0f, 0.1f, 0.9f, 1.0f, 0.9f, 0.1f, 1.0f, 0.9f};
+                        0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, 1.8f, 0.0f, 0.2f, 1.8f, 1.0f, 0.2f,
+                        1.8f, 0.0f, 1.8f, 1.8f, 1.0f, 1.8f, 0.2f, 0.0f, 1.8f, 0.2f, 1.0f, 1.8f,
+                        0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, 0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, // Reset
+                        1.8f, 1.0f, 0.2f, 0.2f, 1.0f, 0.2f, 1.8f, 1.0f, 1.8f, 0.2f, 1.0f, 1.8f};
 
+  const unsigned int positionMax = sideSize / 2;
   glm::vec3 positions[buildingsCount];
   for (unsigned int i = 0; i < buildingsCount; i++) {
     glm::vec3 position;
-    position.x = rand() % (sideSize + 1);
-    position.z = rand() % (sideSize + 1);
+    position.x = rand() % (positionMax + 1);
+    position.z = rand() % (positionMax + 1);
     position.y = rand() % (maxHeight) + 1;
+    position *= glm::vec3(2, 1, 2);
     position -= glm::vec3(sideSize, 0, sideSize) / 2;
     positions[i] = position;
   }
