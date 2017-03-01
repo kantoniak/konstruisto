@@ -12,6 +12,7 @@
 #include "../input/WindowHandler.hpp"
 #include "../rendering/Renderer.hpp"
 #include "../world/Camera.hpp"
+#include "../world/World.hpp"
 
 namespace states {
 
@@ -30,7 +31,7 @@ public:
 
 private:
   rendering::Renderer renderer;
-  world::Camera camera;
+  world::World world;
   input::Selection selection;
 };
 }

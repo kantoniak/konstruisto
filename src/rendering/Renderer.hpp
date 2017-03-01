@@ -8,7 +8,7 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
-#include "../world/Camera.hpp"
+#include "../world/World.hpp"
 #include "ShaderManager.hpp"
 
 namespace rendering {
@@ -16,7 +16,7 @@ namespace rendering {
 class Renderer {
 
 public:
-  Renderer(engine::Engine& engine, world::Camera& camera, input::Selection& selection);
+  Renderer(engine::Engine& engine, world::World& world, input::Selection& selection);
 
   bool init();
   void cleanup();
@@ -25,7 +25,7 @@ public:
 
 protected:
   engine::Engine& engine;
-  world::Camera& camera;
+  world::World& world;
   input::Selection& selection;
 
   glm::vec3 clearColor;

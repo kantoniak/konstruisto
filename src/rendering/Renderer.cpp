@@ -1,13 +1,11 @@
 #include "Renderer.hpp"
 
 namespace rendering {
-Renderer::Renderer(engine::Engine& engine, world::Camera& camera, input::Selection& selection)
-    : engine(engine), camera(camera), selection(selection) {
+Renderer::Renderer(engine::Engine& engine, world::World& world, input::Selection& selection)
+    : engine(engine), world(world), selection(selection) {
 }
 
 bool Renderer::init() {
-
-  this->camera = camera;
 
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 
@@ -145,7 +143,7 @@ void Renderer::renderWorld() {
   glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::mat4 vp = camera.getViewProjectionMatrix();
+  glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
   // Terrain
   glUseProgram(shaderProgram);

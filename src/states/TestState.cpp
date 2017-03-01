@@ -2,7 +2,7 @@
 
 namespace states {
 
-TestState::TestState(engine::Engine& engine) : GameState(engine), renderer(engine, camera, selection) {
+TestState::TestState(engine::Engine& engine) : GameState(engine), renderer(engine, world, selection) {
   this->suspended = false;
 };
 
@@ -24,7 +24,8 @@ void TestState::init() {
   initialCamera.rotationAroundX = M_PI / 4.f;
   initialCamera.rotationAroundY = 0;
 
-  camera.init(initialPerspective, initialCamera);
+  world.getCamera().init(initialPerspective, initialCamera);
+  world.init();
 
   if (!renderer.init()) {
     engine.stop();
@@ -40,8 +41,8 @@ void TestState::update(std::chrono::milliseconds delta) {
   delta = delta;
   // TODO(kantoniak): Move mouse picking out of state
   // Selection
-  glm::vec3 cameraPos = camera.getPosition();
-  glm::vec3 ray = camera.getRay(engine.getWindowHandler().getMousePosition());
+  glm::vec3 cameraPos = world.getCamera().getPosition();
+  glm::vec3 ray = world.getCamera().getRay(engine.getWindowHandler().getMousePosition());
   glm::vec3 onPlane = cameraPos - (cameraPos.y / ray.y) * ray;
   if (onPlane.x < 0) {
     onPlane.x--;
