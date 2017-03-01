@@ -12,7 +12,7 @@ float calcDiffuseAngleStrength(in float ambientStrength, in vec4 v0, in vec4 v1,
     vec3 normal = normalize(cross(v2.xyz-v1.xyz, v0.xyz-v1.xyz));
 
     vec3 lightDir = normalize(-vec3(-1, 0.7f, -1));
-    float diff = max(dot(normal, vec3(-1, 0.7f, -1)), 0.0);
+    float diff = max(dot(normal, vec3(-1, 0.7f, -0.8f)), 0.0);
     float diffuseStrength = (1 - ambientStrength) * diff;
     return diffuseStrength;
 }

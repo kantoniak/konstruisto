@@ -1,11 +1,14 @@
 #include "Renderer.hpp"
 
+#include "../data/Chunk.hpp"
+
 namespace rendering {
 Renderer::Renderer(engine::Engine& engine, world::World& world, input::Selection& selection)
     : engine(engine), world(world), selection(selection) {
 }
 
 bool Renderer::init() {
+  // TODO(kantoniak): Renderer::init(): clean it up
 
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 
@@ -18,7 +21,9 @@ bool Renderer::init() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  GLfloat vertices[] = {50, 0, -50, -50, 0, -50, 50, 0, 50, -50, 0, 50};
+  GLfloat vertices[] = {
+      data::Chunk::SIDE_LENGTH, 0, 0, 0, 0, 0, data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH, 0, 0,
+      data::Chunk::SIDE_LENGTH};
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -29,6 +34,24 @@ bool Renderer::init() {
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
   glEnableVertexAttribArray(0);
+
+  std::vector<glm::vec2> chunkPositions;
+  chunkPositions.reserve(world.getMap().getChunksCount());
+
+  auto chunkPositionsIt = chunkPositions.begin();
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    *chunkPositionsIt = glm::vec2(chunk->getPosition()) * (float)data::Chunk::SIDE_LENGTH;
+    chunkPositionsIt++;
+  }
+
+  glGenBuffers(1, &terrainPositionVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, terrainPositionVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * world.getMap().getChunksCount(), &chunkPositions[0].x,
+               GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+  glVertexAttribDivisor(1, 1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -65,6 +88,7 @@ bool Renderer::init() {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
   glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0);
+  delete[] pixels;
 
   // Buildings
   GLfloat building[] = {// 8x2
@@ -73,16 +97,16 @@ bool Renderer::init() {
                         0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, 0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, // Reset
                         1.8f, 1.0f, 0.2f, 0.2f, 1.0f, 0.2f, 1.8f, 1.0f, 1.8f, 0.2f, 1.0f, 1.8f};
 
-  const unsigned int positionMax = sideSize / 2;
-  glm::vec3 positions[buildingsCount];
-  for (unsigned int i = 0; i < buildingsCount; i++) {
-    glm::vec3 position;
-    position.x = rand() % (positionMax + 1);
-    position.z = rand() % (positionMax + 1);
-    position.y = rand() % (maxHeight) + 1;
-    position *= glm::vec3(2, 1, 2);
-    position -= glm::vec3(sideSize, 0, sideSize) / 2;
-    positions[i] = position;
+  const unsigned int buildingCount = world.getMap().getBuildingCount();
+  std::vector<glm::vec3> buildingPositions;
+  buildingPositions.reserve(buildingCount);
+
+  auto buildingPositionsIt = buildingPositions.begin();
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    for (data::buildings::Building building : chunk->getResidentials()) {
+      *buildingPositionsIt = glm::vec3(building.x, building.level, building.y);
+      buildingPositionsIt++;
+    }
   }
 
   glGenVertexArrays(1, &buildingsVAO);
@@ -96,10 +120,9 @@ bool Renderer::init() {
 
   glGenBuffers(1, &buildingsInstanceVBO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * buildingsCount, &positions[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
   glVertexAttribDivisor(1, 1);
 
@@ -131,6 +154,7 @@ void Renderer::cleanup() {
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
+  glDeleteBuffers(1, &terrainPositionVBO);
   glDeleteProgram(this->shaderProgram);
 
   glDeleteVertexArrays(1, &buildingsVAO);
@@ -153,7 +177,7 @@ void Renderer::renderWorld() {
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
   glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, world.getMap().getChunksCount());
 
   glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -162,7 +186,7 @@ void Renderer::renderWorld() {
   glBindVertexArray(buildingsVAO);
 
   glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, buildingsCount);
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
 
   glBindVertexArray(0);
 

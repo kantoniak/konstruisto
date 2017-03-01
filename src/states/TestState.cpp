@@ -12,6 +12,8 @@ void TestState::init() {
     return;
   }
 
+  world.getMap().createRandom(glm::ivec2(8, 8));
+
   world::PerspectiveState initialPerspective;
   initialPerspective.fovy = 45.f;
   initialPerspective.aspect = engine.getWindowHandler().getViewportRatio();
@@ -19,8 +21,8 @@ void TestState::init() {
   initialPerspective.zFar = 10000.f;
 
   data::CameraState initialCamera;
-  initialCamera.lookAt = glm::vec3(0);
-  initialCamera.distance = 30;
+  initialCamera.lookAt = glm::vec3(world.getMap().getSize().x, 0, world.getMap().getSize().y) * 0.5f;
+  initialCamera.distance = 80;
   initialCamera.rotationAroundX = M_PI / 4.f;
   initialCamera.rotationAroundY = 0;
 
@@ -37,6 +39,7 @@ void TestState::init() {
 
 void TestState::cleanup() {
   renderer.cleanup();
+  world.cleanup();
 }
 
 void TestState::update(std::chrono::milliseconds delta) {

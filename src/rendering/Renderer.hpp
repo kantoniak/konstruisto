@@ -1,6 +1,8 @@
 #ifndef RENDERING_RENDERER_HPP
 #define RENDERING_RENDERER_HPP
 
+#include <vector>
+
 #include <GL/glew.h>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
@@ -32,8 +34,8 @@ protected:
 
   // Terrain
   GLuint shaderProgram;
-  GLuint transformLoc, selectionLoc;
-  GLuint VBO, VAO;
+  GLuint transformLoc, terrainPositionLoc, selectionLoc;
+  GLuint VBO, VAO, terrainPositionVBO;
   GLuint texture;
 
   // Buildings
