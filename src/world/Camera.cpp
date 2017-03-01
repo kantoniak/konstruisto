@@ -5,7 +5,7 @@
 
 #include <glm/ext.hpp>
 
-namespace rendering {
+namespace world {
 
 void Camera::init(PerspectiveState& initialPerspective, data::CameraState& cameraState) {
   this->perspectiveState = initialPerspective;

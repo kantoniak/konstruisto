@@ -18,7 +18,7 @@ void Engine::stop() {
   isRunning = false;
 }
 
-bool Engine::init(rendering::WindowHandler& windowHandler) {
+bool Engine::init(input::WindowHandler& windowHandler) {
   srand(time(nullptr));
 
   this->start = std::chrono::high_resolution_clock::now();
@@ -99,7 +99,7 @@ Logger& Engine::getLogger() const {
   return logger;
 }
 
-rendering::WindowHandler& Engine::getWindowHandler() const {
+input::WindowHandler& Engine::getWindowHandler() const {
   assert(windowHandler != nullptr);
   return *windowHandler;
 }

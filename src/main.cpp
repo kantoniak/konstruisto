@@ -2,7 +2,7 @@
 
 #include "engine/Engine.hpp"
 #include "engine/Logger.hpp"
-#include "rendering/WindowHandler.hpp"
+#include "input/WindowHandler.hpp"
 #include "states/TestState.hpp"
 
 int main() {
@@ -13,7 +13,7 @@ int main() {
   logger.setLoggingLevel(engine::LoggingLevel::DEBUG);
 
   engine::Engine engine(logger);
-  rendering::WindowHandler windowHandler(engine);
+  input::WindowHandler windowHandler(engine);
   engine.init(windowHandler);
 
   states::TestState testState(engine);

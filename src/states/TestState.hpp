@@ -9,9 +9,9 @@
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
 #include "../input/Selection.hpp"
-#include "../rendering/Camera.hpp"
+#include "../input/WindowHandler.hpp"
 #include "../rendering/Renderer.hpp"
-#include "../rendering/WindowHandler.hpp"
+#include "../world/Camera.hpp"
 
 namespace states {
 
@@ -30,7 +30,7 @@ public:
 
 private:
   rendering::Renderer renderer;
-  rendering::Camera camera;
+  world::Camera camera;
   input::Selection selection;
 };
 }

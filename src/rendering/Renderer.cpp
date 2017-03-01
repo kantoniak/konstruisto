@@ -1,7 +1,7 @@
 #include "Renderer.hpp"
 
 namespace rendering {
-Renderer::Renderer(engine::Engine& engine, Camera& camera, input::Selection& selection)
+Renderer::Renderer(engine::Engine& engine, world::Camera& camera, input::Selection& selection)
     : engine(engine), camera(camera), selection(selection) {
 }
 

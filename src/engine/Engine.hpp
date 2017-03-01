@@ -10,7 +10,7 @@
 #include "GameState.hpp"
 #include "Logger.hpp"
 
-namespace rendering {
+namespace input {
 class WindowHandler;
 }
 
@@ -25,7 +25,7 @@ public:
   bool running();
   void stop();
 
-  virtual bool init(rendering::WindowHandler& windowHandler);
+  virtual bool init(input::WindowHandler& windowHandler);
   virtual void cleanup();
 
   void changeState(GameState& state);
@@ -39,13 +39,13 @@ public:
   std::chrono::milliseconds getDeltaSinceStart();
 
   Logger& getLogger() const;
-  rendering::WindowHandler& getWindowHandler() const;
+  input::WindowHandler& getWindowHandler() const;
 
 protected:
   bool isRunning;
 
   Logger& logger;
-  rendering::WindowHandler* windowHandler;
+  input::WindowHandler* windowHandler;
 
   std::vector<GameState*> states;
   std::chrono::time_point<std::chrono::high_resolution_clock> start;

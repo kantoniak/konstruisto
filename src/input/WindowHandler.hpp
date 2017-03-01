@@ -1,5 +1,5 @@
-#ifndef RENDERING_WINDOWHANDLER_HPP
-#define RENDERING_WINDOWHANDLER_HPP
+#ifndef INPUT_WINDOWHANDLER_HPP
+#define INPUT_WINDOWHANDLER_HPP
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -7,7 +7,7 @@
 
 #include "../engine/Engine.hpp"
 
-namespace rendering {
+namespace input {
 
 class WindowHandler {
 

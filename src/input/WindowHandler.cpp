@@ -2,9 +2,9 @@
 
 #include <cassert>
 
-#include "../input/callbacks.hpp"
+#include "callbacks.hpp"
 
-namespace rendering {
+namespace input {
 WindowHandler::WindowHandler(engine::Engine& engine) : engine(engine){};
 
 void WindowHandler::update() {

@@ -1,5 +1,5 @@
-#ifndef RENDERING_CAMERA_HPP
-#define RENDERING_CAMERA_HPP
+#ifndef WORLD_CAMERA_HPP
+#define WORLD_CAMERA_HPP
 
 #include <cmath>
 
@@ -7,7 +7,7 @@
 
 #include "../data/CameraState.hpp"
 
-namespace rendering {
+namespace world {
 
 struct PerspectiveState {
   float fovy, aspect, zNear, zFar;

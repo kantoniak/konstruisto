@@ -12,7 +12,7 @@ void TestState::init() {
     return;
   }
 
-  rendering::PerspectiveState initialPerspective;
+  world::PerspectiveState initialPerspective;
   initialPerspective.fovy = 45.f;
   initialPerspective.aspect = engine.getWindowHandler().getViewportRatio();
   initialPerspective.zNear = 0.1f;
