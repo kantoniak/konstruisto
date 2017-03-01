@@ -1,14 +1,24 @@
-<img src="graphics/konstruisto.svg" width="360"/>
+<img src="graphics/konstruisto.png" width="360"/>
 
-Simple city-builder using OpenGL. For Windows and Linux.
+Simple city-builder using OpenGL. For Windows and Linux. See http://konstruisto.com/ for more.
 
 ## Building
 
-Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`.
+Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`. `make help` shows possible options.
 
-`make help` will guide you.
+### Deps for Windows
 
-Makefile is written for clang++ using MinGW headers.
+1. You will need `make`, `clang`, `clang++`, `clang-format` in `PATH`.
+2. Install GLEW in `ext/glew-2.0.0`
+3. Install GLFW in `ext/glew-3.2.1`
+4. Extract `glm` library to `ext/glm`
+
+### Deps for Linux
+
+1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
+2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
+3. Install `libglfw3-dev` (3.2.1): https://launchpad.net/ubuntu/+source/glfw3
+4. Extract `glm` library to `ext/glm`
 
 ## Author and <img src="https://opensource.org/files/osi_symbol.png" height="20" alt="Open Source" /> license
 
