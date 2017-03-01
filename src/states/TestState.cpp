@@ -27,6 +27,8 @@ void TestState::init() {
   world.getCamera().init(initialPerspective, initialCamera);
   world.init();
 
+  geometry.init(world);
+
   if (!renderer.init()) {
     engine.stop();
     return;
@@ -39,22 +41,13 @@ void TestState::cleanup() {
 
 void TestState::update(std::chrono::milliseconds delta) {
   delta = delta;
-  // TODO(kantoniak): Move mouse picking out of state
-  // Selection
-  glm::vec3 cameraPos = world.getCamera().getPosition();
-  glm::vec3 ray = world.getCamera().getRay(engine.getWindowHandler().getMousePosition());
-  glm::vec3 onPlane = cameraPos - (cameraPos.y / ray.y) * ray;
-  if (onPlane.x < 0) {
-    onPlane.x--;
-  }
-  if (onPlane.z < 0) {
-    onPlane.z--;
-  }
-  if (!selection.isSelecting()) {
-    selection.from(glm::ivec2(onPlane.x, onPlane.z));
-    selection.to(glm::ivec2(onPlane.x, onPlane.z));
-  } else {
-    selection.to(glm::ivec2(onPlane.x, onPlane.z));
+
+  glm::ivec2 selectionEnd;
+  if (geometry.hitField(engine.getWindowHandler().getMousePosition(), selectionEnd)) {
+    if (!selection.isSelecting()) {
+      selection.from(selectionEnd);
+    }
+    selection.to(selectionEnd);
   }
 };
 
