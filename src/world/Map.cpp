@@ -45,6 +45,15 @@ Map::chunkList Map::getChunks() {
   return chunks;
 }
 
+bool Map::chunkExists(glm::ivec2 chunkPosition) {
+  for (data::Chunk* chunk : getChunks()) {
+    if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {
+      return true;
+    }
+  }
+  return false;
+}
+
 Map::chunkListIter Map::getChunkIterator() {
   return chunks.begin();
 }

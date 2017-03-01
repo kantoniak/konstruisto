@@ -23,6 +23,7 @@ public:
 
   unsigned int getChunksCount();
   chunkList getChunks();
+  bool chunkExists(glm::ivec2 chunkPosition);
   chunkListIter getChunkIterator();
 
   unsigned int getBuildingCount();

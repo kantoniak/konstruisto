@@ -3,6 +3,7 @@
 
 #include "Camera.hpp"
 #include "World.hpp"
+#include "../data/Chunk.hpp"
 
 namespace world {
 
@@ -16,6 +17,9 @@ public:
    */
   bool hitGround(glm::vec2 entryPoint, glm::vec3& hit);
   bool hitField(glm::vec2 entryPoint, glm::ivec2& hit);
+
+  glm::ivec2 pointToField(glm::vec3 point);
+  glm::ivec2 fieldToChunk(glm::ivec2 field);
 
 protected:
   World* world;
