@@ -28,12 +28,13 @@ You will need `premake` [(download)](https://premake.github.io/download.html).
 
 1. Extract repo into `ext/nanovg`.
 2. Build x64 release:
-   ```bash
-   cd ext/nanovg
-   premake --cc=gcc gmake
-   cd build
-   make config=release64 nanovg
-   ```
+
+    ```
+    cd ext/nanovg
+    premake --cc=gcc gmake
+    cd build
+    make config=release64 nanovg
+    ```
 
 ## Author and <img src="https://opensource.org/files/osi_symbol.png" height="20" alt="Open Source" /> license
 
