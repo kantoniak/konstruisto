@@ -1,9 +1,9 @@
 #ifndef WORLD_GEOMETRY_HPP
 #define WORLD_GEOMETRY_HPP
 
+#include "../data/Chunk.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
-#include "../data/Chunk.hpp"
 
 namespace world {
 

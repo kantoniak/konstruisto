@@ -31,7 +31,7 @@ glm::ivec2 Geometry::pointToField(glm::vec3 point) {
 }
 
 glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
-  return field / (int) data::Chunk::SIDE_LENGTH;
+  return field / (int)data::Chunk::SIDE_LENGTH;
 }
 
 World& Geometry::getWorld() {
