@@ -1,6 +1,7 @@
 #ifndef RENDERING_RENDERER_HPP
 #define RENDERING_RENDERER_HPP
 
+#include <string>
 #include <vector>
 
 #include <GL/glew.h>
@@ -9,6 +10,7 @@
 
 #include <nanovg.h>
 
+#include "../engine/DebugInfo.hpp"
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
@@ -37,6 +39,8 @@ protected:
   // UI
   // TODO(kantoniak): Move UI renderer to its class
   NVGcontext* nvgContext;
+  static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
+  static constexpr const char* FONT_SSP_REGULAR_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf";
 
   // Terrain
   GLuint shaderProgram;

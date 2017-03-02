@@ -20,8 +20,10 @@ int main() {
   engine.changeState(testState);
 
   while (engine.running() && !glfwWindowShouldClose(&windowHandler.getWindow())) {
+    engine.getDebugInfo().onFrameStart();
     windowHandler.update();
     engine.tick(std::chrono::high_resolution_clock::now());
+    engine.getDebugInfo().onFrameEnd();
   }
 
   engine.cleanup();

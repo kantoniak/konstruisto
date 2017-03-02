@@ -3,6 +3,7 @@ obj/*
 bin/*
 
 # Build resources
+!bin/assets
 !bin/shaders
 
 # Libraries

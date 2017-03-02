@@ -83,12 +83,13 @@ GameState* Engine::getPreviousState() {
 
 void Engine::tick(std::chrono::time_point<std::chrono::high_resolution_clock> now) {
   auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - current);
-  if (delta < std::chrono::milliseconds(16))
-    return;
 
   this->current = now;
   this->update(delta);
+
+  getDebugInfo().onRenderStart();
   this->render();
+  getDebugInfo().onRenderEnd();
 }
 
 std::chrono::milliseconds Engine::getDeltaSinceStart() {
@@ -97,6 +98,10 @@ std::chrono::milliseconds Engine::getDeltaSinceStart() {
 
 Logger& Engine::getLogger() const {
   return logger;
+}
+
+DebugInfo& Engine::getDebugInfo() {
+  return debugInfo;
 }
 
 input::WindowHandler& Engine::getWindowHandler() const {

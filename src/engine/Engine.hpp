@@ -7,6 +7,7 @@
 #include <stack>
 #include <vector>
 
+#include "DebugInfo.hpp"
 #include "GameState.hpp"
 #include "Logger.hpp"
 
@@ -39,12 +40,14 @@ public:
   std::chrono::milliseconds getDeltaSinceStart();
 
   Logger& getLogger() const;
+  DebugInfo& getDebugInfo();
   input::WindowHandler& getWindowHandler() const;
 
 protected:
   bool isRunning;
 
   Logger& logger;
+  DebugInfo debugInfo;
   input::WindowHandler* windowHandler;
 
   std::vector<GameState*> states;
