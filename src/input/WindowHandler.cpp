@@ -83,6 +83,10 @@ float WindowHandler::getViewportRatio() {
   return viewportSize.x / viewportSize.y;
 }
 
+glm::vec2 WindowHandler::getViewportSize() {
+  return viewportSize;
+}
+
 glm::vec2 WindowHandler::getMousePosition() {
   return mousePosition;
 }

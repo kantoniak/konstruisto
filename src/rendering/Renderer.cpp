@@ -1,5 +1,8 @@
 #include "Renderer.hpp"
 
+#define NANOVG_GL3_IMPLEMENTATION
+#include <nanovg_gl.h>
+
 #include "../data/Chunk.hpp"
 
 namespace rendering {
@@ -142,7 +145,14 @@ bool Renderer::init() {
   glDeleteShader(buildingsGeomShader);
   glDeleteShader(buildingsFragmentShader);
 
-  // Others
+  // UI
+  nvgContext = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
+  if (nvgContext == nullptr) {
+    engine.getLogger().severe("Could not initialize NanoVG context.");
+    return false;
+  }
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
 
@@ -161,6 +171,10 @@ void Renderer::cleanup() {
   glDeleteBuffers(1, &buildingsVBO);
   glDeleteBuffers(1, &buildingsInstanceVBO);
   glDeleteProgram(this->buildingsShaderProgram);
+
+  if (nvgContext) {
+    nvgDeleteGL3(nvgContext);
+  }
 }
 
 void Renderer::renderWorld() {
@@ -168,6 +182,25 @@ void Renderer::renderWorld() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
+
+#ifdef DEBUG_CONFIG
+  // UI
+  const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
+  nvgBeginFrame(nvgContext, viewportSize.x, viewportSize.y, 1.f);
+
+  constexpr unsigned short margin = 10;
+  const NVGcolor bgColor = nvgRGB(34, 34, 34);
+
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext, margin, margin, 20, 20);
+  nvgFillColor(nvgContext, bgColor);
+  nvgFill(nvgContext);
+
+  nvgEndFrame(nvgContext);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
+#endif
 
   // Terrain
   glUseProgram(shaderProgram);

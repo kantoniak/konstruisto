@@ -20,6 +20,7 @@ public:
   bool createMainWindow();
   GLFWwindow& getWindow();
   float getViewportRatio();
+  glm::vec2 getViewportSize();
 
   glm::vec2 getMousePosition();
 

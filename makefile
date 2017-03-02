@@ -38,15 +38,21 @@ ifeq ($(OS), Windows_NT)
 
 	INCLUDES += -I$(EXTDIR)/glm/
 
-	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32
+	INCLUDES += -I$(EXTDIR)/nanovg/src
+	LDFLAGS  += -L$(EXTDIR)/nanovg/build
+
+	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
 else
 	INCLUDES += -I$(EXTDIR)/glm/
 
-	LIBS := -lglfw -lGLEW -lGL -lGLU
+	INCLUDES += -I$(EXTDIR)/nanovg/src
+	LDFLAGS  += -L$(EXTDIR)/nanovg/build
+
+	LIBS := -lglfw -lGLEW -lGL -lGLU -lnanovg
 endif
 
 DEFINES +=-D_USE_MATH_DEFINES -DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
-CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm/ -DGLEW_STATIC
+CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm/  --system-header-prefix=nanovg -DGLEW_STATIC
 
 ifeq ($(CONFIG), DEBUG)
 	DEFINES +=-DDEBUG_CONFIG

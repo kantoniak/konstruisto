@@ -7,6 +7,8 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 
+#include <nanovg.h>
+
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
@@ -31,6 +33,10 @@ protected:
   input::Selection& selection;
 
   glm::vec3 clearColor;
+
+  // UI
+  // TODO(kantoniak): Move UI renderer to its class
+  NVGcontext* nvgContext;
 
   // Terrain
   GLuint shaderProgram;
