@@ -12,7 +12,7 @@ void TestState::init() {
     return;
   }
 
-  world.getMap().createRandom(glm::ivec2(8, 8));
+  world.getMap().createRandom(glm::ivec2(16, 16));
 
   world::PerspectiveState initialPerspective;
   initialPerspective.fovy = 45.f;
