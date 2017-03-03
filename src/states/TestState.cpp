@@ -139,6 +139,10 @@ void TestState::onScroll(double xoffset, double yoffset) {
   world.getCamera().zoom(yoffset * 5);
 }
 
+void TestState::onWindowResize(int width, int height) {
+  world.getCamera().updateAspect(width / (float)height);
+}
+
 void TestState::handleMapDragging(std::chrono::milliseconds delta) {
   const glm::vec2 mousePosition = engine.getWindowHandler().getMousePosition();
   const glm::vec2 dragDelta = mousePosition - dragStart;

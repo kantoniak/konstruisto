@@ -31,6 +31,7 @@ public:
   void onKey(int key, int scancode, int action, int mods);
   void onMouseButton(int button, int action, int mods);
   void onScroll(double xoffset, double yoffset);
+  void onWindowResize(int width, int height);
 
 private:
   rendering::Renderer renderer;

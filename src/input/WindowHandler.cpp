@@ -118,5 +118,6 @@ void WindowHandler::onWindowResize(int width, int height) {
   viewportSize.x = width;
   viewportSize.y = height;
   glViewport(0, 0, width, height);
+  engine.getCurrentState()->onWindowResize(width, height);
 }
 }
