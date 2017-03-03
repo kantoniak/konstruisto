@@ -27,7 +27,7 @@ public:
   bool init();
   void cleanup();
 
-  void renderWorld();
+  void renderWorld(bool renderNormals);
 
 protected:
   engine::Engine& engine;
@@ -56,6 +56,10 @@ protected:
   const unsigned int buildingsCount = 100;
   const unsigned int sideSize = 20;
   const unsigned int maxHeight = 6;
+
+  // Buildings - normals
+  GLuint buildingNormalsTransformLoc;
+  GLuint buildingNormalsShaderProgram;
 };
 }
 

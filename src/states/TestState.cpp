@@ -71,7 +71,7 @@ void TestState::update(std::chrono::milliseconds delta) {
 };
 
 void TestState::render() {
-  renderer.renderWorld();
+  renderer.renderWorld(renderNormals);
 };
 
 void TestState::onKey(int key, int scancode, int action, int mods) {
@@ -110,6 +110,10 @@ void TestState::onKey(int key, int scancode, int action, int mods) {
     rotatingDownwards = true;
   } else if (key == GLFW_KEY_END && action == GLFW_RELEASE) {
     rotatingDownwards = false;
+  }
+
+  if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+    renderNormals = !renderNormals;
   }
 }
 

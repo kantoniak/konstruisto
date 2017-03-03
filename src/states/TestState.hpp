@@ -49,6 +49,8 @@ private:
   void handleMapDragging(std::chrono::milliseconds delta);
   void handleRotatingAroundY(std::chrono::milliseconds delta, bool clockwise);
   void handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards);
+
+  bool renderNormals = false;
 };
 }
 

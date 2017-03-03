@@ -141,9 +141,20 @@ bool Renderer::init() {
   this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
                                                             buildingsFragmentShader, engine.getLogger());
   buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+
+  GLuint buildingNormalsGeomShader =
+      ShaderManager::compileShader(GL_GEOMETRY_SHADER, "shaders/buildings_normals.gs", engine.getLogger());
+  GLuint buildingsNormalFragmentShader =
+      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "shaders/buildings_normals.fs", engine.getLogger());
+  this->buildingNormalsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingNormalsGeomShader,
+                                                                  buildingsNormalFragmentShader, engine.getLogger());
+  buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
+
   glDeleteShader(buildingsVertexShader);
   glDeleteShader(buildingsGeomShader);
-  glDeleteShader(buildingsFragmentShader);
+  glDeleteShader(buildingsVertexShader);
+  glDeleteShader(buildingNormalsGeomShader);
+  glDeleteShader(buildingsNormalFragmentShader);
 
   // UI
   nvgContext = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
@@ -177,12 +188,14 @@ void Renderer::cleanup() {
   glDeleteBuffers(1, &buildingsInstanceVBO);
   glDeleteProgram(this->buildingsShaderProgram);
 
+  glDeleteProgram(this->buildingNormalsShaderProgram);
+
   if (nvgContext) {
     nvgDeleteGL3(nvgContext);
   }
 }
 
-void Renderer::renderWorld() {
+void Renderer::renderWorld(bool renderNormals) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
@@ -208,6 +221,20 @@ void Renderer::renderWorld() {
 
   glBindVertexArray(0);
   glFlush();
+
+#ifdef DEBUG_CONFIG
+  if (renderNormals) {
+    glUseProgram(buildingNormalsShaderProgram);
+    glBindVertexArray(buildingsVAO);
+
+    glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+
+    glBindVertexArray(0);
+    glFlush();
+  }
+#endif
+
   engine.getDebugInfo().onRenderWorldEnd();
 
 #ifdef DEBUG_CONFIG
