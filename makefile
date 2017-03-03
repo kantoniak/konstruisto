@@ -39,14 +39,14 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/glm/
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
-	LDFLAGS  += -L$(EXTDIR)/nanovg/build
+	LDFLAGS  += -L$(EXTDIR)/nanovg/build-windows
 
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
 else
 	INCLUDES += -I$(EXTDIR)/glm/
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
-	LDFLAGS  += -L$(EXTDIR)/nanovg/build
+	LDFLAGS  += -L$(EXTDIR)/nanovg/build-linux
 
 	LIBS := -lglfw -lGLEW -lGL -lGLU -lnanovg
 endif

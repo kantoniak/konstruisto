@@ -24,7 +24,7 @@ Just go with `make rebuild run`. To build release configuration: `make rebuild r
 
 ### Building `nanovg`
 
-You will need `premake` [(download)](https://premake.github.io/download.html).
+You will need `premake4` [(download)](https://premake.github.io/download.html).
 
 1. Extract repo into `ext/nanovg`.
 2. Build x64 release:
@@ -32,7 +32,8 @@ You will need `premake` [(download)](https://premake.github.io/download.html).
     ```
     cd ext/nanovg
     premake --cc=gcc gmake
-    cd build
+    mv build build-[windows|linux]
+    cd build-[windows|linux]
     make config=release64 nanovg
     ```
 
