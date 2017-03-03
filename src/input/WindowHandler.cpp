@@ -70,6 +70,8 @@ bool WindowHandler::createMainWindow() {
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
   glfwSetCursorPosCallback(window, callbacks::onMouseMove);
   glfwSetMouseButtonCallback(window, callbacks::onMouseButton);
+  glfwSetKeyCallback(window, callbacks::onKey);
+  glfwSetScrollCallback(window, callbacks::onScroll);
 
   return true;
 }
@@ -91,12 +93,24 @@ glm::vec2 WindowHandler::getMousePosition() {
   return mousePosition;
 }
 
+glm::vec2 WindowHandler::getMousePositionNormalized() {
+  return (mousePosition / viewportSize * 2.f) - glm::vec2(1, 1);
+}
+
+void WindowHandler::onKey(int key, int scancode, int action, int mods) {
+  engine.getCurrentState()->onKey(key, scancode, action, mods);
+}
+
 void WindowHandler::onMouseButton(int button, int action, int mods) {
   engine.getCurrentState()->onMouseButton(button, action, mods);
 }
 
 void WindowHandler::onMouseMove(double x, double y) {
-  mousePosition = (glm::vec2(x, y) / viewportSize * 2.f) - glm::vec2(1, 1);
+  mousePosition = glm::vec2(x, y);
+}
+
+void WindowHandler::onScroll(double xoffset, double yoffset) {
+  engine.getCurrentState()->onScroll(xoffset, yoffset);
 }
 
 void WindowHandler::onWindowResize(int width, int height) {

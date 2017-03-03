@@ -28,9 +28,9 @@ public:
   virtual void update(std::chrono::milliseconds delta) = 0;
   virtual void render() = 0;
 
-  virtual void onMouseButton(int button, int action, int mods) {
-    button = action = mods = 0;
-  }
+  virtual void onKey(int key, int scancode, int action, int mods) = 0;
+  virtual void onMouseButton(int button, int action, int mods) = 0;
+  virtual void onScroll(double xoffset, double yoffset) = 0;
 
 protected:
   bool suspended;

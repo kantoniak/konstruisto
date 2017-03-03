@@ -23,10 +23,13 @@ public:
   glm::vec2 getViewportSize();
 
   glm::vec2 getMousePosition();
+  glm::vec2 getMousePositionNormalized();
 
   // Event callbacks
+  void onKey(int key, int scancode, int action, int mods);
   void onMouseButton(int button, int action, int mods);
   void onMouseMove(double x, double y);
+  void onScroll(double xoffset, double yoffset);
   void onWindowResize(int width, int height);
 
 protected:

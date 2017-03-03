@@ -28,13 +28,27 @@ public:
   void update(std::chrono::milliseconds delta);
   void render();
 
+  void onKey(int key, int scancode, int action, int mods);
   void onMouseButton(int button, int action, int mods);
+  void onScroll(double xoffset, double yoffset);
 
 private:
   rendering::Renderer renderer;
   world::Geometry geometry;
   world::World world;
   input::Selection selection;
+
+  // TODO(kantoniak): Move actions to InputHandler
+  glm::vec2 dragStart = glm::vec2();
+  bool rmbPressed = false;
+  bool rotatingClockwise = false;
+  bool rotatingCounterClockwise = false;
+  bool rotatingUpwards = false;
+  bool rotatingDownwards = false;
+
+  void handleMapDragging(std::chrono::milliseconds delta);
+  void handleRotatingAroundY(std::chrono::milliseconds delta, bool clockwise);
+  void handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards);
 };
 }
 
