@@ -21,7 +21,7 @@ glm::ivec2 Chunk::getPosition() {
 }
 
 void Chunk::randomizeBuildings() {
-  constexpr unsigned int buildingCount = (SIDE_LENGTH * SIDE_LENGTH / 4) * 0.8f;
+  constexpr unsigned int buildingCount = (SIDE_LENGTH * SIDE_LENGTH / 4) * 0.1f;
   residential.reserve(buildingCount);
   residentialSize = buildingCount;
 
@@ -30,6 +30,8 @@ void Chunk::randomizeBuildings() {
     residential.push_back(data::buildings::Building());
     residential[i].x = (rand() % positionMax) * 2 + position.x * SIDE_LENGTH;
     residential[i].y = (rand() % positionMax) * 2 + position.y * SIDE_LENGTH;
+    residential[i].width = (rand() % 3 + 1) * 2;
+    residential[i].length = (rand() % 3 + 1) * 2;
     residential[i].level = rand() % 6 + 1;
   }
 }

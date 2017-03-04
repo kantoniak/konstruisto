@@ -8,6 +8,8 @@ struct Building {
   unsigned int objectId;
   long x;
   long y;
+  short width;
+  short length;
   unsigned short level;
 };
 }

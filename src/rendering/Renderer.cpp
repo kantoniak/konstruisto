@@ -95,19 +95,22 @@ bool Renderer::init() {
 
   // Buildings
   GLfloat building[] = {// 8x2
-                        0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, 1.8f, 0.0f, 0.2f, 1.8f, 1.0f, 0.2f,
-                        1.8f, 0.0f, 1.8f, 1.8f, 1.0f, 1.8f, 0.2f, 0.0f, 1.8f, 0.2f, 1.0f, 1.8f,
-                        0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, 0.2f, 0.0f, 0.2f, 0.2f, 1.0f, 0.2f, // Reset
-                        1.8f, 1.0f, 0.2f, 0.2f, 1.0f, 0.2f, 1.8f, 1.0f, 1.8f, 0.2f, 1.0f, 1.8f};
+                        0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+                        1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+                        0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Reset
+                        1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
   const unsigned int buildingCount = world.getMap().getBuildingCount();
   std::vector<glm::vec3> buildingPositions;
-  buildingPositions.reserve(buildingCount);
+  buildingPositions.reserve(2 * buildingCount);
 
+  constexpr float buildingMargin = 0.2f;
   auto buildingPositionsIt = buildingPositions.begin();
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     for (data::buildings::Building building : chunk->getResidentials()) {
-      *buildingPositionsIt = glm::vec3(building.x, building.level, building.y);
+      *buildingPositionsIt = glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin);
+      buildingPositionsIt++;
+      *buildingPositionsIt = glm::vec3(building.width - 2*buildingMargin, building.level, building.length - 2*buildingMargin);
       buildingPositionsIt++;
     }
   }
@@ -123,11 +126,15 @@ bool Renderer::init() {
 
   glGenBuffers(1, &buildingsInstanceVBO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
   glVertexAttribDivisor(1, 1);
+
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+  glVertexAttribDivisor(2, 1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
