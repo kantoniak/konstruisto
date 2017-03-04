@@ -25,10 +25,10 @@ void TestState::init() {
   initialCamera.rotationAroundY = 0;
 
   world.getCamera().init(initialPerspective, initialCamera);
-  createRandomWorld();
   world.init();
 
-  geometry.init(world);
+  geometry.init(engine, world);
+  createRandomWorld();
 
   if (!renderer.init()) {
     engine.stop();
@@ -154,12 +154,17 @@ void TestState::createRandomWorld() {
   const unsigned int buildingCount = (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.1f;
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
-    test.width = rand() % 5 + 2;
-    test.length = rand() % 5 + 2;
-    test.level = rand() % 6 + 1;
-    test.x = rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - test.width + 1);
-    test.y = rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - test.length + 1);
-    world.getMap().addBuilding(test);
+    for (int i=0; i<20; i++) {
+      test.width = rand() % 4 + 2;
+      test.length = rand() % 4 + 2;
+      test.level = rand() % 6 + 1;
+      test.x = rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - test.width + 1);
+      test.y = rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - test.length + 1);
+      if (!geometry.checkCollisions(test)) {
+        world.getMap().addBuilding(test);
+        break;
+      }
+    }
   }
 
   world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));

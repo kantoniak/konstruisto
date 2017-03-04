@@ -1,8 +1,9 @@
 #include "Geometry.hpp"
 
 namespace world {
-void Geometry::init(World& world) {
+void Geometry::init(engine::Engine& engine, World& world) {
   this->world = &world;
+  this->engine = &engine;
 }
 
 /**
@@ -34,7 +35,31 @@ glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
   return field / (int)data::Chunk::SIDE_LENGTH;
 }
 
+// TODO(kantoniak): Geometry::checkRectIntersection as template for GLM vectors
+bool Geometry::checkRectIntersection(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2) const {
+  return !(a1.y < b2.y || a2.y > b1.y || a1.x < b2.x || a2.x > b1.x);
+}
+
+bool Geometry::checkCollisions(data::buildings::Building& building) {
+  const glm::vec2 a2 = glm::vec2(building.x, building.y);
+  const glm::vec2 a1 = glm::vec2(building.x + building.width, building.y + building.length);
+  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
+    for (data::buildings::Building other : chunk->getResidentials()) {
+      const glm::vec2 b2 = glm::vec2(other.x, other.y);
+      const glm::vec2 b1 = glm::vec2(other.x + other.width, other.y + other.length);
+      if (checkRectIntersection(a1, a2, b1, b2)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 World& Geometry::getWorld() {
   return *world;
+}
+
+engine::Engine& Geometry::getEngine() {
+  return *engine;
 }
 }
