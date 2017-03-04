@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <stdexcept>
 
 #include "../data/Chunk.hpp"
 
@@ -16,24 +17,24 @@ public:
   Map();
   void cleanup();
 
-  void createRandom(glm::ivec2 sizeInChunks);
-
-  glm::ivec2 getSize();
-  glm::ivec2 getSizeInChunks();
+  void createChunk(glm::ivec2 position);
+  void randomizeChunk(glm::ivec2 position);
 
   unsigned int getChunksCount();
   chunkList getChunks();
   bool chunkExists(glm::ivec2 chunkPosition);
   chunkListIter getChunkIterator();
 
+  void addBuilding(data::buildings::Building building);
   unsigned int getBuildingCount();
 
 protected:
-  glm::ivec2 size;
   std::vector<data::Chunk*> chunks;
 
   // Cached
   unsigned int buildingCount;
+
+  data::Chunk& getChunk(glm::ivec2 chunkPosition);
 };
 }
 

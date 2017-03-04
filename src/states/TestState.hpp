@@ -39,6 +39,8 @@ private:
   world::World world;
   input::Selection selection;
 
+  void createRandomWorld();
+
   // TODO(kantoniak): Move actions to InputHandler
   glm::vec2 dragStart = glm::vec2();
   bool rmbPressed = false;

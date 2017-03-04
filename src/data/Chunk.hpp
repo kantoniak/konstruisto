@@ -13,7 +13,7 @@ class Chunk {
   typedef std::vector<data::buildings::Building>::const_iterator residentialListIter;
 
 public:
-  unsigned const static int SIDE_LENGTH = 16;
+  unsigned const static int SIDE_LENGTH = 64;
 
   Chunk();
   void setObjectId(unsigned int objectId);
@@ -25,6 +25,8 @@ public:
   residentialList getResidentials();
   residentialListIter getResidentialIterator();
   unsigned int getResidentialSize();
+
+  void addBuilding(data::buildings::Building building);
 
 private:
   unsigned int objectId;

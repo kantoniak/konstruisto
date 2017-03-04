@@ -12,8 +12,6 @@ void TestState::init() {
     return;
   }
 
-  world.getMap().createRandom(glm::ivec2(16, 16));
-
   world::PerspectiveState initialPerspective;
   initialPerspective.fovy = 45.f;
   initialPerspective.aspect = engine.getWindowHandler().getViewportRatio();
@@ -21,12 +19,13 @@ void TestState::init() {
   initialPerspective.zFar = 10000.f;
 
   data::CameraState initialCamera;
-  initialCamera.lookAt = glm::vec3(world.getMap().getSize().x, 0, world.getMap().getSize().y) * 0.5f;
+  initialCamera.lookAt = glm::vec3();
   initialCamera.distance = 80;
   initialCamera.rotationAroundX = M_PI / 4.f;
   initialCamera.rotationAroundY = 0;
 
   world.getCamera().init(initialPerspective, initialCamera);
+  createRandomWorld();
   world.init();
 
   geometry.init(world);
@@ -141,6 +140,29 @@ void TestState::onScroll(double xoffset, double yoffset) {
 
 void TestState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
+}
+
+void TestState::createRandomWorld() {
+
+  const glm::ivec2 mapSize = glm::ivec2(2, 2);
+  for (int x = 0; x < mapSize.x; x++) {
+    for (int y = 0; y < mapSize.y; y++) {
+      world.getMap().createChunk(glm::ivec2(x, y));
+    }
+  }
+
+  const unsigned int buildingCount = (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.1f;
+  for (unsigned int i = 0; i < buildingCount; i++) {
+    data::buildings::Building test;
+    test.width = rand() % 5 + 2;
+    test.length = rand() % 5 + 2;
+    test.level = rand() % 6 + 1;
+    test.x = rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - test.width + 1);
+    test.y = rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - test.length + 1);
+    world.getMap().addBuilding(test);
+  }
+
+  world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
 }
 
 void TestState::handleMapDragging(std::chrono::milliseconds delta) {

@@ -47,4 +47,8 @@ Chunk::residentialListIter Chunk::getResidentialIterator() {
 unsigned int Chunk::getResidentialSize() {
   return residentialSize;
 }
+
+void Chunk::addBuilding(data::buildings::Building building) {
+  residential.push_back(building);
+}
 }
