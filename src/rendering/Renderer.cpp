@@ -110,7 +110,8 @@ bool Renderer::init() {
     for (data::buildings::Building building : chunk->getResidentials()) {
       *buildingPositionsIt = glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin);
       buildingPositionsIt++;
-      *buildingPositionsIt = glm::vec3(building.width - 2*buildingMargin, building.level, building.length - 2*buildingMargin);
+      *buildingPositionsIt =
+          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin);
       buildingPositionsIt++;
     }
   }
