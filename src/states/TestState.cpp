@@ -122,6 +122,18 @@ void TestState::onMouseButton(int button, int action, int mods) {
     selection.start(selection.getFrom());
   } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
     selection.stop();
+
+    glm::ivec2 size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
+    data::buildings::Building toAdd;
+    toAdd.width = size.x;
+    toAdd.length = size.y;
+    toAdd.level = 1;
+    toAdd.x = selection.getFrom().x;
+    toAdd.y = selection.getFrom().y;
+    if (!geometry.checkCollisions(toAdd)) {
+      world.getMap().addBuilding(toAdd);
+      renderer.markBuildingDataForUpdate();
+    }
   }
   if (button == GLFW_MOUSE_BUTTON_RIGHT) {
     if (action == GLFW_PRESS) {
@@ -151,10 +163,11 @@ void TestState::createRandomWorld() {
     }
   }
 
-  const unsigned int buildingCount = (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.1f;
+  const unsigned int buildingCount =
+      (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.00f;
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
-    for (int i=0; i<20; i++) {
+    for (int i = 0; i < 20; i++) {
       test.width = rand() % 4 + 2;
       test.length = rand() % 4 + 2;
       test.level = rand() % 6 + 1;

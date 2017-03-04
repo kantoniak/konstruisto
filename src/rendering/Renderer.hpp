@@ -27,6 +27,8 @@ public:
   bool init();
   void cleanup();
 
+  void markBuildingDataForUpdate();
+
   void renderWorld(bool renderNormals);
 
 protected:
@@ -35,6 +37,9 @@ protected:
   input::Selection& selection;
 
   glm::vec3 clearColor;
+
+  bool resendBuildingData = false;
+  void sendBuildingData();
 
   // UI
   // TODO(kantoniak): Move UI renderer to its class

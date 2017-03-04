@@ -2,8 +2,8 @@
 #define WORLD_MAP_HPP
 
 #include <glm/glm.hpp>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 #include "../data/Chunk.hpp"
 

@@ -42,11 +42,11 @@ bool Geometry::checkRectIntersection(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, g
 
 bool Geometry::checkCollisions(data::buildings::Building& building) {
   const glm::vec2 a2 = glm::vec2(building.x, building.y);
-  const glm::vec2 a1 = glm::vec2(building.x + building.width, building.y + building.length);
+  const glm::vec2 a1 = glm::vec2(building.x + building.width - 1, building.y + building.length - 1);
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     for (data::buildings::Building other : chunk->getResidentials()) {
       const glm::vec2 b2 = glm::vec2(other.x, other.y);
-      const glm::vec2 b1 = glm::vec2(other.x + other.width, other.y + other.length);
+      const glm::vec2 b1 = glm::vec2(other.x + other.width - 1, other.y + other.length - 1);
       if (checkRectIntersection(a1, a2, b1, b2)) {
         return true;
       }

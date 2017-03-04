@@ -100,22 +100,6 @@ bool Renderer::init() {
                         0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Reset
                         1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
-  const unsigned int buildingCount = world.getMap().getBuildingCount();
-  std::vector<glm::vec3> buildingPositions;
-  buildingPositions.reserve(2 * buildingCount);
-
-  constexpr float buildingMargin = 0.2f;
-  auto buildingPositionsIt = buildingPositions.begin();
-  for (data::Chunk* chunk : world.getMap().getChunks()) {
-    for (data::buildings::Building building : chunk->getResidentials()) {
-      *buildingPositionsIt = glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin);
-      buildingPositionsIt++;
-      *buildingPositionsIt =
-          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin);
-      buildingPositionsIt++;
-    }
-  }
-
   glGenVertexArrays(1, &buildingsVAO);
   glBindVertexArray(buildingsVAO);
 
@@ -127,7 +111,6 @@ bool Renderer::init() {
 
   glGenBuffers(1, &buildingsInstanceVBO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
@@ -139,6 +122,8 @@ bool Renderer::init() {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
+  markBuildingDataForUpdate();
 
   GLuint buildingsVertexShader =
       ShaderManager::compileShader(GL_VERTEX_SHADER, "shaders/buildings.vs", engine.getLogger());
@@ -203,6 +188,10 @@ void Renderer::cleanup() {
   }
 }
 
+void Renderer::markBuildingDataForUpdate() {
+  resendBuildingData = true;
+}
+
 void Renderer::renderWorld(bool renderNormals) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -221,6 +210,11 @@ void Renderer::renderWorld(bool renderNormals) {
   glBindTexture(GL_TEXTURE_2D, 0);
 
   // Buildings
+  if (resendBuildingData) {
+    sendBuildingData();
+    resendBuildingData = false;
+  }
+
   glUseProgram(buildingsShaderProgram);
   glBindVertexArray(buildingsVAO);
 
@@ -289,5 +283,29 @@ void Renderer::renderWorld(bool renderNormals) {
   glEnable(GL_DEPTH_TEST);
 
   glfwSwapBuffers(&engine.getWindowHandler().getWindow());
+}
+
+void Renderer::sendBuildingData() {
+  const unsigned int buildingCount = world.getMap().getBuildingCount();
+  std::vector<glm::vec3> buildingPositions;
+  buildingPositions.reserve(2 * buildingCount);
+
+  constexpr float buildingMargin = 0.2f;
+  auto buildingPositionsIt = buildingPositions.begin();
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    for (data::buildings::Building building : chunk->getResidentials()) {
+      *buildingPositionsIt = glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin);
+      buildingPositionsIt++;
+      *buildingPositionsIt =
+          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin);
+      buildingPositionsIt++;
+    }
+  }
+
+  glBindVertexArray(buildingsVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 }
 }
