@@ -30,6 +30,7 @@ public:
   void markBuildingDataForUpdate();
 
   void renderWorld(bool renderNormals);
+  void renderUI();
 
 protected:
   engine::Engine& engine;
@@ -46,6 +47,8 @@ protected:
   NVGcontext* nvgContext;
   static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
   static constexpr const char* FONT_SSP_REGULAR_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf";
+  static constexpr const char* FONT_SSP_BOLD = "Source Sans Pro Bold";
+  static constexpr const char* FONT_SSP_BOLD_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf";
 
   // Terrain
   GLuint shaderProgram;

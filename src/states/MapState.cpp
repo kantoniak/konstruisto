@@ -156,6 +156,11 @@ void MapState::onWindowResize(int width, int height) {
 
 void MapState::createRandomWorld() {
 
+  city.name = "Warsaw";
+  city.people = 57950;
+  city.money = 445684;
+  world.getMap().setCurrentCity(&city);
+
   const glm::ivec2 mapSize = glm::ivec2(2, 2);
   for (int x = 0; x < mapSize.x; x++) {
     for (int y = 0; y < mapSize.y; y++) {

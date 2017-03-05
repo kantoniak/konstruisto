@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../data/Chunk.hpp"
+#include "../data/City.hpp"
 
 namespace world {
 
@@ -28,8 +29,13 @@ public:
   void addBuilding(data::buildings::Building building);
   unsigned int getBuildingCount();
 
+  // TODO(kantoniak): Map::setCurrentCity() - change parameter to ObjId one day
+  void setCurrentCity(data::City* city);
+  data::City& getCurrentCity();
+
 protected:
   std::vector<data::Chunk*> chunks;
+  data::City* currentCity;
 
   // Cached
   unsigned int buildingCount;

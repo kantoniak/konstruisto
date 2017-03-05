@@ -159,6 +159,10 @@ bool Renderer::init() {
     engine.getLogger().severe("Could not load font %s from %s.", FONT_SSP_REGULAR, FONT_SSP_REGULAR_PATH);
     return false;
   }
+  if (-1 == nvgCreateFont(nvgContext, FONT_SSP_BOLD, FONT_SSP_BOLD_PATH)) {
+    engine.getLogger().severe("Could not load font %s from %s.", FONT_SSP_BOLD, FONT_SSP_BOLD_PATH);
+    return false;
+  }
 
   glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -245,6 +249,10 @@ void Renderer::renderWorld(bool renderNormals) {
   const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
   nvgBeginFrame(nvgContext, viewportSize.x, viewportSize.y, 1.f);
 
+  // Top bar
+  this->renderUI();
+
+  // Debug
   constexpr unsigned short margin = 10;
   constexpr unsigned short textMargin = 4;
   constexpr unsigned short lineHeight = 18;
@@ -284,6 +292,56 @@ void Renderer::renderWorld(bool renderNormals) {
   glEnable(GL_DEPTH_TEST);
 
   glfwSwapBuffers(&engine.getWindowHandler().getWindow());
+}
+
+void Renderer::renderUI() {
+  const glm::vec2 viewport = engine.getWindowHandler().getViewportSize();
+  constexpr unsigned char topbarHeight = 36;
+  constexpr unsigned char topbarInnerMargin = 12;
+  constexpr unsigned char topbarOuterMargin = 6;
+
+  const NVGcolor bgColor = nvgRGB(34, 34, 34);
+  const NVGcolor textColor = nvgRGB(255, 255, 255);
+
+  const data::City& city = world.getMap().getCurrentCity();
+  const std::string people = "People: " + std::to_string(city.people);
+  const std::string money = "€" + std::to_string(city.money);
+
+  nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+  nvgFontFace(nvgContext, FONT_SSP_BOLD);
+  nvgFontSize(nvgContext, 22.0f);
+  float cityNameWidth = nvgTextBounds(nvgContext, 0, 0, city.name.c_str(), nullptr, nullptr);
+
+  nvgFontFace(nvgContext, FONT_SSP_REGULAR);
+  nvgFontSize(nvgContext, 19.0f);
+  float peopleWidth = nvgTextBounds(nvgContext, 0, 0, people.c_str(), nullptr, nullptr);
+  float moneyWidth = nvgTextBounds(nvgContext, 0, 0, money.c_str(), nullptr, nullptr);
+
+  const unsigned short cityNameBlockWidth = cityNameWidth + 2 * topbarInnerMargin;
+  const unsigned short cityNumbersBlockWidth = peopleWidth + moneyWidth + 3 * topbarInnerMargin;
+  const unsigned short topbarWidth = cityNameBlockWidth + topbarOuterMargin + cityNumbersBlockWidth;
+
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2, 0, cityNameBlockWidth, topbarHeight);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin, 0,
+          cityNumbersBlockWidth, topbarHeight);
+  nvgFillColor(nvgContext, bgColor);
+  nvgFill(nvgContext);
+
+  nvgFillColor(nvgContext, textColor);
+
+  nvgFontFace(nvgContext, FONT_SSP_BOLD);
+  nvgFontSize(nvgContext, 22.0f);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + topbarInnerMargin, topbarHeight / 2, city.name.c_str(),
+          nullptr);
+
+  nvgFontFace(nvgContext, FONT_SSP_REGULAR);
+  nvgFontSize(nvgContext, 19.0f);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + topbarInnerMargin,
+          topbarHeight / 2, people.c_str(), nullptr);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
+                          topbarInnerMargin * 2 + peopleWidth,
+          topbarHeight / 2, money.c_str(), nullptr);
 }
 
 void Renderer::sendBuildingData() {

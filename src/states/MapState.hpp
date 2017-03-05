@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "../data/CameraState.hpp"
+#include "../data/City.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
 #include "../input/Selection.hpp"
@@ -40,6 +41,7 @@ private:
   input::Selection selection;
 
   void createRandomWorld();
+  data::City city;
 
   // TODO(kantoniak): Move actions to InputHandler
   glm::vec2 dragStart = glm::vec2();

@@ -67,6 +67,15 @@ unsigned int Map::getBuildingCount() {
   return buildingCount;
 }
 
+void Map::setCurrentCity(data::City* city) {
+  currentCity = city;
+}
+
+data::City& Map::getCurrentCity() {
+  assert(currentCity != nullptr);
+  return *currentCity;
+}
+
 data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) {
   for (unsigned long it = 0; it < chunks.size(); it++) {
     if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {
