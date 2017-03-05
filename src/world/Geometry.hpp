@@ -22,7 +22,8 @@ public:
   glm::ivec2 pointToField(glm::vec3 point);
   glm::ivec2 fieldToChunk(glm::ivec2 field);
 
-  bool checkRectIntersection(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2) const;
+  template <typename T>
+  bool checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const;
 
   // TODO(kantoniak): Return structure with object IDs by type
   bool checkCollisions(data::buildings::Building& building);

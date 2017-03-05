@@ -35,18 +35,18 @@ glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
   return field / (int)data::Chunk::SIDE_LENGTH;
 }
 
-// TODO(kantoniak): Geometry::checkRectIntersection as template for GLM vectors
-bool Geometry::checkRectIntersection(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2) const {
+template <typename T>
+bool Geometry::checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const {
   return !(a1.y < b2.y || a2.y > b1.y || a1.x < b2.x || a2.x > b1.x);
 }
 
 bool Geometry::checkCollisions(data::buildings::Building& building) {
-  const glm::vec2 a2 = glm::vec2(building.x, building.y);
-  const glm::vec2 a1 = glm::vec2(building.x + building.width - 1, building.y + building.length - 1);
+  const glm::ivec2 a2 = glm::vec2(building.x, building.y);
+  const glm::ivec2 a1 = glm::vec2(building.x + building.width - 1, building.y + building.length - 1);
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     for (data::buildings::Building other : chunk->getResidentials()) {
-      const glm::vec2 b2 = glm::vec2(other.x, other.y);
-      const glm::vec2 b1 = glm::vec2(other.x + other.width - 1, other.y + other.length - 1);
+      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
+      const glm::ivec2 b1 = glm::vec2(other.x + other.width - 1, other.y + other.length - 1);
       if (checkRectIntersection(a1, a2, b1, b2)) {
         return true;
       }
