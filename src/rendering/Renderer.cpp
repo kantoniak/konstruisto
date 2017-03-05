@@ -236,6 +236,7 @@ void Renderer::renderWorld(bool renderNormals) {
     glFlush();
   }
 #endif
+  renderNormals = !renderNormals;
 
   engine.getDebugInfo().onRenderWorldEnd();
 

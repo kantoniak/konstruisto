@@ -1,12 +1,12 @@
-#include "TestState.hpp"
+#include "MapState.hpp"
 
 namespace states {
 
-TestState::TestState(engine::Engine& engine) : GameState(engine), renderer(engine, world, selection) {
+MapState::MapState(engine::Engine& engine) : GameState(engine), renderer(engine, world, selection) {
   suspended = false;
 };
 
-void TestState::init() {
+void MapState::init() {
   if (!engine.getWindowHandler().createMainWindow()) {
     engine.stop();
     return;
@@ -36,12 +36,12 @@ void TestState::init() {
   }
 };
 
-void TestState::cleanup() {
+void MapState::cleanup() {
   renderer.cleanup();
   world.cleanup();
 }
 
-void TestState::update(std::chrono::milliseconds delta) {
+void MapState::update(std::chrono::milliseconds delta) {
   delta = delta;
 
   if (rmbPressed) {
@@ -69,12 +69,12 @@ void TestState::update(std::chrono::milliseconds delta) {
   }
 };
 
-void TestState::render() {
+void MapState::render() {
   renderer.renderWorld(renderNormals);
 };
 
-void TestState::onKey(int key, int scancode, int action, int mods) {
-  // TODO(kantoniak): Refactor TestState::onKey by the end of march. If it's April you can start laughing now :)
+void MapState::onKey(int key, int scancode, int action, int mods) {
+  // TODO(kantoniak): Refactor MapState::onKey by the end of march. If it's April you can start laughing now :)
   scancode = mods = 0;
 
   if (key == GLFW_KEY_MINUS && action != GLFW_RELEASE) {
@@ -116,7 +116,7 @@ void TestState::onKey(int key, int scancode, int action, int mods) {
   }
 }
 
-void TestState::onMouseButton(int button, int action, int mods) {
+void MapState::onMouseButton(int button, int action, int mods) {
   mods = 0;
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
     selection.start(selection.getFrom());
@@ -145,16 +145,16 @@ void TestState::onMouseButton(int button, int action, int mods) {
   }
 }
 
-void TestState::onScroll(double xoffset, double yoffset) {
+void MapState::onScroll(double xoffset, double yoffset) {
   xoffset = 0;
   world.getCamera().zoom(yoffset * 5);
 }
 
-void TestState::onWindowResize(int width, int height) {
+void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
-void TestState::createRandomWorld() {
+void MapState::createRandomWorld() {
 
   const glm::ivec2 mapSize = glm::ivec2(2, 2);
   for (int x = 0; x < mapSize.x; x++) {
@@ -164,7 +164,7 @@ void TestState::createRandomWorld() {
   }
 
   const unsigned int buildingCount =
-      (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.00f;
+      (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.05f;
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
     for (int i = 0; i < 20; i++) {
@@ -183,7 +183,7 @@ void TestState::createRandomWorld() {
   world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
 }
 
-void TestState::handleMapDragging(std::chrono::milliseconds delta) {
+void MapState::handleMapDragging(std::chrono::milliseconds delta) {
   const glm::vec2 mousePosition = engine.getWindowHandler().getMousePosition();
   const glm::vec2 dragDelta = mousePosition - dragStart;
 
@@ -191,13 +191,13 @@ void TestState::handleMapDragging(std::chrono::milliseconds delta) {
   world.getCamera().move(dragSpeed * glm::vec3(dragDelta.x, 0.f, dragDelta.y));
 }
 
-void TestState::handleRotatingAroundY(std::chrono::milliseconds delta, bool clockwise) {
+void MapState::handleRotatingAroundY(std::chrono::milliseconds delta, bool clockwise) {
   float rotationDelta = M_PI * delta.count() / 1000.f;
   float modifier = (clockwise ? 1.f : -1.f);
   world.getCamera().rotateAroundY(rotationDelta * modifier);
 }
 
-void TestState::handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards) {
+void MapState::handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards) {
   float rotationDelta = M_PI * delta.count() / 1000.f;
   float modifier = (upwards ? 1.f : -1.f);
   world.getCamera().rotateAroundX(rotationDelta * modifier);

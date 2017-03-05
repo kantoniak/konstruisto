@@ -3,7 +3,7 @@
 #include "engine/Engine.hpp"
 #include "engine/Logger.hpp"
 #include "input/WindowHandler.hpp"
-#include "states/TestState.hpp"
+#include "states/MapState.hpp"
 
 int main() {
   std::cout.sync_with_stdio(false);
@@ -16,8 +16,8 @@ int main() {
   input::WindowHandler windowHandler(engine);
   engine.init(windowHandler);
 
-  states::TestState testState(engine);
-  engine.changeState(testState);
+  states::MapState mapState(engine);
+  engine.changeState(mapState);
 
   while (engine.running() && !glfwWindowShouldClose(&windowHandler.getWindow())) {
     engine.getDebugInfo().onFrameStart();

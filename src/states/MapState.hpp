@@ -1,5 +1,5 @@
-#ifndef STATES_TESTSTATE_HPP
-#define STATES_TESTSTATE_HPP
+#ifndef STATES_MAPSTATE_HPP
+#define STATES_MAPSTATE_HPP
 
 #include <chrono>
 #include <cmath>
@@ -17,10 +17,10 @@
 
 namespace states {
 
-class TestState : public engine::GameState {
+class MapState : public engine::GameState {
 
 public:
-  TestState(engine::Engine& engine);
+  MapState(engine::Engine& engine);
 
   void init();
   void cleanup();
