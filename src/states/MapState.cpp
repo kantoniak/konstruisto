@@ -111,8 +111,12 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
     rotatingDownwards = false;
   }
 
-  if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+  if (key == GLFW_KEY_N && action == GLFW_PRESS) {
     renderNormals = !renderNormals;
+  }
+
+  if (GLFW_KEY_1 <= key && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
+    newBuildingHeight = key - GLFW_KEY_1 + 1;
   }
 }
 
@@ -127,7 +131,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
     data::buildings::Building toAdd;
     toAdd.width = size.x;
     toAdd.length = size.y;
-    toAdd.level = 1;
+    toAdd.level = newBuildingHeight;
     toAdd.x = selection.getFrom().x;
     toAdd.y = selection.getFrom().y;
     if (!geometry.checkCollisions(toAdd)) {

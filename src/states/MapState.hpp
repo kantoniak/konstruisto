@@ -55,6 +55,7 @@ private:
   void handleRotatingAroundY(std::chrono::milliseconds delta, bool clockwise);
   void handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards);
 
+  short newBuildingHeight = 1;
   bool renderNormals = false;
 };
 }
