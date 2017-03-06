@@ -15,6 +15,7 @@
 #include "../world/Camera.hpp"
 #include "../world/Geometry.hpp"
 #include "../world/World.hpp"
+#include "MapPauseState.hpp"
 
 namespace states {
 
@@ -57,6 +58,10 @@ private:
 
   short newBuildingHeight = 1;
   bool renderNormals = false;
+
+  // Pause screen
+  MapPauseState pauseState;
+  void switchToPauseState();
 };
 }
 

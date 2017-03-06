@@ -344,6 +344,10 @@ void Renderer::renderUI() {
           topbarHeight / 2, money.c_str(), nullptr);
 }
 
+NVGcontext* Renderer::getNvgContext() {
+  return nvgContext;
+}
+
 void Renderer::sendBuildingData() {
   const unsigned int buildingCount = world.getMap().getBuildingCount();
   std::vector<glm::vec3> buildingPositions;

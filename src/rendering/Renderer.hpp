@@ -32,6 +32,9 @@ public:
   void renderWorld(bool renderNormals);
   void renderUI();
 
+  // FIXME(kantoniak): Renderer::getNvgContext() is a dirty hack and should be removed ASAP
+  NVGcontext* getNvgContext();
+
 protected:
   engine::Engine& engine;
   world::World& world;

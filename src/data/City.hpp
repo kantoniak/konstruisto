@@ -2,6 +2,7 @@
 #define DATA_CITY_HPP
 
 #include <glm/glm.hpp>
+#include <string>
 
 namespace data {
 struct City {

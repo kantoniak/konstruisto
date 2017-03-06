@@ -2,7 +2,8 @@
 
 namespace states {
 
-MapState::MapState(engine::Engine& engine) : GameState(engine), renderer(engine, world, selection) {
+MapState::MapState(engine::Engine& engine)
+    : GameState(engine), renderer(engine, world, selection), pauseState(engine, world) {
   suspended = false;
 };
 
@@ -118,6 +119,10 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   if (GLFW_KEY_1 <= key && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
     newBuildingHeight = key - GLFW_KEY_1 + 1;
   }
+
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    switchToPauseState();
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int mods) {
@@ -210,5 +215,10 @@ void MapState::handleRotatingAroundX(std::chrono::milliseconds delta, bool upwar
   float rotationDelta = M_PI * delta.count() / 1000.f;
   float modifier = (upwards ? 1.f : -1.f);
   world.getCamera().rotateAroundX(rotationDelta * modifier);
+}
+
+void MapState::switchToPauseState() {
+  pauseState.setNvgContext(renderer.getNvgContext());
+  engine.pushState(pauseState);
 }
 }

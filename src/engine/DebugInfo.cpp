@@ -81,7 +81,7 @@ void DebugInfo::updateTimes() {
     renderUITime += renderUITimes[it];
   }
   frameTime /= AVG_SAMPLES;
-  FPS = 1000 / frameTime;
+  FPS = frameTime ? 1000 / frameTime : 0;
   renderTime /= AVG_SAMPLES;
   renderWorldTime /= AVG_SAMPLES;
   renderUITime /= AVG_SAMPLES;
