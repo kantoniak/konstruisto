@@ -2,14 +2,21 @@
 
 namespace states {
 
-MapPauseState::MapPauseState(engine::Engine& engine, world::World& world) : GameState(engine), world(world) {
+MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer)
+    : GameState(engine), world(world), renderer(renderer) {
   nvgContext = nullptr;
 }
 
 void MapPauseState::update(std::chrono::milliseconds delta) {
   delta = delta;
 }
+
 void MapPauseState::render() {
+  renderer.prepareFrame();
+
+  renderer.renderWorld();
+  engine.getDebugInfo().onRenderWorldEnd();
+
   if (!nvgContext) {
     engine.getLogger().debug("No NVG context");
     return;
@@ -37,9 +44,9 @@ void MapPauseState::render() {
 
   nvgEndFrame(nvgContext);
   glFlush();
-  engine.getDebugInfo().onRenderUIEnd();
 
-  glfwSwapBuffers(&engine.getWindowHandler().getWindow());
+  engine.getDebugInfo().onRenderUIEnd();
+  renderer.sendFrame();
 }
 
 void MapPauseState::onKey(int key, int scancode, int action, int mods) {
@@ -55,8 +62,7 @@ void MapPauseState::onScroll(double xoffset, double yoffset) {
   xoffset = yoffset = 0;
 }
 void MapPauseState::onWindowResize(int width, int height) {
-  width = height = 0;
-  render();
+  world.getCamera().updateAspect(width / (float)height);
 }
 
 void MapPauseState::setNvgContext(NVGcontext* nvgContext) {

@@ -29,8 +29,14 @@ public:
 
   void markBuildingDataForUpdate();
 
-  void renderWorld(bool renderNormals);
+  void prepareFrame();
+  void renderWorld();
+  void renderDebug(bool renderNormals);
+  void prepareUI();
   void renderUI();
+  void renderDebugUI();
+  void sendUI();
+  void sendFrame();
 
   // FIXME(kantoniak): Renderer::getNvgContext() is a dirty hack and should be removed ASAP
   NVGcontext* getNvgContext();

@@ -15,7 +15,7 @@ namespace states {
 class MapPauseState : public engine::GameState {
 
 public:
-  MapPauseState(engine::Engine& engine, world::World& world);
+  MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer);
 
   void update(std::chrono::milliseconds delta);
   void render();
@@ -30,6 +30,7 @@ public:
 
 private:
   world::World& world;
+  rendering::Renderer& renderer;
   NVGcontext* nvgContext;
 };
 }

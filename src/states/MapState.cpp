@@ -3,7 +3,7 @@
 namespace states {
 
 MapState::MapState(engine::Engine& engine)
-    : GameState(engine), renderer(engine, world, selection), pauseState(engine, world) {
+    : GameState(engine), renderer(engine, world, selection), pauseState(engine, world, renderer) {
   suspended = false;
 };
 
@@ -71,7 +71,23 @@ void MapState::update(std::chrono::milliseconds delta) {
 };
 
 void MapState::render() {
-  renderer.renderWorld(renderNormals);
+  renderer.prepareFrame();
+
+  renderer.renderWorld();
+#ifdef DEBUG_CONFIG
+  renderer.renderDebug(renderNormals);
+#endif
+  engine.getDebugInfo().onRenderWorldEnd();
+
+  renderer.prepareUI();
+  renderer.renderUI();
+#ifdef DEBUG_CONFIG
+  renderer.renderDebugUI();
+#endif
+  renderer.sendUI();
+  engine.getDebugInfo().onRenderUIEnd();
+
+  renderer.sendFrame();
 };
 
 void MapState::onKey(int key, int scancode, int action, int mods) {

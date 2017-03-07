@@ -196,10 +196,17 @@ void Renderer::markBuildingDataForUpdate() {
   resendBuildingData = true;
 }
 
-void Renderer::renderWorld(bool renderNormals) {
+void Renderer::prepareFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
 
-  glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
+void Renderer::renderWorld() {
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
+
+  const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
   // Terrain
   glUseProgram(shaderProgram);
@@ -227,9 +234,12 @@ void Renderer::renderWorld(bool renderNormals) {
 
   glBindVertexArray(0);
   glFlush();
+}
 
-#ifdef DEBUG_CONFIG
+void Renderer::renderDebug(bool renderNormals) {
   if (renderNormals) {
+    const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
+
     glUseProgram(buildingNormalsShaderProgram);
     glBindVertexArray(buildingsVAO);
 
@@ -239,59 +249,11 @@ void Renderer::renderWorld(bool renderNormals) {
     glBindVertexArray(0);
     glFlush();
   }
-#endif
-  renderNormals = !renderNormals;
+}
 
-  engine.getDebugInfo().onRenderWorldEnd();
-
-#ifdef DEBUG_CONFIG
-  // UI
+void Renderer::prepareUI() {
   const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
   nvgBeginFrame(nvgContext, viewportSize.x, viewportSize.y, 1.f);
-
-  // Top bar
-  this->renderUI();
-
-  // Debug
-  constexpr unsigned short margin = 10;
-  constexpr unsigned short textMargin = 4;
-  constexpr unsigned short lineHeight = 18;
-  const NVGcolor bgColor = nvgRGB(34, 34, 34);
-  const NVGcolor textColor = nvgRGB(255, 255, 255);
-
-  const std::string fps = "FPS " + std::to_string(engine.getDebugInfo().getFPS());
-  const std::string frame = "Frame: " + std::to_string(engine.getDebugInfo().getFrameTime()) + " ms";
-  const std::string render = "Render: " + std::to_string(engine.getDebugInfo().getRenderTime()) + " ms";
-  const std::string renderWorld = "  World: " + std::to_string(engine.getDebugInfo().getRenderWorldTime()) + " ms";
-  const std::string renderUI = "  UI: " + std::to_string(engine.getDebugInfo().getRenderUITime()) + " ms";
-
-  nvgBeginPath(nvgContext);
-  nvgRect(nvgContext, margin, margin, 100, 2 * textMargin + 5 * lineHeight);
-  nvgFillColor(nvgContext, bgColor);
-  nvgFill(nvgContext);
-
-  nvgFontSize(nvgContext, 16.0f);
-  nvgFontFace(nvgContext, FONT_SSP_REGULAR);
-  nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
-  nvgFillColor(nvgContext, textColor);
-  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f, fps.c_str(), nullptr);
-  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + lineHeight, frame.c_str(), nullptr);
-  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 2 * lineHeight, render.c_str(), nullptr);
-  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 3 * lineHeight, renderWorld.c_str(),
-          nullptr);
-  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 4 * lineHeight, renderUI.c_str(),
-          nullptr);
-
-  nvgEndFrame(nvgContext);
-  glFlush();
-  engine.getDebugInfo().onRenderUIEnd();
-#endif
-
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-  glEnable(GL_CULL_FACE);
-  glEnable(GL_DEPTH_TEST);
-
-  glfwSwapBuffers(&engine.getWindowHandler().getWindow());
 }
 
 void Renderer::renderUI() {
@@ -342,6 +304,46 @@ void Renderer::renderUI() {
   nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
                           topbarInnerMargin * 2 + peopleWidth,
           topbarHeight / 2, money.c_str(), nullptr);
+}
+
+void Renderer::renderDebugUI() {
+  constexpr unsigned short margin = 10;
+  constexpr unsigned short textMargin = 4;
+  constexpr unsigned short lineHeight = 18;
+  const NVGcolor bgColor = nvgRGB(34, 34, 34);
+  const NVGcolor textColor = nvgRGB(255, 255, 255);
+
+  const std::string fps = "FPS " + std::to_string(engine.getDebugInfo().getFPS());
+  const std::string frame = "Frame: " + std::to_string(engine.getDebugInfo().getFrameTime()) + " ms";
+  const std::string render = "Render: " + std::to_string(engine.getDebugInfo().getRenderTime()) + " ms";
+  const std::string renderWorld = "  World: " + std::to_string(engine.getDebugInfo().getRenderWorldTime()) + " ms";
+  const std::string renderUI = "  UI: " + std::to_string(engine.getDebugInfo().getRenderUITime()) + " ms";
+
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext, margin, margin, 100, 2 * textMargin + 5 * lineHeight);
+  nvgFillColor(nvgContext, bgColor);
+  nvgFill(nvgContext);
+
+  nvgFontSize(nvgContext, 16.0f);
+  nvgFontFace(nvgContext, FONT_SSP_REGULAR);
+  nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+  nvgFillColor(nvgContext, textColor);
+  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f, fps.c_str(), nullptr);
+  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + lineHeight, frame.c_str(), nullptr);
+  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 2 * lineHeight, render.c_str(), nullptr);
+  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 3 * lineHeight, renderWorld.c_str(),
+          nullptr);
+  nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 4 * lineHeight, renderUI.c_str(),
+          nullptr);
+}
+
+void Renderer::sendUI() {
+  nvgEndFrame(nvgContext);
+  glFlush();
+}
+
+void Renderer::sendFrame() {
+  glfwSwapBuffers(&engine.getWindowHandler().getWindow());
 }
 
 NVGcontext* Renderer::getNvgContext() {
