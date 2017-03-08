@@ -15,4 +15,8 @@ Camera& World::getCamera() {
 Map& World::getMap() {
   return map;
 }
+
+Timer& World::getTimer() {
+  return timer;
+}
 }

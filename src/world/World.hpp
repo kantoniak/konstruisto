@@ -3,6 +3,7 @@
 
 #include "Camera.hpp"
 #include "Map.hpp"
+#include "Timer.hpp"
 
 namespace world {
 
@@ -14,10 +15,12 @@ public:
 
   Camera& getCamera();
   Map& getMap();
+  Timer& getTimer();
 
 protected:
   Camera camera;
   Map map;
+  Timer timer;
 };
 }
 

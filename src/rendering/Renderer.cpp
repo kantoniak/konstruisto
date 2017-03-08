@@ -243,6 +243,7 @@ void Renderer::renderUI() {
   constexpr unsigned char topbarOuterMargin = 6;
 
   const data::City& city = world.getMap().getCurrentCity();
+  const std::string date = world.getTimer().getDate();
   const std::string people = "People: " + std::to_string(city.people);
   const std::string money = "€" + std::to_string(city.money);
 
@@ -253,16 +254,21 @@ void Renderer::renderUI() {
 
   nvgFontFace(nvgContext, FONT_SSP_REGULAR);
   nvgFontSize(nvgContext, 19.0f);
+  float dateWidth = nvgTextBounds(nvgContext, 0, 0, date.c_str(), nullptr, nullptr);
   float peopleWidth = nvgTextBounds(nvgContext, 0, 0, people.c_str(), nullptr, nullptr);
   float moneyWidth = nvgTextBounds(nvgContext, 0, 0, money.c_str(), nullptr, nullptr);
 
   const unsigned short cityNameBlockWidth = cityNameWidth + 2 * topbarInnerMargin;
+  const unsigned short dateBlockWidth = dateWidth + 2 * topbarInnerMargin;
   const unsigned short cityNumbersBlockWidth = peopleWidth + moneyWidth + 3 * topbarInnerMargin;
-  const unsigned short topbarWidth = cityNameBlockWidth + topbarOuterMargin + cityNumbersBlockWidth;
+  const unsigned short topbarWidth =
+      cityNameBlockWidth + dateBlockWidth + cityNumbersBlockWidth + 2 * topbarOuterMargin;
 
   nvgBeginPath(nvgContext);
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2, 0, cityNameBlockWidth, topbarHeight);
-  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin, 0,
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin, 0, dateBlockWidth,
+          topbarHeight);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin, 0,
           cityNumbersBlockWidth, topbarHeight);
   nvgFillColor(nvgContext, engine.getUI().getBackgroundColor());
   nvgFill(nvgContext);
@@ -277,8 +283,11 @@ void Renderer::renderUI() {
   nvgFontFace(nvgContext, FONT_SSP_REGULAR);
   nvgFontSize(nvgContext, 19.0f);
   nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + topbarInnerMargin,
+          topbarHeight / 2, date.c_str(), nullptr);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
+                          topbarInnerMargin,
           topbarHeight / 2, people.c_str(), nullptr);
-  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
                           topbarInnerMargin * 2 + peopleWidth,
           topbarHeight / 2, money.c_str(), nullptr);
 }
