@@ -8,10 +8,6 @@ MapState::MapState(engine::Engine& engine)
 };
 
 void MapState::init() {
-  if (!engine.getWindowHandler().createMainWindow()) {
-    engine.stop();
-    return;
-  }
 
   world::PerspectiveState initialPerspective;
   initialPerspective.fovy = 45.f;
@@ -234,7 +230,6 @@ void MapState::handleRotatingAroundX(std::chrono::milliseconds delta, bool upwar
 }
 
 void MapState::switchToPauseState() {
-  pauseState.setNvgContext(renderer.getNvgContext());
   engine.pushState(pauseState);
 }
 }

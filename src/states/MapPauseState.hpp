@@ -17,6 +17,8 @@ class MapPauseState : public engine::GameState {
 public:
   MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer);
 
+  void init();
+
   void update(std::chrono::milliseconds delta);
   void render();
 
@@ -24,9 +26,6 @@ public:
   void onMouseButton(int button, int action, int mods);
   void onScroll(double xoffset, double yoffset);
   void onWindowResize(int width, int height);
-
-  // TODO(kantoniak): MapPauseState::setNvgContext() - write UI renderer
-  void setNvgContext(NVGcontext* nvgContext);
 
 private:
   world::World& world;

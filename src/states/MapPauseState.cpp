@@ -7,6 +7,10 @@ MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, render
   nvgContext = nullptr;
 }
 
+void MapPauseState::init() {
+  nvgContext = engine.getUI().getContext();
+}
+
 void MapPauseState::update(std::chrono::milliseconds delta) {
   delta = delta;
 }
@@ -63,9 +67,5 @@ void MapPauseState::onScroll(double xoffset, double yoffset) {
 }
 void MapPauseState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
-}
-
-void MapPauseState::setNvgContext(NVGcontext* nvgContext) {
-  this->nvgContext = nvgContext;
 }
 }

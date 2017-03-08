@@ -15,6 +15,10 @@ namespace input {
 class WindowHandler;
 }
 
+namespace rendering {
+class UI;
+}
+
 namespace engine {
 
 class Engine {
@@ -26,7 +30,7 @@ public:
   bool running();
   void stop();
 
-  virtual bool init(input::WindowHandler& windowHandler);
+  virtual bool init(input::WindowHandler& windowHandler, rendering::UI& ui);
   virtual void cleanup();
 
   void changeState(GameState& state);
@@ -42,6 +46,7 @@ public:
   Logger& getLogger() const;
   DebugInfo& getDebugInfo();
   input::WindowHandler& getWindowHandler() const;
+  rendering::UI& getUI() const;
 
 protected:
   bool isRunning;
@@ -49,6 +54,7 @@ protected:
   Logger& logger;
   DebugInfo debugInfo;
   input::WindowHandler* windowHandler;
+  rendering::UI* ui;
 
   std::vector<GameState*> states;
   std::chrono::time_point<std::chrono::high_resolution_clock> start;

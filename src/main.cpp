@@ -3,6 +3,7 @@
 #include "engine/Engine.hpp"
 #include "engine/Logger.hpp"
 #include "input/WindowHandler.hpp"
+#include "rendering/UI.hpp"
 #include "states/MapState.hpp"
 
 int main() {
@@ -14,7 +15,15 @@ int main() {
 
   engine::Engine engine(logger);
   input::WindowHandler windowHandler(engine);
-  engine.init(windowHandler);
+  rendering::UI ui(engine);
+
+  if (!windowHandler.createMainWindow()) {
+    engine.stop();
+  } else if (!ui.init()) {
+    engine.stop();
+  }
+
+  engine.init(windowHandler, ui);
 
   states::MapState mapState(engine);
   engine.changeState(mapState);
@@ -28,5 +37,6 @@ int main() {
 
   engine.cleanup();
   windowHandler.cleanup();
+  ui.cleanup();
   return 0;
 }

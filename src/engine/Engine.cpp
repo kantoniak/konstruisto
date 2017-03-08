@@ -18,13 +18,14 @@ void Engine::stop() {
   isRunning = false;
 }
 
-bool Engine::init(input::WindowHandler& windowHandler) {
+bool Engine::init(input::WindowHandler& windowHandler, rendering::UI& ui) {
   srand(time(nullptr));
 
   this->start = std::chrono::high_resolution_clock::now();
   this->current = this->start;
 
   this->windowHandler = &windowHandler;
+  this->ui = &ui;
 
   return true;
 }
@@ -107,6 +108,11 @@ DebugInfo& Engine::getDebugInfo() {
 input::WindowHandler& Engine::getWindowHandler() const {
   assert(windowHandler != nullptr);
   return *windowHandler;
+}
+
+rendering::UI& Engine::getUI() const {
+  assert(ui != nullptr);
+  return *ui;
 }
 
 void Engine::update(std::chrono::milliseconds delta) {

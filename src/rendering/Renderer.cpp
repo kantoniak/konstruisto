@@ -1,8 +1,5 @@
 #include "Renderer.hpp"
 
-#define NANOVG_GL3_IMPLEMENTATION
-#include <nanovg_gl.h>
-
 #include "../data/Chunk.hpp"
 
 namespace rendering {
@@ -149,25 +146,12 @@ bool Renderer::init() {
   glDeleteShader(buildingNormalsGeomShader);
   glDeleteShader(buildingsNormalFragmentShader);
 
-  // UI
-  nvgContext = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
-  if (nvgContext == nullptr) {
-    engine.getLogger().severe("Could not initialize NanoVG context.");
-    return false;
-  }
-  if (-1 == nvgCreateFont(nvgContext, FONT_SSP_REGULAR, FONT_SSP_REGULAR_PATH)) {
-    engine.getLogger().severe("Could not load font %s from %s.", FONT_SSP_REGULAR, FONT_SSP_REGULAR_PATH);
-    return false;
-  }
-  if (-1 == nvgCreateFont(nvgContext, FONT_SSP_BOLD, FONT_SSP_BOLD_PATH)) {
-    engine.getLogger().severe("Could not load font %s from %s.", FONT_SSP_BOLD, FONT_SSP_BOLD_PATH);
-    return false;
-  }
-
   glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
+
+  nvgContext = engine.getUI().getContext();
 
   return true;
 }
@@ -186,10 +170,6 @@ void Renderer::cleanup() {
   glDeleteProgram(this->buildingsShaderProgram);
 
   glDeleteProgram(this->buildingNormalsShaderProgram);
-
-  if (nvgContext) {
-    nvgDeleteGL3(nvgContext);
-  }
 }
 
 void Renderer::markBuildingDataForUpdate() {
@@ -262,16 +242,13 @@ void Renderer::renderUI() {
   constexpr unsigned char topbarInnerMargin = 12;
   constexpr unsigned char topbarOuterMargin = 6;
 
-  const NVGcolor bgColor = nvgRGB(34, 34, 34);
-  const NVGcolor textColor = nvgRGB(255, 255, 255);
-
   const data::City& city = world.getMap().getCurrentCity();
   const std::string people = "People: " + std::to_string(city.people);
   const std::string money = "€" + std::to_string(city.money);
 
   nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
   nvgFontFace(nvgContext, FONT_SSP_BOLD);
-  nvgFontSize(nvgContext, 22.0f);
+  nvgFontSize(nvgContext, 24.0f);
   float cityNameWidth = nvgTextBounds(nvgContext, 0, 0, city.name.c_str(), nullptr, nullptr);
 
   nvgFontFace(nvgContext, FONT_SSP_REGULAR);
@@ -287,10 +264,10 @@ void Renderer::renderUI() {
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2, 0, cityNameBlockWidth, topbarHeight);
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin, 0,
           cityNumbersBlockWidth, topbarHeight);
-  nvgFillColor(nvgContext, bgColor);
+  nvgFillColor(nvgContext, engine.getUI().getBackgroundColor());
   nvgFill(nvgContext);
 
-  nvgFillColor(nvgContext, textColor);
+  nvgFillColor(nvgContext, engine.getUI().getPrimaryTextColor());
 
   nvgFontFace(nvgContext, FONT_SSP_BOLD);
   nvgFontSize(nvgContext, 22.0f);
@@ -310,8 +287,6 @@ void Renderer::renderDebugUI() {
   constexpr unsigned short margin = 10;
   constexpr unsigned short textMargin = 4;
   constexpr unsigned short lineHeight = 18;
-  const NVGcolor bgColor = nvgRGB(34, 34, 34);
-  const NVGcolor textColor = nvgRGB(255, 255, 255);
 
   const std::string fps = "FPS " + std::to_string(engine.getDebugInfo().getFPS());
   const std::string frame = "Frame: " + std::to_string(engine.getDebugInfo().getFrameTime()) + " ms";
@@ -321,13 +296,13 @@ void Renderer::renderDebugUI() {
 
   nvgBeginPath(nvgContext);
   nvgRect(nvgContext, margin, margin, 100, 2 * textMargin + 5 * lineHeight);
-  nvgFillColor(nvgContext, bgColor);
+  nvgFillColor(nvgContext, engine.getUI().getBackgroundColor());
   nvgFill(nvgContext);
 
   nvgFontSize(nvgContext, 16.0f);
   nvgFontFace(nvgContext, FONT_SSP_REGULAR);
   nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
-  nvgFillColor(nvgContext, textColor);
+  nvgFillColor(nvgContext, engine.getUI().getPrimaryTextColor());
   nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f, fps.c_str(), nullptr);
   nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + lineHeight, frame.c_str(), nullptr);
   nvgText(nvgContext, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 2 * lineHeight, render.c_str(), nullptr);

@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
+#include <nanovg.h>
+
 #include <GL/glew.h>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
-
-#include <nanovg.h>
 
 #include "../engine/DebugInfo.hpp"
 #include "../engine/Engine.hpp"
@@ -16,6 +16,7 @@
 #include "../input/WindowHandler.hpp"
 #include "../world/World.hpp"
 #include "ShaderManager.hpp"
+#include "UI.hpp"
 
 namespace rendering {
 
