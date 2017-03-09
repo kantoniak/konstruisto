@@ -2,6 +2,7 @@
 
 uniform sampler2D texGround;
 uniform ivec4 selection;
+uniform vec4 selectionColor;
 
 in vec3 vPos;
 
@@ -14,6 +15,6 @@ void main() {
     color = texture(texGround, vPos.xz);
 
     if (selectionStart.x <= vPos.x && vPos.x <= selectionStop.x && selectionStart.y <= vPos.z && vPos.z <= selectionStop.y) {
-        color = mix(color, vec4(1,1,0,1), 0.4f);
+        color = mix(color, vec4(selectionColor.xyz, 1), selectionColor.w);
     }
 } 

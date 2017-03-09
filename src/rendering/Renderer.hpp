@@ -62,7 +62,7 @@ protected:
 
   // Terrain
   GLuint shaderProgram;
-  GLuint transformLoc, terrainPositionLoc, selectionLoc;
+  GLuint transformLoc, terrainPositionLoc, selectionLoc, selectionColorLoc;
   GLuint VBO, VAO, terrainPositionVBO;
   GLuint texture;
 

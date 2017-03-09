@@ -32,6 +32,8 @@ void MapState::init() {
     return;
   }
 
+  selection.setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+
   world.getTimer().start();
 };
 
@@ -64,6 +66,21 @@ void MapState::update(std::chrono::milliseconds delta) {
       selection.from(selectionEnd);
     }
     selection.to(selectionEnd);
+  }
+
+  if (selection.isSelecting()) {
+    glm::ivec2 size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
+    data::buildings::Building toAdd;
+    toAdd.width = size.x;
+    toAdd.length = size.y;
+    toAdd.level = newBuildingHeight;
+    toAdd.x = selection.getFrom().x;
+    toAdd.y = selection.getFrom().y;
+    if (!geometry.checkCollisions(toAdd)) {
+      selection.markValid();
+    } else {
+      selection.markInvalid();
+    }
   }
 
   world.update(delta);

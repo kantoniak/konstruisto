@@ -18,6 +18,7 @@ bool Renderer::init() {
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
   selectionLoc = glGetUniformLocation(shaderProgram, "selection");
+  selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
@@ -196,6 +197,8 @@ void Renderer::renderWorld() {
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
   glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
+  glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
+              selection.getColor().w);
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, world.getMap().getChunksCount());
 
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -252,7 +255,7 @@ void Renderer::renderUI() {
   nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
   nvgFontFace(nvgContext, FONT_SSP_BOLD);
   nvgFontSize(nvgContext, 24.0f);
-  float cityNameWidth = nvgTextBounds(nvgContext, 0, 0, city.name.c_str(), nullptr, nullptr);
+  float cityNameWidth = nvgTextBounds(nvgContext, 0, 0, city.name.c_str(), nullptr, nullptr) - 6;
 
   nvgFontFace(nvgContext, FONT_SSP_REGULAR);
   nvgFontSize(nvgContext, 19.0f);

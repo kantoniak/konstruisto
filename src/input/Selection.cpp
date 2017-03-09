@@ -1,7 +1,23 @@
 #include "Selection.hpp"
 
 namespace input {
-Selection::Selection() : selecting(false) {
+Selection::Selection() : selecting(false), valid(true) {
+}
+
+void Selection::setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor) {
+  this->startColor = startColor;
+  this->selectionColor = selectionColor;
+  this->invalidColor = invalidColor;
+}
+
+glm::vec4 Selection::getColor() {
+  if (isSelecting() && isValid()) {
+    return selectionColor;
+  }
+  if (isSelecting() && !isValid()) {
+    return invalidColor;
+  }
+  return startColor;
 }
 
 void Selection::start(glm::ivec2 point) {
@@ -22,12 +38,25 @@ void Selection::stop() {
   selecting = false;
 }
 
+void Selection::markInvalid() {
+  valid = false;
+}
+
+void Selection::markValid() {
+  valid = true;
+}
+
+bool Selection::isValid() {
+  return valid;
+}
+
 bool Selection::isSelecting() {
   return selecting;
 }
 
 void Selection::reset() {
   selecting = false;
+  valid = true;
   fromPoint = toPoint = glm::ivec2();
 }
 
