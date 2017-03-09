@@ -54,7 +54,13 @@ const std::string Timer::getDate() {
   return result.str();
 }
 
-unsigned short Timer::getCurrentSpeed() {
+void Timer::setSpeed(unsigned short speed) {
+  float currentTurnPassed = sinceTurnStart / (float)getTurnLength();
+  currentSpeed = speed;
+  sinceTurnStart = currentTurnPassed * getTurnLength();
+}
+
+unsigned short Timer::getSpeed() {
   return currentSpeed;
 }
 

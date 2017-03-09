@@ -91,7 +91,7 @@ void MapState::render() {
 
 void MapState::onKey(int key, int scancode, int action, int mods) {
   // TODO(kantoniak): Refactor MapState::onKey by the end of march. If it's April you can start laughing now :)
-  scancode = mods = 0;
+  scancode = 0;
 
   if (key == GLFW_KEY_MINUS && action != GLFW_RELEASE) {
     world.getCamera().zoom(-5);
@@ -131,8 +131,19 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
     renderNormals = !renderNormals;
   }
 
-  if (GLFW_KEY_1 <= key && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-    newBuildingHeight = key - GLFW_KEY_1 + 1;
+  if (mods == GLFW_MOD_CONTROL) {
+    if (GLFW_KEY_1 <= key && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
+      newBuildingHeight = key - GLFW_KEY_1 + 1;
+    }
+  } else {
+    if (GLFW_KEY_1 <= key && key <= GLFW_KEY_1 + world.getTimer().getMaxSpeed() - 1 && action == GLFW_PRESS) {
+      world.getTimer().setSpeed(key - GLFW_KEY_1 + 1);
+      world.getTimer().start();
+    }
+  }
+
+  if (key == GLFW_KEY_GRAVE_ACCENT && action == GLFW_PRESS) {
+    world.getTimer().pause();
   }
 
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {

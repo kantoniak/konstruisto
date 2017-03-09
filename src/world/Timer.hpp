@@ -17,9 +17,14 @@ public:
   void pause();
   void start();
 
+  void setSpeed(unsigned short speed);
+  unsigned short getSpeed();
+  constexpr unsigned short getMaxSpeed() {
+    return 3;
+  }
+
   bool paused();
   const std::string getDate();
-  unsigned short getCurrentSpeed();
 
 protected:
   static constexpr unsigned short SPEED_1_TURN_LENGTH = 2000;

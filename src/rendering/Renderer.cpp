@@ -261,7 +261,8 @@ void Renderer::renderUI() {
   float moneyWidth = nvgTextBounds(nvgContext, 0, 0, money.c_str(), nullptr, nullptr);
 
   const unsigned short cityNameBlockWidth = cityNameWidth + 2 * topbarInnerMargin;
-  const unsigned short dateBlockWidth = 4 * UI::ICON_SIDE + dateWidth + 6 * topbarInnerMargin;
+  const unsigned short dateBlockWidth =
+      (1 + world.getTimer().getMaxSpeed()) * (UI::ICON_SIDE + topbarInnerMargin) + dateWidth + 2 * topbarInnerMargin;
   const unsigned short cityNumbersBlockWidth = peopleWidth + moneyWidth + 3 * topbarInnerMargin;
   const unsigned short topbarWidth =
       cityNameBlockWidth + dateBlockWidth + cityNumbersBlockWidth + 2 * topbarOuterMargin;
@@ -276,7 +277,7 @@ void Renderer::renderUI() {
   nvgFill(nvgContext);
 
   // Icon backgrounds
-  short speedIcon = world.getTimer().paused() ? 0 : world.getTimer().getCurrentSpeed();
+  short speedIcon = world.getTimer().paused() ? 0 : world.getTimer().getSpeed();
   nvgBeginPath(nvgContext);
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
                           2 * topbarInnerMargin + speedIcon * (UI::ICON_SIDE + topbarInnerMargin),
@@ -303,22 +304,16 @@ void Renderer::renderUI() {
           topbarHeight / 2, money.c_str(), nullptr);
 
   // Speed numbers
+  char speedLabel = '0';
   nvgFontSize(nvgContext, 16.0f);
   nvgTextAlign(nvgContext, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
-                          2 * topbarInnerMargin + dateWidth + UI::ICON_SIDE / 2,
-          topbarHeight / 2, "0", nullptr);
-  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
-                          2 * topbarInnerMargin + dateWidth + UI::ICON_SIDE / 2 + UI::ICON_SIDE + topbarInnerMargin,
-          topbarHeight / 2, "1", nullptr);
-  nvgText(nvgContext,
-          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
-              dateWidth + UI::ICON_SIDE / 2 + 2 * UI::ICON_SIDE + 2 * topbarInnerMargin,
-          topbarHeight / 2, "2", nullptr);
-  nvgText(nvgContext,
-          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
-              dateWidth + UI::ICON_SIDE / 2 + 3 * UI::ICON_SIDE + 3 * topbarInnerMargin,
-          topbarHeight / 2, "3", nullptr);
+  for (int i = 0; i <= world.getTimer().getMaxSpeed(); i++) {
+    nvgText(nvgContext,
+            viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
+                dateWidth + UI::ICON_SIDE / 2 + (speedLabel - '0') * (UI::ICON_SIDE + topbarInnerMargin),
+            topbarHeight / 2, &speedLabel, nullptr);
+    speedLabel++;
+  }
 }
 
 void Renderer::renderDebugUI() {
