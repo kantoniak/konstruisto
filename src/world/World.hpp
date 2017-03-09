@@ -13,6 +13,8 @@ public:
   void init();
   void cleanup();
 
+  void update(std::chrono::milliseconds delta);
+
   Camera& getCamera();
   Map& getMap();
   Timer& getTimer();

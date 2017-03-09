@@ -276,18 +276,10 @@ void Renderer::renderUI() {
   nvgFill(nvgContext);
 
   // Icon backgrounds
+  short speedIcon = world.getTimer().paused() ? 0 : world.getTimer().getCurrentSpeed();
   nvgBeginPath(nvgContext);
-  nvgRect(nvgContext,
-          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth + 2 * topbarInnerMargin,
-          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
-                          UI::ICON_SIDE + 3 * topbarInnerMargin,
-          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
-  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
-                          2 * UI::ICON_SIDE + 4 * topbarInnerMargin,
-          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
-  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
-                          3 * UI::ICON_SIDE + 5 * topbarInnerMargin,
+                          2 * topbarInnerMargin + speedIcon * (UI::ICON_SIDE + topbarInnerMargin),
           topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
   nvgFillColor(nvgContext, iconBackgroundColor);
   nvgFill(nvgContext);

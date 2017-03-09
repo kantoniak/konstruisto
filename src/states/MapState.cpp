@@ -31,6 +31,8 @@ void MapState::init() {
     engine.stop();
     return;
   }
+
+  world.getTimer().start();
 };
 
 void MapState::cleanup() {
@@ -39,7 +41,6 @@ void MapState::cleanup() {
 }
 
 void MapState::update(std::chrono::milliseconds delta) {
-  delta = delta;
 
   if (rmbPressed) {
     handleMapDragging(delta);
@@ -64,6 +65,8 @@ void MapState::update(std::chrono::milliseconds delta) {
     }
     selection.to(selectionEnd);
   }
+
+  world.update(delta);
 };
 
 void MapState::render() {
