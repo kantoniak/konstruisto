@@ -242,6 +242,8 @@ void Renderer::renderUI() {
   constexpr unsigned char topbarInnerMargin = 12;
   constexpr unsigned char topbarOuterMargin = 6;
 
+  const NVGcolor iconBackgroundColor = nvgRGB(68, 68, 68);
+
   const data::City& city = world.getMap().getCurrentCity();
   const std::string date = world.getTimer().getDate();
   const std::string people = "People: " + std::to_string(city.people);
@@ -259,7 +261,7 @@ void Renderer::renderUI() {
   float moneyWidth = nvgTextBounds(nvgContext, 0, 0, money.c_str(), nullptr, nullptr);
 
   const unsigned short cityNameBlockWidth = cityNameWidth + 2 * topbarInnerMargin;
-  const unsigned short dateBlockWidth = dateWidth + 2 * topbarInnerMargin;
+  const unsigned short dateBlockWidth = 4 * UI::ICON_SIDE + dateWidth + 6 * topbarInnerMargin;
   const unsigned short cityNumbersBlockWidth = peopleWidth + moneyWidth + 3 * topbarInnerMargin;
   const unsigned short topbarWidth =
       cityNameBlockWidth + dateBlockWidth + cityNumbersBlockWidth + 2 * topbarOuterMargin;
@@ -271,6 +273,23 @@ void Renderer::renderUI() {
   nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin, 0,
           cityNumbersBlockWidth, topbarHeight);
   nvgFillColor(nvgContext, engine.getUI().getBackgroundColor());
+  nvgFill(nvgContext);
+
+  // Icon backgrounds
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth + 2 * topbarInnerMargin,
+          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
+                          UI::ICON_SIDE + 3 * topbarInnerMargin,
+          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
+                          2 * UI::ICON_SIDE + 4 * topbarInnerMargin,
+          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
+  nvgRect(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
+                          3 * UI::ICON_SIDE + 5 * topbarInnerMargin,
+          topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
+  nvgFillColor(nvgContext, iconBackgroundColor);
   nvgFill(nvgContext);
 
   nvgFillColor(nvgContext, engine.getUI().getPrimaryTextColor());
@@ -290,6 +309,24 @@ void Renderer::renderUI() {
   nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
                           topbarInnerMargin * 2 + peopleWidth,
           topbarHeight / 2, money.c_str(), nullptr);
+
+  // Speed numbers
+  nvgFontSize(nvgContext, 16.0f);
+  nvgTextAlign(nvgContext, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
+                          2 * topbarInnerMargin + dateWidth + UI::ICON_SIDE / 2,
+          topbarHeight / 2, "0", nullptr);
+  nvgText(nvgContext, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin +
+                          2 * topbarInnerMargin + dateWidth + UI::ICON_SIDE / 2 + UI::ICON_SIDE + topbarInnerMargin,
+          topbarHeight / 2, "1", nullptr);
+  nvgText(nvgContext,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
+              dateWidth + UI::ICON_SIDE / 2 + 2 * UI::ICON_SIDE + 2 * topbarInnerMargin,
+          topbarHeight / 2, "2", nullptr);
+  nvgText(nvgContext,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
+              dateWidth + UI::ICON_SIDE / 2 + 3 * UI::ICON_SIDE + 3 * topbarInnerMargin,
+          topbarHeight / 2, "3", nullptr);
 }
 
 void Renderer::renderDebugUI() {

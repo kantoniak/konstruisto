@@ -35,6 +35,8 @@ public:
   static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
   static constexpr const char* FONT_SSP_BOLD = "Source Sans Pro Bold";
 
+  static constexpr const unsigned char ICON_SIDE = 16;
+
 protected:
   engine::Engine& engine;
   NVGcontext* nvgContext;
