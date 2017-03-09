@@ -35,7 +35,7 @@ glm::ivec2 Geometry::pointToField(glm::vec3 point) {
 }
 
 glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
-  glm::vec2 chunk = glm::vec2(field) / (float)data::Chunk::SIDE_LENGTH;
+  glm::vec2 chunk = glm::vec2(field) / static_cast<float>(data::Chunk::SIDE_LENGTH);
   return glm::ivec2(floor(chunk.x), floor(chunk.y));
 }
 
