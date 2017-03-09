@@ -1,5 +1,8 @@
 #include "Geometry.hpp"
 
+#include <iostream>
+#include "glm/gtx/string_cast.hpp"
+
 namespace world {
 void Geometry::init(engine::Engine& engine, World& world) {
   this->world = &world;
@@ -32,7 +35,8 @@ glm::ivec2 Geometry::pointToField(glm::vec3 point) {
 }
 
 glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
-  return field / (int)data::Chunk::SIDE_LENGTH;
+  glm::vec2 chunk = glm::vec2(field) / (float)data::Chunk::SIDE_LENGTH;
+  return glm::ivec2(floor(chunk.x), floor(chunk.y));
 }
 
 template <typename T>
@@ -43,6 +47,11 @@ bool Geometry::checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tv
 bool Geometry::checkCollisions(data::buildings::Building& building) {
   const glm::ivec2 a2 = glm::vec2(building.x, building.y);
   const glm::ivec2 a1 = glm::vec2(building.x + building.width - 1, building.y + building.length - 1);
+
+  if (!getWorld().getMap().chunkExists(fieldToChunk(a1)) || !getWorld().getMap().chunkExists(fieldToChunk(a2))) {
+    return true;
+  }
+
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     for (data::buildings::Building other : chunk->getResidentials()) {
       const glm::ivec2 b2 = glm::vec2(other.x, other.y);
