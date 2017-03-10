@@ -71,7 +71,7 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 HPP_FILES := $(call rwildcard,$(SRCDIR),*.hpp)
 CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
-RELEASE_ZIP_FILENAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM).zip
+RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
 $(BINDIR)/$(PROJECT_NAME)$(EXTENSION):  $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
@@ -106,10 +106,12 @@ todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
 
 release-zip: rebuild
-	@mkdir -p releases
-	@echo "Zipping to releases/$(RELEASE_ZIP_FILENAME)..."
-	@cd $(BINDIR); zip -r "../releases/$(RELEASE_ZIP_FILENAME)" assets
-	@cd $(BINDIR); zip "../releases/$(RELEASE_ZIP_FILENAME)" $(PROJECT_NAME)$(EXTENSION)
+	@echo "Copying to releases/$(RELEASE_ZIP_NAME)..."
+	@mkdir -p "releases/$(RELEASE_ZIP_NAME)"
+	@cd $(BINDIR); cp -r assets "../releases/$(RELEASE_ZIP_NAME)"
+	@cd $(BINDIR); cp "$(PROJECT_NAME)$(EXTENSION)" "../releases/$(RELEASE_ZIP_NAME)"
+	@echo "Zipping to releases/$(RELEASE_ZIP_NAME).zip..."
+	@cd releases; zip -r "$(RELEASE_ZIP_NAME).zip" "$(RELEASE_ZIP_NAME)"
 
 
 help:
