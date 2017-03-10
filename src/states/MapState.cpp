@@ -212,6 +212,10 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
+rendering::Renderer& MapState::getRenderer() {
+  return renderer;
+}
+
 void MapState::createRandomWorld() {
 
   city.name = "Warsaw";

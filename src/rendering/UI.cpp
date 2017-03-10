@@ -25,6 +25,7 @@ bool UI::init() {
 
   bgColor = nvgRGB(34, 34, 34);
   primaryTextColor = nvgRGB(255, 255, 255);
+  accentColor = nvgRGB(200, 113, 55);
 
   engine.getLogger().info("UI initialized.");
   return true;
@@ -45,5 +46,9 @@ const NVGcolor UI::getBackgroundColor() const {
 
 const NVGcolor UI::getPrimaryTextColor() const {
   return primaryTextColor;
+}
+
+const NVGcolor UI::getAccentColor() const {
+  return accentColor;
 }
 }

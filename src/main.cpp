@@ -4,6 +4,7 @@
 #include "engine/Logger.hpp"
 #include "input/WindowHandler.hpp"
 #include "rendering/UI.hpp"
+#include "states/MainMenuState.hpp"
 #include "states/MapState.hpp"
 
 int main() {
@@ -26,7 +27,8 @@ int main() {
   engine.init(windowHandler, ui);
 
   states::MapState mapState(engine);
-  engine.changeState(mapState);
+  states::MainMenuState menuState(engine, mapState.getRenderer(), mapState);
+  engine.changeState(menuState);
 
   while (engine.running() && !glfwWindowShouldClose(&windowHandler.getWindow())) {
     engine.getDebugInfo().onFrameStart();

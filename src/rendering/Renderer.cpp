@@ -5,16 +5,16 @@
 namespace rendering {
 Renderer::Renderer(engine::Engine& engine, world::World& world, input::Selection& selection)
     : engine(engine), world(world), selection(selection) {
+  clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
 bool Renderer::init() {
   // TODO(kantoniak): Renderer::init(): clean it up
 
-  clearColor = glm::vec3(89, 159, 209) / 255.f;
-
   // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
   GLuint vertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.vs", engine.getLogger());
-  GLuint fragmentShader = ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs", engine.getLogger());
+  GLuint fragmentShader =
+      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs", engine.getLogger());
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
   selectionLoc = glGetUniformLocation(shaderProgram, "selection");
