@@ -1,6 +1,7 @@
 # Build
 obj/*
 bin/*
+releases/*
 
 # Build resources
 !bin/assets

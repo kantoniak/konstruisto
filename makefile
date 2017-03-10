@@ -24,6 +24,7 @@ CXX=clang++
 RM_R=rm -rf
 
 ifeq ($(OS), Windows_NT)
+	SYSTEM := WINDOWS
 	EXTENSION := .exe
 
 	ifeq ($(HIDE_CONSOLE), TRUE)
@@ -43,6 +44,8 @@ ifeq ($(OS), Windows_NT)
 
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
 else
+	SYSTEM := LINUX
+
 	INCLUDES += -I$(EXTDIR)/glm/
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
@@ -68,6 +71,7 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 HPP_FILES := $(call rwildcard,$(SRCDIR),*.hpp)
 CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
+RELEASE_ZIP_FILENAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM).zip
 
 $(BINDIR)/$(PROJECT_NAME)$(EXTENSION):  $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
@@ -101,6 +105,13 @@ all: clean build run
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
 
+release-zip: rebuild
+	@mkdir -p releases
+	@echo "Zipping to releases/$(RELEASE_ZIP_FILENAME)..."
+	@cd $(BINDIR); zip -r "../releases/$(RELEASE_ZIP_FILENAME)" assets
+	@cd $(BINDIR); zip "../releases/$(RELEASE_ZIP_FILENAME)" $(PROJECT_NAME)$(EXTENSION)
+
+
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
 	@echo -e "\nTargets:"
@@ -111,6 +122,7 @@ help:
 	@echo "  run"
 	@echo "  all"
 	@echo "  todos"
+	@echo "  release-zip"
 	@echo "  help"
 	@echo "Flags:"
 	@echo "  CONFIG=[DEBUG|RELEASE]"
