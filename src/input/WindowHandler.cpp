@@ -114,6 +114,12 @@ void WindowHandler::onScroll(double xoffset, double yoffset) {
 }
 
 void WindowHandler::onWindowResize(int width, int height) {
+
+  if (width == 0 && height == 0) {
+    // TODO(kantoniak): Tell state when window loses focus
+    return;
+  }
+
   engine.getLogger().debug("Window resized to %dx%d", width, height);
   viewportSize.x = width;
   viewportSize.y = height;
