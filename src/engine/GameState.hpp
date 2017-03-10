@@ -31,6 +31,7 @@ public:
   virtual void onKey(int key, int scancode, int action, int mods) = 0;
   virtual void onMouseButton(int button, int action, int mods) = 0;
   virtual void onScroll(double xoffset, double yoffset) = 0;
+  virtual void onWindowFocusChange(int focused) = 0;
   virtual void onWindowResize(int width, int height) = 0;
 
 protected:

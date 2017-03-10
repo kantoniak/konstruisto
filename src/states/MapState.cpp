@@ -202,6 +202,12 @@ void MapState::onScroll(double xoffset, double yoffset) {
   world.getCamera().zoom(yoffset * 5);
 }
 
+void MapState::onWindowFocusChange(int focused) {
+  if (!focused) {
+    switchToPauseState();
+  }
+}
+
 void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }

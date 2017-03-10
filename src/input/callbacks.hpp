@@ -29,6 +29,11 @@ void onWindowResize(GLFWwindow* window, int width, int height) {
   input::WindowHandler* windowHandler = (input::WindowHandler*)glfwGetWindowUserPointer(window);
   windowHandler->onWindowResize(width, height);
 }
+
+void onWindowFocusChange(GLFWwindow* window, int focused) {
+  input::WindowHandler* windowHandler = (input::WindowHandler*)glfwGetWindowUserPointer(window);
+  windowHandler->onWindowFocusChange(focused);
+}
 }
 
 #endif

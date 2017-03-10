@@ -1,7 +1,7 @@
 #include "Geometry.hpp"
 
-#include <iostream>
 #include "glm/gtx/string_cast.hpp"
+#include <iostream>
 
 namespace world {
 void Geometry::init(engine::Engine& engine, World& world) {

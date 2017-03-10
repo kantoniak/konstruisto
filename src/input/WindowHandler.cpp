@@ -72,6 +72,7 @@ bool WindowHandler::createMainWindow() {
   glfwSetMouseButtonCallback(window, callbacks::onMouseButton);
   glfwSetKeyCallback(window, callbacks::onKey);
   glfwSetScrollCallback(window, callbacks::onScroll);
+  glfwSetWindowFocusCallback(window, callbacks::onWindowFocusChange);
 
   return true;
 }
@@ -111,6 +112,10 @@ void WindowHandler::onMouseMove(double x, double y) {
 
 void WindowHandler::onScroll(double xoffset, double yoffset) {
   engine.getCurrentState()->onScroll(xoffset, yoffset);
+}
+
+void WindowHandler::onWindowFocusChange(int focused) {
+  engine.getCurrentState()->onWindowFocusChange(focused);
 }
 
 void WindowHandler::onWindowResize(int width, int height) {

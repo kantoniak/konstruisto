@@ -30,6 +30,7 @@ public:
   void onMouseButton(int button, int action, int mods);
   void onMouseMove(double x, double y);
   void onScroll(double xoffset, double yoffset);
+  void onWindowFocusChange(int focused);
   void onWindowResize(int width, int height);
 
 protected:
