@@ -33,14 +33,12 @@ public:
   void prepareFrame();
   void renderWorld();
   void renderDebug(bool renderNormals);
-  void prepareUI();
+
+  // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
   void renderUI();
   void renderDebugUI();
-  void sendUI();
-  void sendFrame();
 
-  // FIXME(kantoniak): Renderer::getNvgContext() is a dirty hack and should be removed ASAP
-  NVGcontext* getNvgContext();
+  void sendFrame();
 
 protected:
   engine::Engine& engine;
@@ -51,14 +49,6 @@ protected:
 
   bool resendBuildingData = false;
   void sendBuildingData();
-
-  // UI
-  // TODO(kantoniak): Move UI renderer to its class
-  NVGcontext* nvgContext;
-  static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
-  static constexpr const char* FONT_SSP_REGULAR_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf";
-  static constexpr const char* FONT_SSP_BOLD = "Source Sans Pro Bold";
-  static constexpr const char* FONT_SSP_BOLD_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf";
 
   // Terrain
   GLuint shaderProgram;

@@ -4,11 +4,9 @@ namespace states {
 
 MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer)
     : GameState(engine), world(world), renderer(renderer) {
-  nvgContext = nullptr;
 }
 
 void MapPauseState::init() {
-  nvgContext = engine.getUI().getContext();
 }
 
 void MapPauseState::update(std::chrono::milliseconds delta) {
@@ -21,35 +19,28 @@ void MapPauseState::render() {
   renderer.renderWorld();
   engine.getDebugInfo().onRenderWorldEnd();
 
-  if (!nvgContext) {
-    engine.getLogger().debug("No NVG context");
-    return;
-  }
+  NVGcontext* context = engine.getUI().getContext();
+  engine.getUI().startFrame();
   const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
-  nvgBeginFrame(nvgContext, viewportSize.x, viewportSize.y, 1.f);
 
-  const NVGcolor bgColor = nvgRGB(34, 34, 34);
-  const NVGcolor textColor = nvgRGB(255, 255, 255);
-
-  nvgTextAlign(nvgContext, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  nvgFontFace(nvgContext, "Source Sans Pro Bold");
-  nvgFontSize(nvgContext, 70.0f);
+  nvgTextAlign(context, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+  nvgFontFace(context, rendering::UI::FONT_SSP_BOLD);
+  nvgFontSize(context, 70.0f);
 
   const data::City& city = world.getMap().getCurrentCity();
-  float cityNameWidth = nvgTextBounds(nvgContext, 0, 0, city.name.c_str(), nullptr, nullptr);
+  float cityNameWidth = nvgTextBounds(context, 0, 0, city.name.c_str(), nullptr, nullptr);
 
-  nvgBeginPath(nvgContext);
-  nvgRect(nvgContext, viewportSize.x / 2 - cityNameWidth / 2 - 40, viewportSize.y / 2 - 40, cityNameWidth + 80, 80);
-  nvgFillColor(nvgContext, bgColor);
-  nvgFill(nvgContext);
+  nvgBeginPath(context);
+  nvgRect(context, viewportSize.x / 2 - cityNameWidth / 2 - 40, viewportSize.y / 2 - 40, cityNameWidth + 80, 80);
+  nvgFillColor(context, engine.getUI().getBackgroundColor());
+  nvgFill(context);
 
-  nvgFillColor(nvgContext, textColor);
-  nvgText(nvgContext, viewportSize.x / 2, viewportSize.y / 2, city.name.c_str(), nullptr);
+  nvgBeginPath(context);
+  nvgText(context, viewportSize.x / 2, viewportSize.y / 2, city.name.c_str(), nullptr);
+  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
+  nvgFill(context);
 
-  nvgEndFrame(nvgContext);
-  glFlush();
-
-  engine.getDebugInfo().onRenderUIEnd();
+  engine.getUI().endFrame();
   renderer.sendFrame();
 }
 

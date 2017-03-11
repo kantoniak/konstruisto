@@ -40,6 +40,17 @@ NVGcontext* UI::getContext() {
   return nvgContext;
 }
 
+void UI::startFrame() {
+  const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
+  nvgBeginFrame(engine.getUI().getContext(), viewportSize.x, viewportSize.y, 1.f);
+}
+
+void UI::endFrame() {
+  nvgEndFrame(engine.getUI().getContext());
+  glFlush();
+  engine.getDebugInfo().onRenderUIEnd();
+}
+
 const NVGcolor UI::getBackgroundColor() const {
   return bgColor;
 }

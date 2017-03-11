@@ -95,13 +95,12 @@ void MapState::render() {
 #endif
   engine.getDebugInfo().onRenderWorldEnd();
 
-  renderer.prepareUI();
+  engine.getUI().startFrame();
   renderer.renderUI();
 #ifdef DEBUG_CONFIG
   renderer.renderDebugUI();
 #endif
-  renderer.sendUI();
-  engine.getDebugInfo().onRenderUIEnd();
+  engine.getUI().endFrame();
 
   renderer.sendFrame();
 };

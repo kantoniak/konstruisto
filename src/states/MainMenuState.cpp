@@ -18,25 +18,22 @@ void MainMenuState::render() {
   renderer.prepareFrame();
 
   engine.getDebugInfo().onRenderWorldEnd();
-  const glm::vec2 viewportSize = engine.getWindowHandler().getViewportSize();
-  nvgBeginFrame(engine.getUI().getContext(), viewportSize.x, viewportSize.y, 1.f);
+  engine.getUI().startFrame();
+  NVGcontext* context = engine.getUI().getContext();
 
-  nvgTextAlign(engine.getUI().getContext(), NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
-  nvgFontFace(engine.getUI().getContext(), rendering::UI::FONT_SSP_BOLD);
-  nvgFontSize(engine.getUI().getContext(), 100.0f);
+  nvgTextAlign(context, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+  nvgFontFace(context, rendering::UI::FONT_SSP_BOLD);
+  nvgFontSize(context, 100.0f);
 
-  nvgFillColor(engine.getUI().getContext(), engine.getUI().getPrimaryTextColor());
-  nvgText(engine.getUI().getContext(), 100, 150, PROJECT_NAME, nullptr);
+  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
+  nvgText(context, 100, 150, PROJECT_NAME, nullptr);
 
-  nvgFontSize(engine.getUI().getContext(), 42.0f);
+  nvgFontSize(context, 42.0f);
   for (int i = 0; i < MainMenuState::buttonsCount; i++) {
     renderButton(buttons[i], glm::vec2(100, 250 + i * 80), 20);
   }
 
-  nvgEndFrame(engine.getUI().getContext());
-  glFlush();
-
-  engine.getDebugInfo().onRenderUIEnd();
+  engine.getUI().endFrame();
   renderer.sendFrame();
 }
 
@@ -75,26 +72,28 @@ void MainMenuState::onWindowResize(int width, int height) {
 }
 
 void MainMenuState::renderButton(const char* label, glm::vec2 pos, unsigned short padding) {
+  NVGcontext* context = engine.getUI().getContext();
   constexpr unsigned short buttonHeight = 60;
-  float labelWidth = nvgTextBounds(engine.getUI().getContext(), 0, 0, label, nullptr, nullptr);
+  float labelWidth = nvgTextBounds(context, 0, 0, label, nullptr, nullptr);
 
-  nvgFillColor(engine.getUI().getContext(), engine.getUI().getAccentColor());
-  nvgBeginPath(engine.getUI().getContext());
-  nvgRect(engine.getUI().getContext(), pos.x, pos.y, labelWidth + 2 * padding, buttonHeight);
-  nvgFill(engine.getUI().getContext());
+  nvgFillColor(context, engine.getUI().getAccentColor());
+  nvgBeginPath(context);
+  nvgRect(context, pos.x, pos.y, labelWidth + 2 * padding, buttonHeight);
+  nvgFill(context);
 
-  nvgFillColor(engine.getUI().getContext(), engine.getUI().getPrimaryTextColor());
-  nvgBeginPath(engine.getUI().getContext());
-  nvgText(engine.getUI().getContext(), pos.x + padding, pos.y + buttonHeight / 2, label, nullptr);
-  nvgFill(engine.getUI().getContext());
+  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
+  nvgBeginPath(context);
+  nvgText(context, pos.x + padding, pos.y + buttonHeight / 2, label, nullptr);
+  nvgFill(context);
 }
 
 int MainMenuState::hitTestButton(glm::vec2 mouse) {
-  nvgFontSize(engine.getUI().getContext(), 42.0f);
+  NVGcontext* context = engine.getUI().getContext();
+  nvgFontSize(context, 42.0f);
 
   glm::vec4 button; // x1 (top-left), y1, x2, y2
   for (int i = 0; i < MainMenuState::buttonsCount; i++) {
-    float labelWidth = nvgTextBounds(engine.getUI().getContext(), 0, 0, buttons[i], nullptr, nullptr);
+    float labelWidth = nvgTextBounds(context, 0, 0, buttons[i], nullptr, nullptr);
     button = glm::vec4(100, 250 + i * 80, 100 + labelWidth + 2 * 20, 250 + i * 80 + 60);
     if (mouse.x < button.x || mouse.y < button.y || mouse.x > button.z || mouse.y > button.w) {
       continue;

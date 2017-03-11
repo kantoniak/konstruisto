@@ -28,6 +28,8 @@ public:
   void cleanup();
 
   NVGcontext* getContext();
+  void startFrame();
+  void endFrame();
 
   const NVGcolor getBackgroundColor() const;
   const NVGcolor getPrimaryTextColor() const;

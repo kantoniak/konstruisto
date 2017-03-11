@@ -31,7 +31,6 @@ public:
 private:
   world::World& world;
   rendering::Renderer& renderer;
-  NVGcontext* nvgContext;
 };
 }
 
