@@ -59,24 +59,8 @@ bool Renderer::init() {
 
   // TODO(kantoniak): Load ground texture from file
   // TODO(kantoniak): Add option to turn off the infinite grid
-  unsigned short size = 64;
-  unsigned char* pixels = new unsigned char[size * size * 4];
-
-  for (unsigned short x = 0; x < size; x++) {
-    for (unsigned short y = 0; y < size; y++) {
-      pixels[4 * (size * y + x) + 0] = 159;
-      pixels[4 * (size * y + x) + 1] = 164;
-      pixels[4 * (size * y + x) + 2] = 81;
-      pixels[4 * (size * y + x) + 3] = 255;
-
-      if (x == size - 1 || y == size - 1 || x == 0 || y == 0) {
-        pixels[4 * (size * y + x) + 0] = 159 * 0.8f;
-        pixels[4 * (size * y + x) + 1] = 164 * 0.8f;
-        pixels[4 * (size * y + x) + 2] = 81 * 0.8f;
-        pixels[4 * (size * y + x) + 3] = 255;
-      }
-    }
-  }
+  int width, height;
+  unsigned char* pixels = stbi_load("assets/textures/grid.png", &width, &height, nullptr, STBI_rgb_alpha);
 
   // Texture of the ground
   glGenTextures(1, &texture);
@@ -86,7 +70,7 @@ bool Renderer::init() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
   glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0);
   delete[] pixels;
