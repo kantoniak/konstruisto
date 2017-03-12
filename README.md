@@ -49,3 +49,4 @@ Contents of this repository is licensed under GNU General Public License, versio
 * [GLEW 2.0.0](http://glew.sourceforge.net/) under the Modified BSD License, the Mesa 3-D License (MIT) and the Khronos License (MIT)
 * [GLM 0.9.8.4](http://glm.g-truc.net/0.9.8/index.html) under the MIT License
 * [NanoVG](https://github.com/memononen/nanovg) under the zlib/libpng license
+* [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h), a public license image loading library
