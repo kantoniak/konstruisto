@@ -16,7 +16,7 @@ void MapPauseState::update(std::chrono::milliseconds delta) {
 void MapPauseState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld();
+  renderer.renderWorld(true);
   engine.getDebugInfo().onRenderWorldEnd();
 
   NVGcontext* context = engine.getUI().getContext();

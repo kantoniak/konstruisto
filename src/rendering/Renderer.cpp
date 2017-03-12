@@ -17,6 +17,7 @@ bool Renderer::init() {
       ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs", engine.getLogger());
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
+  renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
   selectionLoc = glGetUniformLocation(shaderProgram, "selection");
   selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
   glDeleteShader(vertexShader);
@@ -163,7 +164,7 @@ void Renderer::prepareFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void Renderer::renderWorld() {
+void Renderer::renderWorld(bool renderGrid) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -177,6 +178,7 @@ void Renderer::renderWorld() {
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+  glUniform1i(renderGridLoc, renderGrid);
   glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
   glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,

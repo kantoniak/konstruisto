@@ -61,6 +61,7 @@ private:
   void handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards);
 
   short newBuildingHeight = 1;
+  bool renderGrid = true;
   bool renderNormals = false;
 
   // Pause screen

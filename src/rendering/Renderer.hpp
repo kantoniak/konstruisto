@@ -32,7 +32,7 @@ public:
   void markBuildingDataForUpdate();
 
   void prepareFrame();
-  void renderWorld();
+  void renderWorld(bool renderGrid);
   void renderDebug(bool renderNormals);
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
@@ -53,7 +53,7 @@ protected:
 
   // Terrain
   GLuint shaderProgram;
-  GLuint transformLoc, terrainPositionLoc, selectionLoc, selectionColorLoc;
+  GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc;
   GLuint VBO, VAO, terrainPositionVBO;
   GLuint texture;
 
