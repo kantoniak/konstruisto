@@ -30,14 +30,14 @@ void MapPauseState::render() {
   const data::City& city = world.getMap().getCurrentCity();
   float cityNameWidth = nvgTextBounds(context, 0, 0, city.name.c_str(), nullptr, nullptr);
 
+  nvgFillColor(context, engine.getUI().getBackgroundColor());
   nvgBeginPath(context);
   nvgRect(context, viewportSize.x / 2 - cityNameWidth / 2 - 40, viewportSize.y / 2 - 40, cityNameWidth + 80, 80);
-  nvgFillColor(context, engine.getUI().getBackgroundColor());
   nvgFill(context);
 
+  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
   nvgBeginPath(context);
   nvgText(context, viewportSize.x / 2, viewportSize.y / 2, city.name.c_str(), nullptr);
-  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
   nvgFill(context);
 
   engine.getUI().endFrame();
