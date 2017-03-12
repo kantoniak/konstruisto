@@ -89,7 +89,7 @@ void MapState::update(std::chrono::milliseconds delta) {
 void MapState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld(renderGrid);
+  renderer.renderWorld(renderGrid, true);
 #ifdef DEBUG_CONFIG
   renderer.renderDebug(renderNormals);
 #endif

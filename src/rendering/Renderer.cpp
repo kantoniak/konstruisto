@@ -164,7 +164,7 @@ void Renderer::prepareFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void Renderer::renderWorld(bool renderGrid) {
+void Renderer::renderWorld(bool renderGrid, bool renderSelection) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -182,7 +182,7 @@ void Renderer::renderWorld(bool renderGrid) {
   glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
   glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
-              selection.getColor().w);
+              renderSelection ? selection.getColor().w : 0);
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, world.getMap().getChunksCount());
 
   glBindTexture(GL_TEXTURE_2D, 0);

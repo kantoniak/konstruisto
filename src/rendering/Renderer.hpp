@@ -32,7 +32,7 @@ public:
   void markBuildingDataForUpdate();
 
   void prepareFrame();
-  void renderWorld(bool renderGrid);
+  void renderWorld(bool renderGrid, bool renderSelection);
   void renderDebug(bool renderNormals);
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
