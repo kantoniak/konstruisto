@@ -7,6 +7,6 @@ uniform mat4 transform;
 out vec3 vPos;
 
 void main() {
-    vPos = vertex + vec3(position.x, 0, position.y);
-    gl_Position = transform * vec4(vPos, 1.0);
+  vPos = vertex + vec3(position.x, 0, position.y);
+  gl_Position = transform * vec4(vPos, 1.0);
 }
