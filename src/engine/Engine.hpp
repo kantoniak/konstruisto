@@ -11,6 +11,8 @@
 #include "GameState.hpp"
 #include "Logger.hpp"
 
+struct settings;
+
 namespace input {
 class WindowHandler;
 }
@@ -24,7 +26,7 @@ namespace engine {
 class Engine {
 
 public:
-  Engine(Logger& logger);
+  Engine(settings& gameSettings, Logger& logger);
   virtual ~Engine();
 
   bool running();
@@ -43,12 +45,14 @@ public:
   void tick(std::chrono::time_point<std::chrono::high_resolution_clock> now);
   std::chrono::milliseconds getDeltaSinceStart();
 
+  settings& getSettings() const;
   Logger& getLogger() const;
   DebugInfo& getDebugInfo();
   input::WindowHandler& getWindowHandler() const;
   rendering::UI& getUI() const;
 
 protected:
+  settings& gameSettings;
   bool isRunning;
 
   Logger& logger;

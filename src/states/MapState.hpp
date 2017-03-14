@@ -12,6 +12,7 @@
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../rendering/Renderer.hpp"
+#include "../settings.hpp"
 #include "../world/Camera.hpp"
 #include "../world/Geometry.hpp"
 #include "../world/World.hpp"
@@ -61,8 +62,6 @@ private:
   void handleRotatingAroundX(std::chrono::milliseconds delta, bool upwards);
 
   short newBuildingHeight = 1;
-  bool renderGrid = true;
-  bool renderNormals = false;
 
   // Pause screen
   MapPauseState pauseState;

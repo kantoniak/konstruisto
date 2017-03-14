@@ -4,7 +4,7 @@
 
 namespace engine {
 
-Engine::Engine(Logger& logger) : isRunning(true), logger(logger) {
+Engine::Engine(settings& gameSettings, Logger& logger) : gameSettings(gameSettings), isRunning(true), logger(logger) {
 }
 
 Engine::~Engine() {
@@ -95,6 +95,10 @@ void Engine::tick(std::chrono::time_point<std::chrono::high_resolution_clock> no
 
 std::chrono::milliseconds Engine::getDeltaSinceStart() {
   return std::chrono::duration_cast<std::chrono::milliseconds>(current - start);
+}
+
+settings& Engine::getSettings() const {
+  return gameSettings;
 }
 
 Logger& Engine::getLogger() const {

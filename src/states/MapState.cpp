@@ -89,9 +89,9 @@ void MapState::update(std::chrono::milliseconds delta) {
 void MapState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld(renderGrid, true);
+  renderer.renderWorld();
 #ifdef DEBUG_CONFIG
-  renderer.renderDebug(renderNormals);
+  renderer.renderDebug();
 #endif
   engine.getDebugInfo().onRenderWorldEnd();
 
@@ -144,11 +144,11 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   }
 
   if (key == GLFW_KEY_N && action == GLFW_PRESS) {
-    renderNormals = !renderNormals;
+    engine.getSettings().rendering.renderNormals = !engine.getSettings().rendering.renderNormals;
   }
 
   if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-    renderGrid = !renderGrid;
+    engine.getSettings().world.showGrid = !engine.getSettings().world.showGrid;
   }
 
   if (mods == GLFW_MOD_CONTROL) {

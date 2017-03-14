@@ -164,7 +164,7 @@ void Renderer::prepareFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void Renderer::renderWorld(bool renderGrid, bool renderSelection) {
+void Renderer::renderWorld() {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -178,11 +178,11 @@ void Renderer::renderWorld(bool renderGrid, bool renderSelection) {
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glUniform1i(renderGridLoc, renderGrid);
+  glUniform1i(renderGridLoc, engine.getSettings().world.showGrid);
   glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
   glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
-              renderSelection ? selection.getColor().w : 0);
+              engine.getSettings().rendering.renderSelection ? selection.getColor().w : 0);
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, world.getMap().getChunksCount());
 
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -203,8 +203,8 @@ void Renderer::renderWorld(bool renderGrid, bool renderSelection) {
   glFlush();
 }
 
-void Renderer::renderDebug(bool renderNormals) {
-  if (renderNormals) {
+void Renderer::renderDebug() {
+  if (engine.getSettings().rendering.renderNormals) {
     const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
     glUseProgram(buildingNormalsShaderProgram);

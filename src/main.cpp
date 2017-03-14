@@ -4,6 +4,7 @@
 #include "engine/Logger.hpp"
 #include "input/WindowHandler.hpp"
 #include "rendering/UI.hpp"
+#include "settings.hpp"
 #include "states/MainMenuState.hpp"
 #include "states/MapState.hpp"
 
@@ -14,7 +15,8 @@ int main() {
   logger.info("%s %s", PROJECT_NAME, BUILD_DESC);
   logger.setLoggingLevel(engine::LoggingLevel::DEBUG);
 
-  engine::Engine engine(logger);
+  settings gameSettings;
+  engine::Engine engine(gameSettings, logger);
   input::WindowHandler windowHandler(engine);
   rendering::UI ui(engine);
 

@@ -14,6 +14,7 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../settings.hpp"
 #include "../world/World.hpp"
 #include "ShaderManager.hpp"
 #include "UI.hpp"
@@ -32,8 +33,8 @@ public:
   void markBuildingDataForUpdate();
 
   void prepareFrame();
-  void renderWorld(bool renderGrid, bool renderSelection);
-  void renderDebug(bool renderNormals);
+  void renderWorld();
+  void renderDebug();
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
   void renderUI();
