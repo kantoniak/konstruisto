@@ -119,9 +119,7 @@ void WindowHandler::onWindowFocusChange(int focused) {
 }
 
 void WindowHandler::onWindowResize(int width, int height) {
-
   if (width == 0 && height == 0) {
-    // TODO(kantoniak): Tell state when window loses focus
     return;
   }
 
