@@ -24,7 +24,8 @@ bool WindowHandler::createMainWindow() {
   engine.getLogger().debug("GLFW initiated.");
 
   // Window
-  const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode* mode = glfwGetVideoMode(monitor);
   glfwWindowHint(GLFW_RED_BITS, mode->redBits);
   glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
   glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
@@ -40,10 +41,14 @@ bool WindowHandler::createMainWindow() {
   windowTitle += std::string(" ") + BUILD_DESC;
 #endif
 
-  viewportSize = glm::vec2(1600, 900);
-  window = glfwCreateWindow(1600, 900, windowTitle.c_str(), nullptr, nullptr);
-  glViewport(0, 0, 1600, 900);
-
+  if (engine.getSettings().input.fullscreen) {
+    viewportSize = glm::vec2(mode->width, mode->height);
+    window = glfwCreateWindow(viewportSize.x, viewportSize.y, windowTitle.c_str(), monitor, nullptr);
+  } else {
+    viewportSize = glm::vec2(engine.getSettings().input.windowWidth, engine.getSettings().input.windowHeight);
+    window = glfwCreateWindow(viewportSize.x, viewportSize.y, windowTitle.c_str(), nullptr, nullptr);
+  }
+  glViewport(0, 0, viewportSize.x, viewportSize.y);
   glfwSetWindowUserPointer(window, this);
 
   if (!window) {

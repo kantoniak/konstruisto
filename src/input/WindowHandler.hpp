@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "../engine/Engine.hpp"
+#include "../settings.hpp"
 
 namespace input {
 
