@@ -16,7 +16,7 @@ void main() {
   color = vec4(0.624f, 0.643f, 0.318f, 1);
 
   if (renderGrid) {
-    vec4 gridColor = texture(texGround, vPos.xz / 16.f);
+    vec4 gridColor = texture(texGround, vPos.xz / 16.f + vec2(0.5, 0.5) / 512.f);
     color = vec4(mix(color.xyz, gridColor.xyz, gridColor.w), 1);
   }
 
