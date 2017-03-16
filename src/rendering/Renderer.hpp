@@ -56,7 +56,7 @@ protected:
   GLuint shaderProgram;
   GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc;
   GLuint VBO, VAO, terrainPositionVBO;
-  GLuint texture;
+  GLuint gridTexture, roadTexture;
 
   // Buildings
   GLuint buildingsVAO, buildingsVBO;

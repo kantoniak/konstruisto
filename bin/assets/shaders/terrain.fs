@@ -1,6 +1,7 @@
-#version 330 core
+#version 430 core
 
-uniform sampler2D texGround;
+layout (binding = 0) uniform sampler2D groundTexture;
+layout (binding = 1) uniform sampler2D roadTexture;
 uniform bool renderGrid;
 uniform ivec4 selection;
 uniform vec4 selectionColor;
@@ -15,8 +16,14 @@ void main() {
 
   color = vec4(0.624f, 0.643f, 0.318f, 1);
 
+  // Roads (WIP)
+  if (false) {
+    vec4 roadColor = texture(roadTexture, vPos.xz / 3.f);
+    color = vec4(mix(color.xyz, roadColor.xyz, roadColor.w), 1);
+  }
+
   if (renderGrid) {
-    vec4 gridColor = texture(texGround, vPos.xz / 16.f + vec2(0.5, 0.5) / 512.f);
+    vec4 gridColor = texture(groundTexture, vPos.xz / 16.f + vec2(0.5, 0.5) / 512.f);
     color = vec4(mix(color.xyz, gridColor.xyz, gridColor.w), 1);
   }
 
