@@ -21,16 +21,13 @@ void MainMenuState::render() {
   engine.getUI().startFrame();
   NVGcontext* context = engine.getUI().getContext();
 
+  engine.getUI().renderLogo(100, 100);
+
   nvgTextAlign(context, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
   nvgFontFace(context, rendering::UI::FONT_SSP_BOLD);
-  nvgFontSize(context, 100.0f);
-
-  nvgFillColor(context, engine.getUI().getPrimaryTextColor());
-  nvgText(context, 100, 150, PROJECT_NAME, nullptr);
-
   nvgFontSize(context, 42.0f);
   for (int i = 0; i < MainMenuState::buttonsCount; i++) {
-    renderButton(buttons[i], glm::vec2(100, 250 + i * 80), 20);
+    renderButton(buttons[i], glm::vec2(100, 280 + i * 80), 20);
   }
 
   engine.getUI().endFrame();
@@ -94,7 +91,7 @@ int MainMenuState::hitTestButton(glm::vec2 mouse) {
   glm::vec4 button; // x1 (top-left), y1, x2, y2
   for (int i = 0; i < MainMenuState::buttonsCount; i++) {
     float labelWidth = nvgTextBounds(context, 0, 0, buttons[i], nullptr, nullptr);
-    button = glm::vec4(100, 250 + i * 80, 100 + labelWidth + 2 * 20, 250 + i * 80 + 60);
+    button = glm::vec4(100, 280 + i * 80, 100 + labelWidth + 2 * 20, 280 + i * 80 + 60);
     if (mouse.x < button.x || mouse.y < button.y || mouse.x > button.z || mouse.y > button.w) {
       continue;
     }

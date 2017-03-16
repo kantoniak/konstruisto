@@ -35,6 +35,8 @@ public:
   const NVGcolor getPrimaryTextColor() const;
   const NVGcolor getAccentColor() const;
 
+  void renderLogo(float x, float y);
+
   static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
   static constexpr const char* FONT_SSP_BOLD = "Source Sans Pro Bold";
 
@@ -50,6 +52,8 @@ protected:
 
   static constexpr const char* FONT_SSP_REGULAR_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf";
   static constexpr const char* FONT_SSP_BOLD_PATH = "assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf";
+
+  int logoImage;
 };
 }
 

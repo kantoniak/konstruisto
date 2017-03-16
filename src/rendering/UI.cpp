@@ -23,6 +23,12 @@ bool UI::init() {
     return false;
   }
 
+  logoImage = nvgCreateImage(nvgContext, "assets/textures/ui/logo.png", NVG_IMAGE_REPEATX | NVG_IMAGE_REPEATY);
+  if (0 == logoImage) {
+    engine.getLogger().severe("Could not load texture from %s.", "assets/textures/ui/logo.png");
+    return false;
+  }
+  
   bgColor = nvgRGB(34, 34, 34);
   primaryTextColor = nvgRGB(255, 255, 255);
   accentColor = nvgRGB(200, 113, 55);
@@ -31,9 +37,13 @@ bool UI::init() {
   return true;
 }
 void UI::cleanup() {
-  if (nvgContext) {
-    nvgDeleteGL3(nvgContext);
+  if (!nvgContext) {
+    return;
   }
+  if (logoImage) {
+    nvgDeleteImage(nvgContext, logoImage);
+  }
+  nvgDeleteGL3(nvgContext);
 }
 
 NVGcontext* UI::getContext() {
@@ -61,5 +71,13 @@ const NVGcolor UI::getPrimaryTextColor() const {
 
 const NVGcolor UI::getAccentColor() const {
   return accentColor;
+}
+
+void UI::renderLogo(float x, float y) {
+  NVGpaint paint = nvgImagePattern(nvgContext, x, y, 640, 120, 0, logoImage, 1.0f); // nvglImageHandleGL3 gives texture handle
+  nvgFillPaint(nvgContext, paint);
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext, x, y, 640, 120);
+  nvgFill(nvgContext);
 }
 }
