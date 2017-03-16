@@ -23,16 +23,26 @@ bool Renderer::init() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  GLfloat vertices[] = {
-      data::Chunk::SIDE_LENGTH, 0, 0, 0, 0, 0, data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH, 0, 0,
-      data::Chunk::SIDE_LENGTH};
+  GLfloat fieldBase[] = {1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1};
+
+  GLfloat* vertices = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3 * 3];
+  for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
+    for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
+      for (unsigned int i = 0; i < 18; i++) {
+        vertices[y * data::Chunk::SIDE_LENGTH * 18 + x * 18 + i] =
+            fieldBase[i] + (i % 3 == 0 ? x : 0) + (i % 3 == 2 ? y : 0);
+      }
+    }
+  }
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
 
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3 * 3,
+               vertices, GL_STATIC_DRAW);
+  delete[] vertices;
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
   glEnableVertexAttribArray(0);
@@ -202,7 +212,8 @@ void Renderer::renderWorld() {
               selection.getTo().y + 1);
   glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
               engine.getSettings().rendering.renderSelection ? selection.getColor().w : 0);
-  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, world.getMap().getChunksCount());
+  glDrawArraysInstanced(GL_TRIANGLES, 0, data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3,
+                        world.getMap().getChunksCount());
 
   // Buildings
   if (resendBuildingData) {
@@ -305,7 +316,8 @@ void Renderer::renderUI() {
 
   // Speed numbers
   {
-    int x = viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin + dateWidth;
+    int x =
+        viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin + dateWidth;
     const int y = topbarHeight / 2 - UI::ICON_SIDE / 2;
 
     engine.getUI().renderIcon(UI::ICON_SPEED_0, x, y);
