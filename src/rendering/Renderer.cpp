@@ -44,8 +44,8 @@ bool Renderer::init() {
                vertices, GL_STATIC_DRAW);
   delete[] vertices;
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
   glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 
   std::vector<glm::vec2> chunkPositions;
   chunkPositions.reserve(world.getMap().getChunksCount());
@@ -53,7 +53,7 @@ bool Renderer::init() {
   auto chunkPositionsIt = chunkPositions.begin();
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     *chunkPositionsIt = glm::vec2(chunk->getPosition()) * (float)data::Chunk::SIDE_LENGTH;
-    chunkPositionsIt++;
+    chunkPositionsIt++;    
   }
 
   glGenBuffers(1, &terrainPositionVBO);
@@ -64,6 +64,30 @@ bool Renderer::init() {
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
   glVertexAttribDivisor(1, 1);
+
+  // Roads
+  GLshort* contents = nullptr;
+  contents = new GLshort[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3];
+  for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
+    for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
+      for (unsigned int i = 0; i < 6; i++) {
+        contents[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = (y == 17 || y == 13 || x == 18 || x == 19 || x == 45) ? 0 : -1;
+      }
+    }
+  }
+ 
+  GLuint chunkVBO = 0;
+  //for (data::Chunk* chunk : world.getMap().getChunks()) {
+    glGenBuffers(1, &chunkVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLshort) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3, contents, GL_STATIC_DRAW);
+    //chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
+    chunks[std::make_pair(0, 0)] = chunkVBO;
+  //}
+  delete[] contents;
+
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 1, GL_SHORT, GL_FALSE, sizeof(GLshort), (GLvoid*)0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -173,6 +197,10 @@ void Renderer::cleanup() {
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &terrainPositionVBO);
   glDeleteProgram(this->shaderProgram);
+
+  for (auto it = chunks.begin(); it != chunks.end(); it++) {
+    glDeleteBuffers(1, &(it->second));
+  }
 
   glDeleteVertexArrays(1, &buildingsVAO);
   glDeleteBuffers(1, &buildingsVBO);

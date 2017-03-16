@@ -1,6 +1,7 @@
 #ifndef RENDERING_RENDERER_HPP
 #define RENDERING_RENDERER_HPP
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -57,6 +58,7 @@ protected:
   GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc;
   GLuint VBO, VAO, terrainPositionVBO;
   GLuint gridTexture, roadTexture;
+  std::map<std::pair<int, int>, GLuint> chunks; // chunk -> VBO (roadTile)
 
   // Buildings
   GLuint buildingsVAO, buildingsVBO;
