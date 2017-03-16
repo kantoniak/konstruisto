@@ -304,14 +304,17 @@ void Renderer::renderUI() {
           topbarHeight / 2, money.c_str(), nullptr);
 
   // Speed numbers
-  char speedLabel = '0';
-  nvgFontSize(context, 16.0f);
-  nvgTextAlign(context, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  for (int i = 0; i <= world.getTimer().getMaxSpeed(); i++) {
-    nvgText(context, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin +
-                         dateWidth + UI::ICON_SIDE / 2 + (speedLabel - '0') * (UI::ICON_SIDE + topbarInnerMargin),
-            topbarHeight / 2, &speedLabel, nullptr);
-    speedLabel++;
+  {
+    int x = viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + 2 * topbarInnerMargin + dateWidth;
+    const int y = topbarHeight / 2 - UI::ICON_SIDE / 2;
+
+    engine.getUI().renderIcon(UI::ICON_SPEED_0, x, y);
+    x += UI::ICON_SIDE + topbarInnerMargin;
+    engine.getUI().renderIcon(UI::ICON_SPEED_1, x, y);
+    x += UI::ICON_SIDE + topbarInnerMargin;
+    engine.getUI().renderIcon(UI::ICON_SPEED_2, x, y);
+    x += UI::ICON_SIDE + topbarInnerMargin;
+    engine.getUI().renderIcon(UI::ICON_SPEED_3, x, y);
   }
 }
 

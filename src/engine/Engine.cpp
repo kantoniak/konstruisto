@@ -4,7 +4,8 @@
 
 namespace engine {
 
-Engine::Engine(settings& gameSettings, Logger& logger) : gameSettings(gameSettings), isRunning(true), logger(logger), windowHandler(nullptr), ui(nullptr) {
+Engine::Engine(settings& gameSettings, Logger& logger)
+    : gameSettings(gameSettings), isRunning(true), logger(logger), windowHandler(nullptr), ui(nullptr) {
 }
 
 Engine::~Engine() {

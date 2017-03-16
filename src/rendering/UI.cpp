@@ -23,12 +23,19 @@ bool UI::init() {
     return false;
   }
 
-  logoImage = nvgCreateImage(nvgContext, "assets/textures/ui/logo.png", NVG_IMAGE_REPEATX | NVG_IMAGE_REPEATY);
+  logoImage = nvgCreateImage(nvgContext, LOGO_PATH, NVG_IMAGE_REPEATX | NVG_IMAGE_REPEATY);
   if (0 == logoImage) {
-    engine.getLogger().severe("Could not load texture from %s.", "assets/textures/ui/logo.png");
+    engine.getLogger().severe("Could not load texture from %s.", LOGO_PATH);
     return false;
   }
-  
+
+  if (!loadIcon(ICON_SPEED_0, ICON_PATH_SPEED_0) ||
+      !loadIcon(ICON_SPEED_1, ICON_PATH_SPEED_1) ||
+      !loadIcon(ICON_SPEED_2, ICON_PATH_SPEED_2) ||
+      !loadIcon(ICON_SPEED_3, ICON_PATH_SPEED_3)) {
+    return false;
+  }
+
   bgColor = nvgRGB(34, 34, 34);
   primaryTextColor = nvgRGB(255, 255, 255);
   accentColor = nvgRGB(200, 113, 55);
@@ -42,6 +49,9 @@ void UI::cleanup() {
   }
   if (logoImage) {
     nvgDeleteImage(nvgContext, logoImage);
+  }
+  for(auto const &entry : icons) {
+    nvgDeleteImage(nvgContext, entry.second);
   }
   nvgDeleteGL3(nvgContext);
 }
@@ -74,10 +84,29 @@ const NVGcolor UI::getAccentColor() const {
 }
 
 void UI::renderLogo(float x, float y) {
-  NVGpaint paint = nvgImagePattern(nvgContext, x, y, 640, 120, 0, logoImage, 1.0f); // nvglImageHandleGL3 gives texture handle
+  NVGpaint paint = nvgImagePattern(nvgContext, x, y, 640, 120, 0, logoImage, 1.0f);
   nvgFillPaint(nvgContext, paint);
   nvgBeginPath(nvgContext);
   nvgRect(nvgContext, x, y, 640, 120);
   nvgFill(nvgContext);
+}
+
+void UI::renderIcon(unsigned int icon, float x, float y) {
+  NVGpaint paint = nvgImagePattern(nvgContext, x, y, ICON_SIDE, ICON_SIDE, 0, icons[icon],
+                                   1.0f); // nvglImageHandleGL3 gives texture handle
+  nvgFillPaint(nvgContext, paint);
+  nvgBeginPath(nvgContext);
+  nvgRect(nvgContext, x, y, ICON_SIDE, ICON_SIDE);
+  nvgFill(nvgContext);
+}
+
+bool UI::loadIcon(unsigned int icon, const char* filename) {
+  int image = nvgCreateImage(nvgContext, filename, NVG_IMAGE_REPEATX | NVG_IMAGE_REPEATY);
+  if (0 == image) {
+    engine.getLogger().severe("Could not load texture from %s.", filename);
+    return false;
+  }
+  icons[icon] = image;
+  return true;
 }
 }
