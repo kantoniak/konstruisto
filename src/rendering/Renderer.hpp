@@ -55,7 +55,7 @@ protected:
 
   // Terrain
   GLuint shaderProgram;
-  GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc;
+  GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc, roadTextureLoc;
   GLuint VBO, VAO, terrainPositionVBO;
   GLuint gridTexture, roadTexture;
   std::map<std::pair<int, int>, GLuint> chunks; // chunk -> VBO (roadTile)

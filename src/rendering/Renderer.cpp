@@ -20,6 +20,8 @@ bool Renderer::init() {
   renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
   selectionLoc = glGetUniformLocation(shaderProgram, "selection");
   selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
+  groundTextureLoc = glGetUniformLocation(shaderProgram, "groundTexture");
+  roadTextureLoc = glGetUniformLocation(shaderProgram, "roadTexture");
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
@@ -233,6 +235,8 @@ void Renderer::renderWorld() {
   glBindTexture(GL_TEXTURE_2D, gridTexture);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, roadTexture);
+  glUniform1i(groundTextureLoc, 0);
+  glUniform1i(roadTextureLoc, 1);
 
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
   glUniform1i(renderGridLoc, engine.getSettings().world.showGrid);

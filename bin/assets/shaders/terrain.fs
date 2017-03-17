@@ -1,7 +1,7 @@
-#version 430 core
+#version 330 core
 
-layout (binding = 0) uniform sampler2D groundTexture;
-layout (binding = 1) uniform sampler2D roadTexture;
+uniform sampler2D groundTexture;
+uniform sampler2D roadTexture;
 
 uniform bool renderGrid;
 uniform ivec4 selection;
