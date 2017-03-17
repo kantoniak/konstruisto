@@ -71,6 +71,8 @@ bool WindowHandler::createMainWindow() {
   }
   engine.getLogger().debug("GLEW initiated.");
 
+  engine.getLogger().info("OpenGL version: %s", glGetString(GL_VERSION));
+
   // Callbacks
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
   glfwSetCursorPosCallback(window, callbacks::onMouseMove);
