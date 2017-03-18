@@ -68,12 +68,22 @@ bool Renderer::init() {
   glVertexAttribDivisor(1, 1);
 
   // Roads
-  GLshort* contents = nullptr;
-  contents = new GLshort[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3];
+  GLfloat* contents = nullptr;
+  contents = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3];
   for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
     for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
       for (unsigned int i = 0; i < 6; i++) {
-        contents[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = (y == 17 || y == 13 || x == 18 || x == 19 || x == 45) ? 0 : -1;
+        bool yRoad = (y == 17 || y == 13);
+        bool xRoad = (x == 18 || x == 19 || x == 45);
+        int tile = -1;
+        if (yRoad && xRoad) {
+          tile = 0;
+        } else if (xRoad) {
+          tile = 1;
+        } else if (yRoad) {
+          tile = 2;
+        }
+        contents[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = tile;
       }
     }
   }
@@ -82,14 +92,14 @@ bool Renderer::init() {
   //for (data::Chunk* chunk : world.getMap().getChunks()) {
     glGenBuffers(1, &chunkVBO);
     glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLshort) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3, contents, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3, contents, GL_STATIC_DRAW);
     //chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
     chunks[std::make_pair(0, 0)] = chunkVBO;
   //}
   delete[] contents;
 
   glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 1, GL_SHORT, GL_FALSE, sizeof(GLshort), (GLvoid*)0);
+  glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);

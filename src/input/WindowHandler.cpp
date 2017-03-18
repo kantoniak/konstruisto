@@ -69,6 +69,7 @@ bool WindowHandler::createMainWindow() {
     glfwTerminate();
     return false;
   }
+  glGetError();
   engine.getLogger().debug("GLEW initiated.");
 
   engine.getLogger().info("OpenGL version: %s", glGetString(GL_VERSION));
