@@ -33,6 +33,8 @@ public:
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
 
+  void addRoad(data::roads::Road road);
+
 protected:
   std::vector<data::Chunk*> chunks;
   data::City* currentCity;

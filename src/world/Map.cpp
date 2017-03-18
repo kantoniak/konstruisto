@@ -76,6 +76,10 @@ data::City& Map::getCurrentCity() {
   return *currentCity;
 }
 
+void Map::addRoad(data::roads::Road road) {
+  getChunk(glm::ivec2()).addRoad(road);
+}
+
 data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) {
   for (unsigned long it = 0; it < chunks.size(); it++) {
     if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {

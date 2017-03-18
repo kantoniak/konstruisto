@@ -51,4 +51,12 @@ unsigned int Chunk::getResidentialSize() {
 void Chunk::addBuilding(data::buildings::Building building) {
   residential.push_back(building);
 }
+
+void Chunk::addRoad(data::roads::Road road) {
+  roads.push_back(road);
+}
+
+Chunk::roadList Chunk::getRoads() {
+  return roads;
+}
 }

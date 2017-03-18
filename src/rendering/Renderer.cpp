@@ -70,20 +70,20 @@ bool Renderer::init() {
   // Roads
   GLfloat* contents = nullptr;
   contents = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3];
-  for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
-    for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
-      for (unsigned int i = 0; i < 6; i++) {
-        bool yRoad = (y == 17 || y == 13);
-        bool xRoad = (x == 18 || x == 19 || x == 45);
-        int tile = -1;
-        if (yRoad && xRoad) {
-          tile = 0;
-        } else if (xRoad) {
-          tile = 1;
-        } else if (yRoad) {
-          tile = 2;
+  for (unsigned int i = 0; i < data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3; i++) {
+    contents[i] = -1;
+  }
+
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    for (data::roads::Road road : chunk->getRoads()) {
+      
+      for (long x = road.x; x < road.x + road.width -1; x++) {
+        for (long y = road.y; y < road.y + road.length -1; y++) {
+          for (int i=0; i<6; i++) {
+            unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
+            contents[index] = 0;
+          }
         }
-        contents[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = tile;
       }
     }
   }
