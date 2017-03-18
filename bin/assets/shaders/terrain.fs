@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform sampler2D groundTexture;
-uniform sampler2D roadTexture;
+uniform sampler2DArray roadTexture;
 
 uniform bool renderGrid;
 uniform ivec4 selection;
@@ -25,7 +25,7 @@ void main() {
   vec2 textureInnerSize = textureSize - vec2(1 / atlasSidePx, 1 / atlasSidePx);
   vec2 tilePos = vPos.xz - ivec2(vPos.xz);
   vec2 texturePos = vec2(int(vTile) % int(atlasSide), floor(vTile / atlasSide)) * textureSize + textureInnerMovement + tilePos * textureInnerSize;
-  vec4 roadColor = texture(roadTexture, texturePos);
+  vec4 roadColor = texture(roadTexture, vec3(texturePos, 0));
   color = vec4(mix(color.xyz, roadColor.xyz, int(vTile > -1) * roadColor.w), 1);
 
   if (renderGrid) {
