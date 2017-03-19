@@ -229,7 +229,7 @@ void MapState::createRandomWorld() {
     }
   }
 
-  const unsigned int roadsCountPerDir = 3;
+  const unsigned int roadsCountPerDir = 2;
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
@@ -254,8 +254,8 @@ void MapState::createRandomWorld() {
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
     for (int i = 0; i < 20; i++) {
-      test.width = rand() % 4 + 2;
-      test.length = rand() % 4 + 2;
+      test.width = rand() % 3 + 2;
+      test.length = rand() % 3 + 2;
       test.level = rand() % 6 + 1;
       test.x = rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - test.width + 1);
       test.y = rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - test.length + 1);

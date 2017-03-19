@@ -11,7 +11,7 @@ struct RoadDefinition {
 
 const struct RoadDefinition Standard = {1, 2};
 
-enum class Direction {N, W}; 
+enum class Direction { N, W };
 
 struct Road {
   int type;

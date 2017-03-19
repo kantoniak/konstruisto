@@ -53,6 +53,20 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
   }
 
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
+    // With roads
+    for (data::roads::Road road : chunk->getRoads()) {
+      long maxX =
+          road.x + (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width);
+      long maxY =
+          road.y + (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width);
+      const glm::ivec2 b2 = glm::vec2(road.x, road.y);
+      const glm::ivec2 b1 = glm::vec2(maxX - 1, maxY - 1);
+      if (checkRectIntersection(a1, a2, b1, b2)) {
+        return true;
+      }
+    }
+
+    // With buildings
     for (data::buildings::Building other : chunk->getResidentials()) {
       const glm::ivec2 b2 = glm::vec2(other.x, other.y);
       const glm::ivec2 b1 = glm::vec2(other.x + other.width - 1, other.y + other.length - 1);
