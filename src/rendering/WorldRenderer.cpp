@@ -103,14 +103,16 @@ bool WorldRenderer::setupTextures() {
 }
 
 bool WorldRenderer::setupTerrain() {
-  GLfloat fieldBase[] = {1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1};
+  // Chunk vertices
+  std::vector<glm::vec3> fieldBase{glm::vec3(1, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 1),
+                                   glm::vec3(1, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)};
 
-  GLfloat* vertices = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3 * 3];
+  std::vector<glm::vec3> vertices;
+  vertices.resize(data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3);
   for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
     for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
-      for (unsigned int i = 0; i < 18; i++) {
-        vertices[y * data::Chunk::SIDE_LENGTH * 18 + x * 18 + i] =
-            fieldBase[i] + (i % 3 == 0 ? x : 0) + (i % 3 == 2 ? y : 0);
+      for (unsigned int i = 0; i < 6; i++) {
+        vertices[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = fieldBase[i] + glm::vec3(x, 0, y);
       }
     }
   }
@@ -120,65 +122,52 @@ bool WorldRenderer::setupTerrain() {
 
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3 * 3,
-               vertices, GL_STATIC_DRAW);
-  delete[] vertices;
+  glBufferDataVector(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 
+  // Chunk position
   std::vector<glm::vec2> chunkPositions;
   chunkPositions.reserve(world.getMap().getChunksCount());
-
-  auto chunkPositionsIt = chunkPositions.begin();
   for (data::Chunk* chunk : world.getMap().getChunks()) {
-    *chunkPositionsIt = glm::vec2(chunk->getPosition()) * (float)data::Chunk::SIDE_LENGTH;
-    chunkPositionsIt++;
+    chunkPositions.push_back(glm::vec2(chunk->getPosition()) * (float)data::Chunk::SIDE_LENGTH);
   }
 
   glGenBuffers(1, &terrainPositionVBO);
   glBindBuffer(GL_ARRAY_BUFFER, terrainPositionVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * world.getMap().getChunksCount(), &chunkPositions[0].x,
-               GL_STATIC_DRAW);
+  glBufferDataVector(GL_ARRAY_BUFFER, chunkPositions, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
   glVertexAttribDivisor(1, 1);
 
   // Roads
-  GLfloat* contents = nullptr;
-  contents = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3];
-  for (unsigned int i = 0; i < data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3; i++) {
-    contents[i] = -1;
-  }
+  GLuint perChunkVBO = 0;
+  std::vector<GLfloat> perChunk;
+  perChunk.resize(data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3);
 
   for (data::Chunk* chunk : world.getMap().getChunks()) {
-    for (data::roads::Road road : chunk->getRoads()) {
 
+    // Generate tiles
+    std::fill(perChunk.begin(), perChunk.end(), 0);
+    for (data::roads::Road road : chunk->getRoads()) {
       for (long x = road.x; x < road.x + road.width - 1; x++) {
         for (long y = road.y; y < road.y + road.length - 1; y++) {
           for (int i = 0; i < 6; i++) {
             unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-            contents[index] = 0;
+            perChunk[index] = 1;
           }
         }
       }
     }
+
+    // Send buffer
+    glGenBuffers(1, &perChunkVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, perChunkVBO);
+    glBufferDataVector(GL_ARRAY_BUFFER, perChunk, GL_STATIC_DRAW);
+    chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = perChunkVBO;
   }
-
-  GLuint chunkVBO = 0;
-  // for (data::Chunk* chunk : world.getMap().getChunks()) {
-  glGenBuffers(1, &chunkVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3, contents,
-               GL_STATIC_DRAW);
-  // chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
-  chunks[std::make_pair(0, 0)] = chunkVBO;
-  //}
-  delete[] contents;
-
-  glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -271,6 +260,11 @@ void WorldRenderer::renderWorld() {
               selection.getTo().y + 1);
   glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
               engine.getSettings().rendering.renderSelection ? selection.getColor().w : 0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, chunks[std::make_pair(0, 0)]);
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
   glDrawArraysInstanced(GL_TRIANGLES, 0, data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3,
                         world.getMap().getChunksCount());
 
@@ -425,20 +419,17 @@ void WorldRenderer::sendBuildingData() {
   buildingPositions.reserve(2 * buildingCount);
 
   constexpr float buildingMargin = 0.2f;
-  auto buildingPositionsIt = buildingPositions.begin();
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     for (data::buildings::Building building : chunk->getResidentials()) {
-      *buildingPositionsIt = glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin);
-      buildingPositionsIt++;
-      *buildingPositionsIt =
-          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin);
-      buildingPositionsIt++;
+      buildingPositions.push_back(glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin));
+      buildingPositions.push_back(
+          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin));
     }
   }
 
   glBindVertexArray(buildingsVAO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * buildingCount, &buildingPositions[0], GL_STATIC_DRAW);
+  glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }

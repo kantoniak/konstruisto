@@ -10,6 +10,6 @@ flat out int vTile;
 
 void main() {
   vPos = vertex + vec3(position.x, 0, position.y);
-  vTile = int(tile);
+  vTile = int(tile) - 1;
   gl_Position = transform * vec4(vPos, 1.0);
 }
