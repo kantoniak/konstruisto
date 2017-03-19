@@ -38,6 +38,8 @@ protected:
   engine::Engine& engine;
 
   glm::vec3 clearColor;
+
+  GLuint compileShader(GLenum shaderType, std::string filename);
 };
 }
 

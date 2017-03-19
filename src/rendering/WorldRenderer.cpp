@@ -10,12 +10,28 @@ WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world, input:
 
 bool WorldRenderer::init() {
   Renderer::init();
-  // TODO(kantoniak): WorldRenderer::init(): clean it up
 
+  if (!setupShaders() || !setupTextures()) {
+    return false;
+  }
+
+  if (!setupTerrain() || !setupBuildings()) {
+    return false;
+  }
+
+  glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
+
+  return true;
+}
+
+bool WorldRenderer::setupShaders() {
   // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
-  GLuint vertexShader = ShaderManager::compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.vs", engine.getLogger());
-  GLuint fragmentShader =
-      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs", engine.getLogger());
+
+  GLuint vertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.vs");
+  GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs");
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
   renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
@@ -23,9 +39,70 @@ bool WorldRenderer::init() {
   selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
   groundTextureLoc = glGetUniformLocation(shaderProgram, "groundTexture");
   roadTextureLoc = glGetUniformLocation(shaderProgram, "roadTexture");
+
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
+  GLuint buildingsVertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/buildings.vs");
+  GLuint buildingsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings.gs");
+  GLuint buildingsFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings.fs");
+  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
+                                                            buildingsFragmentShader, engine.getLogger());
+  buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+
+  GLuint buildingNormalsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings_normals.gs");
+  GLuint buildingsNormalFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings_normals.fs");
+  this->buildingNormalsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingNormalsGeomShader,
+                                                                  buildingsNormalFragmentShader, engine.getLogger());
+  buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
+
+  glDeleteShader(buildingsVertexShader);
+  glDeleteShader(buildingsGeomShader);
+  glDeleteShader(buildingsVertexShader);
+  glDeleteShader(buildingNormalsGeomShader);
+  glDeleteShader(buildingsNormalFragmentShader);
+
+  return true;
+}
+
+bool WorldRenderer::setupTextures() {
+  {
+    int width, height;
+    unsigned char* pixels = stbi_load("assets/textures/grid.png", &width, &height, nullptr, STBI_rgb_alpha);
+
+    // Texture of the ground
+    glGenTextures(1, &gridTexture);
+    glBindTexture(GL_TEXTURE_2D, gridTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    delete[] pixels;
+  }
+
+  {
+    int width, height;
+    unsigned char* pixels = stbi_load("assets/textures/road.png", &width, &height, nullptr, STBI_rgb_alpha);
+
+    // Texture of the ground
+    glGenTextures(1, &roadTexture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 96, 96, 1);
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 96, 96, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    delete[] pixels;
+  }
+
+  return true;
+}
+
+bool WorldRenderer::setupTerrain() {
   GLfloat fieldBase[] = {1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1};
 
   GLfloat* vertices = new GLfloat[data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3 * 3];
@@ -106,40 +183,10 @@ bool WorldRenderer::init() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  {
-    int width, height;
-    unsigned char* pixels = stbi_load("assets/textures/grid.png", &width, &height, nullptr, STBI_rgb_alpha);
+  return true;
+}
 
-    // Texture of the ground
-    glGenTextures(1, &gridTexture);
-    glBindTexture(GL_TEXTURE_2D, gridTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    delete[] pixels;
-  }
-
-  {
-    int width, height;
-    unsigned char* pixels = stbi_load("assets/textures/road.png", &width, &height, nullptr, STBI_rgb_alpha);
-
-    // Texture of the ground
-    glGenTextures(1, &roadTexture);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 96, 96, 1);
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 96, 96, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    delete[] pixels;
-  }
-
-  // Buildings
+bool WorldRenderer::setupBuildings() {
   GLfloat building[] = {// 8x2
                         0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
                         1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
@@ -170,35 +217,6 @@ bool WorldRenderer::init() {
   glBindVertexArray(0);
 
   markBuildingDataForUpdate();
-
-  GLuint buildingsVertexShader =
-      ShaderManager::compileShader(GL_VERTEX_SHADER, "assets/shaders/buildings.vs", engine.getLogger());
-  GLuint buildingsGeomShader =
-      ShaderManager::compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings.gs", engine.getLogger());
-  GLuint buildingsFragmentShader =
-      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings.fs", engine.getLogger());
-  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
-                                                            buildingsFragmentShader, engine.getLogger());
-  buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
-
-  GLuint buildingNormalsGeomShader =
-      ShaderManager::compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings_normals.gs", engine.getLogger());
-  GLuint buildingsNormalFragmentShader =
-      ShaderManager::compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings_normals.fs", engine.getLogger());
-  this->buildingNormalsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingNormalsGeomShader,
-                                                                  buildingsNormalFragmentShader, engine.getLogger());
-  buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
-
-  glDeleteShader(buildingsVertexShader);
-  glDeleteShader(buildingsGeomShader);
-  glDeleteShader(buildingsVertexShader);
-  glDeleteShader(buildingNormalsGeomShader);
-  glDeleteShader(buildingsNormalFragmentShader);
-
-  glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-  glEnable(GL_CULL_FACE);
-  glEnable(GL_DEPTH_TEST);
 
   return true;
 }

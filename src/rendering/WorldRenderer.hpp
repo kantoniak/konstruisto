@@ -30,6 +30,10 @@ public:
   WorldRenderer(engine::Engine& engine, world::World& world, input::Selection& selection);
 
   virtual bool init();
+  bool setupShaders();
+  bool setupTextures();
+  bool setupTerrain();
+  bool setupBuildings();
   virtual void cleanup();
 
   void markBuildingDataForUpdate();
