@@ -11,13 +11,17 @@ struct RoadDefinition {
 
 const struct RoadDefinition Standard = {1, 2};
 
+enum class Direction {N, W}; 
+
 struct Road {
   int type;
   long x;
   long y;
-  unsigned short width;
+  Direction direction;
   unsigned short length;
 };
+
+const RoadDefinition getDefinition(Road road);
 }
 }
 

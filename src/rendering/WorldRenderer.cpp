@@ -137,8 +137,11 @@ bool WorldRenderer::setupTerrain() {
     // Generate tiles
     std::fill(tiles.begin(), tiles.end(), 0);
     for (data::roads::Road road : chunk->getRoads()) {
-      for (long x = road.x; x < road.x + road.width - 1; x++) {
-        for (long y = road.y; y < road.y + road.length - 1; y++) {
+      long maxX = road.x + (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width);
+      long maxY = road.y + (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width);
+
+      for (long x = road.x; x < maxX; x++) {
+        for (long y = road.y; y < maxY; y++) {
           for (int i = 0; i < 6; i++) {
             unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
             tiles[index] = 1;

@@ -229,13 +229,25 @@ void MapState::createRandomWorld() {
     }
   }
 
-  data::roads::Road road;
-  road.type = data::roads::Standard.typeId;
-  road.x = 0;
-  road.y = 2;
-  road.width = data::Chunk::SIDE_LENGTH * mapSize.x;
-  road.length = data::roads::Standard.width;
-  world.getMap().addRoad(road);
+  const unsigned int roadsCountPerDir = 3;
+  for (unsigned int i = 0; i < roadsCountPerDir; i++) {
+    data::roads::Road road;
+    road.type = data::roads::Standard.typeId;
+    road.x = 0;
+    road.y = rand() % (data::Chunk::SIDE_LENGTH - 2);
+    road.direction = data::roads::Direction::W;
+    road.length = data::Chunk::SIDE_LENGTH;
+    world.getMap().addRoad(road);
+  }
+  for (unsigned int i = 0; i < roadsCountPerDir; i++) {
+    data::roads::Road road;
+    road.type = data::roads::Standard.typeId;
+    road.y = 0;
+    road.x = rand() % (data::Chunk::SIDE_LENGTH - 2);
+    road.direction = data::roads::Direction::N;
+    road.length = data::Chunk::SIDE_LENGTH;
+    world.getMap().addRoad(road);
+  }
 
   const unsigned int buildingCount =
       (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.05f;
