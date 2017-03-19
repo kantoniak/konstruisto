@@ -23,7 +23,6 @@ public:
   void setPosition(glm::ivec2 position);
   glm::ivec2 getPosition();
 
-  void randomizeBuildings();
   residentialList getResidentials();
   residentialListIter getResidentialIterator();
   unsigned int getResidentialSize();

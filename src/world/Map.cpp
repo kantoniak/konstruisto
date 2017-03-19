@@ -19,21 +19,6 @@ void Map::createChunk(glm::ivec2 position) {
   chunks.push_back(chunk);
 }
 
-void Map::randomizeChunk(glm::ivec2 position) {
-  data::Chunk* chunk = nullptr;
-  for (data::Chunk* c : getChunks()) {
-    if (glm::all(glm::equal(position, c->getPosition()))) {
-      chunk = c;
-      break;
-    }
-  }
-  if (chunk == nullptr) {
-    return;
-  }
-  chunk->randomizeBuildings();
-  buildingCount += chunk->getResidentialSize();
-}
-
 unsigned int Map::getChunksCount() {
   return chunks.size();
 }

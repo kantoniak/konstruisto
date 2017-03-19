@@ -19,7 +19,6 @@ public:
   void cleanup();
 
   void createChunk(glm::ivec2 position);
-  void randomizeChunk(glm::ivec2 position);
 
   unsigned int getChunksCount();
   chunkList getChunks();
