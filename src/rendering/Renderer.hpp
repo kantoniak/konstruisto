@@ -26,52 +26,18 @@ namespace rendering {
 class Renderer {
 
 public:
-  Renderer(engine::Engine& engine, world::World& world, input::Selection& selection);
+  Renderer(engine::Engine& engine);
 
-  bool init();
-  void cleanup();
-
-  void markBuildingDataForUpdate();
+  virtual bool init();
+  virtual void cleanup();
 
   void prepareFrame();
-  void renderWorld();
-  void renderDebug();
-
-  // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
-  void renderUI();
-  void renderDebugUI();
-
   void sendFrame();
 
 protected:
   engine::Engine& engine;
-  world::World& world;
-  input::Selection& selection;
 
   glm::vec3 clearColor;
-
-  bool resendBuildingData = false;
-  void sendBuildingData();
-
-  // Terrain
-  GLuint shaderProgram;
-  GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc, roadTextureLoc;
-  GLuint VBO, VAO, terrainPositionVBO;
-  GLuint gridTexture, roadTexture;
-  std::map<std::pair<int, int>, GLuint> chunks; // chunk -> VBO (roadTile)
-
-  // Buildings
-  GLuint buildingsVAO, buildingsVBO;
-  GLuint buildingsInstanceVBO;
-  GLuint buildingsShaderProgram;
-  GLuint buildingsTransformLoc;
-  const unsigned int buildingsCount = 100;
-  const unsigned int sideSize = 20;
-  const unsigned int maxHeight = 6;
-
-  // Buildings - normals
-  GLuint buildingNormalsTransformLoc;
-  GLuint buildingNormalsShaderProgram;
 };
 }
 

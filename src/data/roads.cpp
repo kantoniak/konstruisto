@@ -4,10 +4,10 @@ namespace data {
 namespace roads {
 
 const RoadDefinition getDefinition(Road road) {
-    if (road.type == Standard.typeId) {
-        return Standard;
-    }
-    return RoadDefinition {};
+  if (road.type == Standard.typeId) {
+    return Standard;
+  }
+  return RoadDefinition{};
 }
 }
 }

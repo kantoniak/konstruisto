@@ -215,7 +215,7 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
-rendering::Renderer& MapState::getRenderer() {
+rendering::WorldRenderer& MapState::getRenderer() {
   return renderer;
 }
 

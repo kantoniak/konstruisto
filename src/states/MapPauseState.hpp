@@ -7,7 +7,7 @@
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
 #include "../input/WindowHandler.hpp"
-#include "../rendering/Renderer.hpp"
+#include "../rendering/WorldRenderer.hpp"
 #include "../world/World.hpp"
 
 namespace states {
@@ -15,7 +15,7 @@ namespace states {
 class MapPauseState : public engine::GameState {
 
 public:
-  MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer);
+  MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& renderer);
 
   void init();
 
@@ -30,7 +30,7 @@ public:
 
 private:
   world::World& world;
-  rendering::Renderer& renderer;
+  rendering::WorldRenderer& renderer;
 };
 }
 

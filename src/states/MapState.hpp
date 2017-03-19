@@ -38,10 +38,10 @@ public:
   void onWindowResize(int width, int height);
 
   // FIXME(kantoniak): Remove MapState::getRenderer(), a temporary hack, by extracting rendering superclass
-  rendering::Renderer& getRenderer();
+  rendering::WorldRenderer& getRenderer();
 
 private:
-  rendering::Renderer renderer;
+  rendering::WorldRenderer renderer;
   world::Geometry geometry;
   world::World world;
   input::Selection selection;

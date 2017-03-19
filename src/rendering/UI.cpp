@@ -29,10 +29,8 @@ bool UI::init() {
     return false;
   }
 
-  if (!loadIcon(ICON_SPEED_0, ICON_PATH_SPEED_0) ||
-      !loadIcon(ICON_SPEED_1, ICON_PATH_SPEED_1) ||
-      !loadIcon(ICON_SPEED_2, ICON_PATH_SPEED_2) ||
-      !loadIcon(ICON_SPEED_3, ICON_PATH_SPEED_3)) {
+  if (!loadIcon(ICON_SPEED_0, ICON_PATH_SPEED_0) || !loadIcon(ICON_SPEED_1, ICON_PATH_SPEED_1) ||
+      !loadIcon(ICON_SPEED_2, ICON_PATH_SPEED_2) || !loadIcon(ICON_SPEED_3, ICON_PATH_SPEED_3)) {
     return false;
   }
 
@@ -50,7 +48,7 @@ void UI::cleanup() {
   if (logoImage) {
     nvgDeleteImage(nvgContext, logoImage);
   }
-  for(auto const &entry : icons) {
+  for (auto const& entry : icons) {
     nvgDeleteImage(nvgContext, entry.second);
   }
   nvgDeleteGL3(nvgContext);

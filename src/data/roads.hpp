@@ -9,7 +9,7 @@ struct RoadDefinition {
   int width;
 };
 
-const struct RoadDefinition Standard = { 1, 2 };
+const struct RoadDefinition Standard = {1, 2};
 
 struct Road {
   int type;
@@ -18,7 +18,6 @@ struct Road {
   unsigned short width;
   unsigned short length;
 };
-
 }
 }
 

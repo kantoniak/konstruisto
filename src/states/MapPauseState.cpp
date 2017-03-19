@@ -2,7 +2,7 @@
 
 namespace states {
 
-MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::Renderer& renderer)
+MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& renderer)
     : GameState(engine), world(world), renderer(renderer) {
 }
 
