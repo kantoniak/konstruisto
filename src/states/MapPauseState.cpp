@@ -2,8 +2,8 @@
 
 namespace states {
 
-MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& renderer)
-    : GameState(engine), world(world), renderer(renderer) {
+MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& worldRenderer)
+    : GameState(engine), world(world), worldRenderer(worldRenderer) {
 }
 
 void MapPauseState::init() {
@@ -14,9 +14,10 @@ void MapPauseState::update(std::chrono::milliseconds delta) {
 }
 
 void MapPauseState::render() {
+  rendering::Renderer& renderer = engine.getRenderer();
   renderer.prepareFrame();
 
-  renderer.renderWorld();
+  worldRenderer.renderWorld();
   engine.getDebugInfo().onRenderWorldEnd();
 
   NVGcontext* context = engine.getUI().getContext();

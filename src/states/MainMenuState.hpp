@@ -16,7 +16,7 @@ namespace states {
 class MainMenuState : public engine::GameState {
 
 public:
-  MainMenuState(engine::Engine& engine, rendering::Renderer& renderer, MapState& mapState);
+  MainMenuState(engine::Engine& engine, MapState& mapState);
 
   void init();
 
@@ -30,8 +30,6 @@ public:
   void onWindowResize(int width, int height);
 
 private:
-  rendering::Renderer& renderer;
-
   // FIXME(kantoniak): MainMenuState::renderButton() should not be there
   static constexpr unsigned short buttonsCount = 2;
   const char* const buttons[buttonsCount] = {"Start game", "Exit"};

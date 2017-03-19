@@ -15,7 +15,7 @@ namespace states {
 class MapPauseState : public engine::GameState {
 
 public:
-  MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& renderer);
+  MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& worldRenderer);
 
   void init();
 
@@ -30,7 +30,7 @@ public:
 
 private:
   world::World& world;
-  rendering::WorldRenderer& renderer;
+  rendering::WorldRenderer& worldRenderer;
 };
 }
 

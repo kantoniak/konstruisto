@@ -18,6 +18,7 @@ class WindowHandler;
 }
 
 namespace rendering {
+class Renderer;
 class UI;
 }
 
@@ -32,7 +33,7 @@ public:
   bool running();
   void stop();
 
-  virtual bool init(input::WindowHandler& windowHandler, rendering::UI& ui);
+  virtual bool init(input::WindowHandler& windowHandler, rendering::Renderer& renderer, rendering::UI& ui);
   virtual void cleanup();
 
   void changeState(GameState& state);
@@ -49,6 +50,7 @@ public:
   Logger& getLogger() const;
   DebugInfo& getDebugInfo();
   input::WindowHandler& getWindowHandler() const;
+  rendering::Renderer& getRenderer() const;
   rendering::UI& getUI() const;
 
 protected:
@@ -58,6 +60,7 @@ protected:
   Logger& logger;
   DebugInfo debugInfo;
   input::WindowHandler* windowHandler;
+  rendering::Renderer* renderer;
   rendering::UI* ui;
 
   std::vector<GameState*> states;

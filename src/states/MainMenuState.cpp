@@ -2,8 +2,7 @@
 
 namespace states {
 
-MainMenuState::MainMenuState(engine::Engine& engine, rendering::Renderer& renderer, MapState& mapState)
-    : GameState(engine), renderer(renderer), mapState(mapState) {
+MainMenuState::MainMenuState(engine::Engine& engine, MapState& mapState) : GameState(engine), mapState(mapState) {
 }
 
 void MainMenuState::init() {
@@ -15,6 +14,7 @@ void MainMenuState::update(std::chrono::milliseconds delta) {
 }
 
 void MainMenuState::render() {
+  rendering::Renderer& renderer = engine.getRenderer();
   renderer.prepareFrame();
 
   engine.getDebugInfo().onRenderWorldEnd();

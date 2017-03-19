@@ -5,7 +5,8 @@
 namespace engine {
 
 Engine::Engine(settings& gameSettings, Logger& logger)
-    : gameSettings(gameSettings), isRunning(true), logger(logger), windowHandler(nullptr), ui(nullptr) {
+    : gameSettings(gameSettings), isRunning(true), logger(logger), windowHandler(nullptr), renderer(nullptr),
+      ui(nullptr) {
 }
 
 Engine::~Engine() {
@@ -19,13 +20,14 @@ void Engine::stop() {
   isRunning = false;
 }
 
-bool Engine::init(input::WindowHandler& windowHandler, rendering::UI& ui) {
+bool Engine::init(input::WindowHandler& windowHandler, rendering::Renderer& renderer, rendering::UI& ui) {
   srand(time(nullptr));
 
   this->start = std::chrono::high_resolution_clock::now();
   this->current = this->start;
 
   this->windowHandler = &windowHandler;
+  this->renderer = &renderer;
   this->ui = &ui;
 
   return true;
@@ -113,6 +115,11 @@ DebugInfo& Engine::getDebugInfo() {
 input::WindowHandler& Engine::getWindowHandler() const {
   assert(windowHandler != nullptr);
   return *windowHandler;
+}
+
+rendering::Renderer& Engine::getRenderer() const {
+  assert(renderer != nullptr);
+  return *renderer;
 }
 
 rendering::UI& Engine::getUI() const {

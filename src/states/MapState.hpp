@@ -37,9 +37,6 @@ public:
   void onWindowFocusChange(int focused);
   void onWindowResize(int width, int height);
 
-  // FIXME(kantoniak): Remove MapState::getRenderer(), a temporary hack, by extracting rendering superclass
-  rendering::WorldRenderer& getRenderer();
-
 private:
   rendering::WorldRenderer renderer;
   world::Geometry geometry;

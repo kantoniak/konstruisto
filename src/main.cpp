@@ -64,18 +64,21 @@ int main(int argc, char** argv) {
 
   engine::Engine engine(gameSettings, logger);
   input::WindowHandler windowHandler(engine);
+  rendering::Renderer renderer(engine);
   rendering::UI ui(engine);
 
   if (!windowHandler.createMainWindow()) {
+    engine.stop();
+  } else if (!renderer.init()) {
     engine.stop();
   } else if (!ui.init()) {
     engine.stop();
   }
 
-  engine.init(windowHandler, ui);
+  engine.init(windowHandler, renderer, ui);
 
   states::MapState mapState(engine);
-  states::MainMenuState menuState(engine, mapState.getRenderer(), mapState);
+  states::MainMenuState menuState(engine, mapState);
   engine.changeState(menuState);
 
   while (engine.running() && !glfwWindowShouldClose(&windowHandler.getWindow())) {
