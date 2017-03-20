@@ -249,14 +249,19 @@ void MapState::createRandomWorld() {
     world.getMap().addRoad(road);
   }
 
+  constexpr unsigned int minBuildingSide = 2;
+  constexpr unsigned int maxBuildingSideDifference = 3;
+  constexpr unsigned int minBuildingHeight = 1;
+  constexpr unsigned int maxBuildingHeightDifference = 6;
+  constexpr unsigned int maxCollisionTries = 20;
   const unsigned int buildingCount =
       (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.05f;
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
-    for (int i = 0; i < 20; i++) {
-      test.width = rand() % 3 + 2;
-      test.length = rand() % 3 + 2;
-      test.level = rand() % 6 + 1;
+    for (unsigned int i = 0; i < maxCollisionTries; i++) {
+      test.width = rand() % maxBuildingSideDifference + minBuildingSide;
+      test.length = rand() % maxBuildingSideDifference + minBuildingSide;
+      test.level = rand() % maxBuildingHeightDifference + minBuildingHeight;
       test.x = rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - test.width + 1);
       test.y = rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - test.length + 1);
       if (!geometry.checkCollisions(test)) {
