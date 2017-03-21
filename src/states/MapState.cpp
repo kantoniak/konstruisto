@@ -255,7 +255,7 @@ void MapState::createRandomWorld() {
   constexpr unsigned int maxBuildingHeightDifference = 6;
   constexpr unsigned int maxCollisionTries = 20;
   const unsigned int buildingCount =
-      (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.05f;
+      (mapSize.x * mapSize.y) * (data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH / 4) * 0.15f;
   for (unsigned int i = 0; i < buildingCount; i++) {
     data::buildings::Building test;
     for (unsigned int i = 0; i < maxCollisionTries; i++) {
