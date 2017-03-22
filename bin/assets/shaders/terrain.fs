@@ -18,8 +18,8 @@ void main() {
 
   color = vec4(0.624f, 0.643f, 0.318f, 1);
 
-  float atlasSide = 3;
-  float atlasSidePx = 96;
+  float atlasSide = 5;
+  float atlasSidePx = 160;
   vec2 textureSize = vec2(1 / atlasSide, 1 / atlasSide);
   vec2 textureInnerMovement = vec2(1 / (2 * atlasSidePx), 1 / (2 * atlasSidePx));
   vec2 textureInnerSize = textureSize - vec2(1 / atlasSidePx, 1 / atlasSidePx);

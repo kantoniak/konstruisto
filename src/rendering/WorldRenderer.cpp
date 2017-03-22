@@ -90,8 +90,8 @@ bool WorldRenderer::setupTextures() {
     // Texture of the ground
     glGenTextures(1, &roadTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 96, 96, 1);
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 96, 96, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 160, 160, 1);
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 160, 160, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -137,19 +137,7 @@ bool WorldRenderer::setupTerrain() {
     // Generate tiles
     std::fill(tiles.begin(), tiles.end(), 0);
     for (data::roads::Road road : chunk->getRoads()) {
-      long maxX =
-          road.x + (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width);
-      long maxY =
-          road.y + (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width);
-
-      for (long x = road.x; x < maxX; x++) {
-        for (long y = road.y; y < maxY; y++) {
-          for (int i = 0; i < 6; i++) {
-            unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-            tiles[index] = 1;
-          }
-        }
-      }
+      this->paintRoadOnTiles(road, tiles);
     }
 
     // Concatenate
@@ -435,5 +423,66 @@ void WorldRenderer::sendBuildingData() {
   glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+}
+
+void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {
+
+  if (road.direction == data::roads::Direction::W) {
+    for (long x = road.x; x < road.x + road.length; x++) {
+      for (int i = 0; i < 6; i++) {
+        unsigned int index = road.y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
+        if (x == road.x) {
+          tiles[index] = 1;
+        } else if (x == road.x + road.length - 1) {
+          tiles[index] = 3;
+        } else {
+          tiles[index] = 2;
+        }
+        index = (road.y + 1) * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
+        if (x == road.x) {
+          tiles[index] = 11;
+        } else if (x == road.x + road.length - 1) {
+          tiles[index] = 13;
+        } else {
+          tiles[index] = 12;
+        }
+      }
+    }
+  }
+
+  if (road.direction == data::roads::Direction::N) {
+    for (long y = road.y; y < road.y + road.length; y++) {
+      for (int i = 0; i < 6; i++) {
+        unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x) * 6 + i;
+        if (tiles[index] == 2) {
+          tiles[index] = 14;
+        } else if (tiles[index] == 12) {
+          tiles[index] = 19;
+        } else {
+          if (y == road.y) {
+            tiles[index] = 1;
+          } else if (y == road.y + road.length - 1) {
+            tiles[index] = 11;
+          } else {
+            tiles[index] = 6;
+          }
+        }
+        index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x + 1) * 6 + i;
+        if (tiles[index] == 2) {
+          tiles[index] = 15;
+        } else if (tiles[index] == 12) {
+          tiles[index] = 20;
+        } else {
+          if (y == road.y) {
+            tiles[index] = 3;
+          } else if (y == road.y + road.length - 1) {
+            tiles[index] = 13;
+          } else {
+            tiles[index] = 8;
+          }
+        }
+      }
+    }
+  }
 }
 }

@@ -52,6 +52,8 @@ protected:
   bool resendBuildingData = false;
   void sendBuildingData();
 
+  void paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles);
+
   // Terrain
   GLuint shaderProgram;
   GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
