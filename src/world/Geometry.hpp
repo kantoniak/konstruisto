@@ -27,6 +27,7 @@ public:
 
   // TODO(kantoniak): Return structure with object IDs by type
   bool checkCollisions(data::buildings::Building& building);
+  bool checkCollisions(data::roads::Road& road);
 
 protected:
   World* world;
@@ -34,6 +35,9 @@ protected:
 
   World& getWorld();
   engine::Engine& getEngine();
+
+  const glm::ivec2 getEnd(data::buildings::Building& building) const;
+  const glm::ivec2 getEnd(data::roads::Road& road) const;
 };
 }
 

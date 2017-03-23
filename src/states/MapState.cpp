@@ -229,7 +229,7 @@ void MapState::createRandomWorld() {
     }
   }
 
-  const unsigned int roadsCountPerDir = 2;
+  const unsigned int roadsCountPerDir = 4;
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
@@ -237,7 +237,9 @@ void MapState::createRandomWorld() {
     road.y = rand() % (data::Chunk::SIDE_LENGTH - 2);
     road.direction = data::roads::Direction::W;
     road.length = data::Chunk::SIDE_LENGTH;
-    world.getMap().addRoad(road);
+    if (!geometry.checkCollisions(road)) {
+      world.getMap().addRoad(road);
+    }
   }
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
@@ -246,7 +248,9 @@ void MapState::createRandomWorld() {
     road.x = rand() % (data::Chunk::SIDE_LENGTH - 2);
     road.direction = data::roads::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH;
-    world.getMap().addRoad(road);
+    if (!geometry.checkCollisions(road)) {
+      world.getMap().addRoad(road);
+    }
   }
 
   constexpr unsigned int minBuildingSide = 2;
