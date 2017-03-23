@@ -455,9 +455,9 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
       for (int i = 0; i < 6; i++) {
         unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x) * 6 + i;
         if (tiles[index] == 2) {
-          tiles[index] = 14;
+          tiles[index] = 4;
         } else if (tiles[index] == 12) {
-          tiles[index] = 19;
+          tiles[index] = 9;
         } else {
           if (y == road.y) {
             tiles[index] = 1;
@@ -469,9 +469,9 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
         }
         index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x + 1) * 6 + i;
         if (tiles[index] == 2) {
-          tiles[index] = 15;
+          tiles[index] = 5;
         } else if (tiles[index] == 12) {
-          tiles[index] = 20;
+          tiles[index] = 10;
         } else {
           if (y == road.y) {
             tiles[index] = 3;
