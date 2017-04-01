@@ -37,6 +37,7 @@ public:
   virtual void cleanup();
 
   void markBuildingDataForUpdate();
+  void markTileDataForUpdate();
 
   void renderWorld(const input::Selection& selection);
   void renderDebug();
@@ -52,6 +53,9 @@ protected:
 
   bool resendBuildingData = false;
   void sendBuildingData();
+
+  bool resendTileData = false;
+  void sendTileData();
 
   void paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles);
 

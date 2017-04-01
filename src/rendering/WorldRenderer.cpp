@@ -103,60 +103,7 @@ bool WorldRenderer::setupTextures() {
 
 bool WorldRenderer::setupTerrain() {
   glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  constexpr unsigned long verticesCount = data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3;
-  std::vector<glm::vec3> fieldBase{glm::vec3(1, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 1),
-                                   glm::vec3(1, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)};
-
-  // Generate buffers
-  std::vector<glm::vec3> positions;
-  positions.resize(verticesCount);
-
-  std::vector<GLfloat> tiles;
-  tiles.resize(verticesCount);
-
-  GLuint chunkVBO = 0;
-  std::vector<GLfloat> toBuffer;
-  toBuffer.resize(verticesCount * (3 + 1));
-
-  for (data::Chunk* chunk : world.getMap().getChunks()) {
-    glm::vec3 chunkPosition =
-        glm::vec3(chunk->getPosition().x, 0, chunk->getPosition().y) * (float)data::Chunk::SIDE_LENGTH;
-
-    // Generate positions
-    for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
-      for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
-        for (unsigned int i = 0; i < 6; i++) {
-          positions[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = chunkPosition + glm::vec3(x, 0, y) + fieldBase[i];
-        }
-      }
-    }
-
-    // Generate tiles
-    std::fill(tiles.begin(), tiles.end(), 0);
-    for (data::roads::Road road : chunk->getRoads()) {
-      this->paintRoadOnTiles(road, tiles);
-    }
-
-    // Concatenate
-    for (unsigned int i = 0; i < verticesCount; i++) {
-      toBuffer[i * 4] = positions[i].x;
-      toBuffer[i * 4 + 1] = positions[i].y;
-      toBuffer[i * 4 + 2] = positions[i].z;
-      toBuffer[i * 4 + 3] = tiles[i];
-    }
-
-    // Send buffer
-    glGenBuffers(1, &chunkVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
-    glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
-    chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
-  }
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-
+  markTileDataForUpdate();
   return true;
 }
 
@@ -221,6 +168,10 @@ void WorldRenderer::markBuildingDataForUpdate() {
   resendBuildingData = true;
 }
 
+void WorldRenderer::markTileDataForUpdate() {
+  resendTileData = true;
+}
+
 void WorldRenderer::renderWorld(const input::Selection& selection) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -230,6 +181,11 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
   // Terrain
+  if (resendTileData) {
+    sendTileData();
+    resendTileData = false;
+  }
+
   glUseProgram(shaderProgram);
   glBindVertexArray(VAO);
   glActiveTexture(GL_TEXTURE0);
@@ -449,10 +405,65 @@ void WorldRenderer::sendBuildingData() {
           glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin));
     }
   }
-
   glBindVertexArray(buildingsVAO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
   glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+}
+
+void WorldRenderer::sendTileData() {
+  glBindVertexArray(VAO);
+
+  constexpr unsigned long verticesCount = data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3;
+  const std::vector<glm::vec3> fieldBase{glm::vec3(1, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 1),
+                                   glm::vec3(1, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)};
+
+  // Generate buffers
+  std::vector<glm::vec3> positions;
+  positions.resize(verticesCount);
+
+  std::vector<GLfloat> tiles;
+  tiles.resize(verticesCount);
+
+  GLuint chunkVBO = 0;
+  std::vector<GLfloat> toBuffer;
+  toBuffer.resize(verticesCount * (3 + 1));
+
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    glm::vec3 chunkPosition =
+        glm::vec3(chunk->getPosition().x, 0, chunk->getPosition().y) * (float)data::Chunk::SIDE_LENGTH;
+
+    // Generate positions
+    for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
+      for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
+        for (unsigned int i = 0; i < 6; i++) {
+          positions[y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i] = chunkPosition + glm::vec3(x, 0, y) + fieldBase[i];
+        }
+      }
+    }
+
+    // Generate tiles
+    std::fill(tiles.begin(), tiles.end(), 0);
+    for (data::roads::Road road : chunk->getRoads()) {
+      this->paintRoadOnTiles(road, tiles);
+    }
+
+    // Concatenate
+    for (unsigned int i = 0; i < verticesCount; i++) {
+      toBuffer[i * 4] = positions[i].x;
+      toBuffer[i * 4 + 1] = positions[i].y;
+      toBuffer[i * 4 + 2] = positions[i].z;
+      toBuffer[i * 4 + 3] = tiles[i];
+    }
+
+    // Send buffer
+    glGenBuffers(1, &chunkVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
+    glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
+    chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
+  }
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
