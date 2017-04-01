@@ -68,7 +68,7 @@ void MapState::update(std::chrono::milliseconds delta) {
     selection->to(selectionEnd);
   }
 
-  if (selection->isSelecting()) {
+  if (selection->isSelecting() && MapStateAction::PLACE_BUILDING == currentAction) {
     glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
     data::buildings::Building toAdd;
     toAdd.width = size.x;
@@ -77,6 +77,26 @@ void MapState::update(std::chrono::milliseconds delta) {
     toAdd.x = selection->getFrom().x;
     toAdd.y = selection->getFrom().y;
     if (!geometry.checkCollisions(toAdd)) {
+      selection->markValid();
+    } else {
+      selection->markInvalid();
+    }
+  }
+
+  if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
+    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
+    data::roads::Road road;
+    road.type = data::roads::Standard.typeId;
+    road.x = selection->getFrom().x;
+    road.y = selection->getFrom().y;
+    if (size.x > size.y) {
+      road.direction = data::roads::Direction::W;
+      road.length = size.x;
+    } else {
+      road.direction = data::roads::Direction::N;
+      road.length = size.y;
+    }
+    if (!geometry.checkCollisions(road)) {
       selection->markValid();
     } else {
       selection->markInvalid();
@@ -169,6 +189,14 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     switchToPauseState();
   }
+
+  if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::PLACE_BUILDING);
+  }
+
+  if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::PLACE_ROAD);
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int mods) {
@@ -178,16 +206,37 @@ void MapState::onMouseButton(int button, int action, int mods) {
   } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
     selection->stop();
 
-    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-    data::buildings::Building toAdd;
-    toAdd.width = size.x;
-    toAdd.length = size.y;
-    toAdd.level = newBuildingHeight;
-    toAdd.x = selection->getFrom().x;
-    toAdd.y = selection->getFrom().y;
-    if (!geometry.checkCollisions(toAdd)) {
-      world.getMap().addBuilding(toAdd);
-      renderer.markBuildingDataForUpdate();
+    if (MapStateAction::PLACE_BUILDING == currentAction) {
+      glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
+      data::buildings::Building toAdd;
+      toAdd.width = size.x;
+      toAdd.length = size.y;
+      toAdd.level = newBuildingHeight;
+      toAdd.x = selection->getFrom().x;
+      toAdd.y = selection->getFrom().y;
+      if (!geometry.checkCollisions(toAdd)) {
+        world.getMap().addBuilding(toAdd);
+        renderer.markBuildingDataForUpdate();
+      }
+    }
+
+    if (MapStateAction::PLACE_ROAD == currentAction) {
+      glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
+      data::roads::Road road;
+      road.type = data::roads::Standard.typeId;
+      road.x = selection->getFrom().x;
+      road.y = selection->getFrom().y;
+      if (size.x > size.y) {
+        road.direction = data::roads::Direction::W;
+        road.length = size.x;
+      } else {
+        road.direction = data::roads::Direction::N;
+        road.length = size.y;
+      }
+      if (!geometry.checkCollisions(road)) {
+        world.getMap().addRoad(road);
+        renderer.markTileDataForUpdate();
+      }
     }
   }
   if (button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -288,7 +337,7 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ROAD:
-    selection = std::make_unique<input::LineSelection>(2);
+    selection = std::make_unique<input::LineSelection>(data::roads::Standard.width);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   }
