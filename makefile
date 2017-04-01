@@ -73,7 +73,10 @@ CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
-$(BINDIR)/$(PROJECT_NAME)$(EXTENSION):  $(OBJ_FILES)
+$(OBJDIR)/windows.rc.o:
+	windres $(SRCDIR)/windows.rc $(OBJDIR)/windows.rc.o
+
+$(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJDIR)/windows.rc.o $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
 	@echo "[LINK] $(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
 	@$(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
