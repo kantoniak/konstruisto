@@ -417,7 +417,7 @@ void WorldRenderer::sendTileData() {
 
   constexpr unsigned long verticesCount = data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3;
   const std::vector<glm::vec3> fieldBase{glm::vec3(1, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 1),
-                                   glm::vec3(1, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)};
+                                         glm::vec3(1, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)};
 
   // Generate buffers
   std::vector<glm::vec3> positions;
@@ -458,10 +458,15 @@ void WorldRenderer::sendTileData() {
     }
 
     // Send buffer
-    glGenBuffers(1, &chunkVBO);
+    auto key = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
+    if (chunks.find(key) == chunks.end()) {
+      glGenBuffers(1, &chunkVBO);
+      chunks[key] = chunkVBO;
+    } else {
+      chunkVBO = chunks[key];
+    }
     glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
     glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
-    chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)] = chunkVBO;
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
