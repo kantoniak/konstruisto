@@ -9,6 +9,7 @@
 #include "../data/City.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
+#include "../input/LineSelection.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../rendering/Renderer.hpp"

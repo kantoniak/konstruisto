@@ -280,7 +280,6 @@ void MapState::createRandomWorld() {
 
 void MapState::setCurrentAction(MapStateAction action) {
   currentAction = action;
-  engine.getLogger().debug("%d %d %d", action, MapStateAction::PLACE_BUILDING, action - MapStateAction::PLACE_BUILDING);
   renderer.setLeftMenuActiveIcon(currentAction - MapStateAction::PLACE_BUILDING);
 
   switch (action) {
@@ -289,7 +288,7 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ROAD:
-    selection = std::make_unique<input::Selection>();
+    selection = std::make_unique<input::LineSelection>(2);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   }

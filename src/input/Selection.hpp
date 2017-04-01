@@ -26,10 +26,10 @@ public:
   bool isSelecting() const;
   void reset();
 
-  glm::ivec2 getFrom() const;
-  glm::ivec2 getTo() const;
+  virtual glm::ivec2 getFrom() const;
+  virtual glm::ivec2 getTo() const;
 
-private:
+protected:
   bool selecting;
   bool valid;
   glm::ivec2 fromPoint;
@@ -38,8 +38,6 @@ private:
   glm::vec4 startColor;
   glm::vec4 selectionColor;
   glm::vec4 invalidColor;
-
-  void updateFromAndTo();
 };
 }
 
