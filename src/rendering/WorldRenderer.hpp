@@ -27,7 +27,7 @@ namespace rendering {
 class WorldRenderer : public Renderer {
 
 public:
-  WorldRenderer(engine::Engine& engine, world::World& world, input::Selection& selection);
+  WorldRenderer(engine::Engine& engine, world::World& world);
 
   virtual bool init();
   bool setupShaders();
@@ -38,16 +38,17 @@ public:
 
   void markBuildingDataForUpdate();
 
-  void renderWorld();
+  void renderWorld(const input::Selection& selection);
   void renderDebug();
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
   void renderUI();
   void renderDebugUI();
 
+  void setLeftMenuActiveIcon(int index);
+
 protected:
   world::World& world;
-  input::Selection& selection;
 
   bool resendBuildingData = false;
   void sendBuildingData();
@@ -74,6 +75,9 @@ protected:
   // Buildings - normals
   GLuint buildingNormalsTransformLoc;
   GLuint buildingNormalsShaderProgram;
+
+  // Left menu
+  int leftMenuActiveIcon = -1;
 };
 }
 

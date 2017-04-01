@@ -3,7 +3,7 @@
 namespace states {
 
 MapState::MapState(engine::Engine& engine)
-    : GameState(engine), renderer(engine, world, selection), pauseState(engine, world, renderer) {
+    : GameState(engine), renderer(engine, world), pauseState(engine, world, renderer) {
   suspended = false;
 };
 
@@ -32,7 +32,7 @@ void MapState::init() {
     return;
   }
 
-  selection.setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+  setCurrentAction(MapStateAction::PLACE_BUILDING);
 
   world.getTimer().start();
 };
@@ -62,24 +62,24 @@ void MapState::update(std::chrono::milliseconds delta) {
 
   glm::ivec2 selectionEnd;
   if (geometry.hitField(engine.getWindowHandler().getMousePositionNormalized(), selectionEnd)) {
-    if (!selection.isSelecting()) {
-      selection.from(selectionEnd);
+    if (!selection->isSelecting()) {
+      selection->from(selectionEnd);
     }
-    selection.to(selectionEnd);
+    selection->to(selectionEnd);
   }
 
-  if (selection.isSelecting()) {
-    glm::ivec2 size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
+  if (selection->isSelecting()) {
+    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
     data::buildings::Building toAdd;
     toAdd.width = size.x;
     toAdd.length = size.y;
     toAdd.level = newBuildingHeight;
-    toAdd.x = selection.getFrom().x;
-    toAdd.y = selection.getFrom().y;
+    toAdd.x = selection->getFrom().x;
+    toAdd.y = selection->getFrom().y;
     if (!geometry.checkCollisions(toAdd)) {
-      selection.markValid();
+      selection->markValid();
     } else {
-      selection.markInvalid();
+      selection->markInvalid();
     }
   }
 
@@ -89,7 +89,7 @@ void MapState::update(std::chrono::milliseconds delta) {
 void MapState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld();
+  renderer.renderWorld(*selection);
 #ifdef DEBUG_CONFIG
   renderer.renderDebug();
 #endif
@@ -174,17 +174,17 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
 void MapState::onMouseButton(int button, int action, int mods) {
   mods = 0;
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-    selection.start(selection.getFrom());
+    selection->start(selection->getFrom());
   } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-    selection.stop();
+    selection->stop();
 
-    glm::ivec2 size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
+    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
     data::buildings::Building toAdd;
     toAdd.width = size.x;
     toAdd.length = size.y;
     toAdd.level = newBuildingHeight;
-    toAdd.x = selection.getFrom().x;
-    toAdd.y = selection.getFrom().y;
+    toAdd.x = selection->getFrom().x;
+    toAdd.y = selection->getFrom().y;
     if (!geometry.checkCollisions(toAdd)) {
       world.getMap().addBuilding(toAdd);
       renderer.markBuildingDataForUpdate();
@@ -276,6 +276,23 @@ void MapState::createRandomWorld() {
   }
 
   world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
+}
+
+void MapState::setCurrentAction(MapStateAction action) {
+  currentAction = action;
+  engine.getLogger().debug("%d %d %d", action, MapStateAction::PLACE_BUILDING, action - MapStateAction::PLACE_BUILDING);
+  renderer.setLeftMenuActiveIcon(currentAction - MapStateAction::PLACE_BUILDING);
+
+  switch (action) {
+  case MapStateAction::PLACE_BUILDING:
+    selection = std::make_unique<input::Selection>();
+    selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+    break;
+  case MapStateAction::PLACE_ROAD:
+    selection = std::make_unique<input::Selection>();
+    selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+    break;
+  }
 }
 
 void MapState::handleMapDragging(std::chrono::milliseconds delta) {

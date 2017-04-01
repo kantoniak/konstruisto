@@ -3,8 +3,7 @@
 #include "../data/Chunk.hpp"
 
 namespace rendering {
-WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world, input::Selection& selection)
-    : Renderer(engine), world(world), selection(selection) {
+WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world) : Renderer(engine), world(world) {
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
@@ -222,7 +221,7 @@ void WorldRenderer::markBuildingDataForUpdate() {
   resendBuildingData = true;
 }
 
-void WorldRenderer::renderWorld() {
+void WorldRenderer::renderWorld(const input::Selection& selection) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -372,6 +371,35 @@ void WorldRenderer::renderUI() {
     x += UI::ICON_SIDE + topbarInnerMargin;
     engine.getUI().renderIcon(UI::ICON_SPEED_3, x, y);
   }
+
+  // Left menu
+  {
+    const unsigned short optionsCount = 3;
+    const unsigned short buttonSide = 3 * UI::ICON_SIDE;
+    int x = 0;
+    int y = viewport.y / 2 - optionsCount * buttonSide / 2.f;
+
+    nvgBeginPath(context);
+    nvgRect(context, x, y, buttonSide, buttonSide * optionsCount);
+    nvgFillColor(context, engine.getUI().getBackgroundColor());
+    nvgFill(context);
+
+    if (leftMenuActiveIcon >= 0) {
+      nvgBeginPath(context);
+      nvgRect(context, x, y + buttonSide * leftMenuActiveIcon, buttonSide, buttonSide);
+      nvgFillColor(context, iconBackgroundColor);
+      nvgFill(context);
+    }
+
+    x = (buttonSide - UI::ICON_SIDE) / 2;
+    y += x;
+
+    engine.getUI().renderIcon(UI::ICON_BUILDING, x, y);
+    y += buttonSide;
+    engine.getUI().renderIcon(UI::ICON_ROAD, x, y);
+    y += buttonSide;
+    engine.getUI().renderIcon(UI::ICON_MORE, x, y);
+  }
 }
 
 void WorldRenderer::renderDebugUI() {
@@ -402,6 +430,10 @@ void WorldRenderer::renderDebugUI() {
   nvgText(context, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 3 * lineHeight, renderWorld.c_str(),
           nullptr);
   nvgText(context, 1.8f * margin, margin + textMargin + lineHeight / 2.f + 4 * lineHeight, renderUI.c_str(), nullptr);
+}
+
+void WorldRenderer::setLeftMenuActiveIcon(int index) {
+  leftMenuActiveIcon = index;
 }
 
 void WorldRenderer::sendBuildingData() {

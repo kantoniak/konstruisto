@@ -34,6 +34,11 @@ bool UI::init() {
     return false;
   }
 
+  if (!loadIcon(ICON_BUILDING, ICON_PATH_BUILDING) || !loadIcon(ICON_ROAD, ICON_PATH_ROAD) ||
+      !loadIcon(ICON_MORE, ICON_PATH_MORE)) {
+    return false;
+  }
+
   bgColor = nvgRGB(34, 34, 34);
   primaryTextColor = nvgRGB(255, 255, 255);
   accentColor = nvgRGB(200, 113, 55);

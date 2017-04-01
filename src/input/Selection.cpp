@@ -2,6 +2,23 @@
 
 namespace input {
 Selection::Selection() : selecting(false), valid(true) {
+  reset();
+  startColor = glm::vec4();
+  selectionColor = glm::vec4();
+  invalidColor = glm::vec4();
+}
+
+Selection& Selection::operator=(const Selection& other) {
+  selecting = other.selecting;
+  valid = other.valid;
+  fromPoint = other.fromPoint;
+  toPoint = other.toPoint;
+
+  startColor = other.startColor;
+  selectionColor = other.selectionColor;
+  invalidColor = other.invalidColor;
+
+  return *this;
 }
 
 void Selection::setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor) {
@@ -10,7 +27,7 @@ void Selection::setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::v
   this->invalidColor = invalidColor;
 }
 
-glm::vec4 Selection::getColor() {
+glm::vec4 Selection::getColor() const {
   if (isSelecting() && isValid()) {
     return selectionColor;
   }
@@ -46,11 +63,11 @@ void Selection::markValid() {
   valid = true;
 }
 
-bool Selection::isValid() {
+bool Selection::isValid() const {
   return valid;
 }
 
-bool Selection::isSelecting() {
+bool Selection::isSelecting() const {
   return selecting;
 }
 
@@ -60,7 +77,7 @@ void Selection::reset() {
   fromPoint = toPoint = glm::ivec2();
 }
 
-glm::ivec2 Selection::getFrom() {
+glm::ivec2 Selection::getFrom() const {
   glm::ivec2 result = fromPoint;
   if (fromPoint.x > toPoint.x) {
     result.x = toPoint.x;
@@ -71,7 +88,7 @@ glm::ivec2 Selection::getFrom() {
   return result;
 }
 
-glm::ivec2 Selection::getTo() {
+glm::ivec2 Selection::getTo() const {
   glm::ivec2 result = toPoint;
   if (fromPoint.x > toPoint.x) {
     result.x = fromPoint.x;

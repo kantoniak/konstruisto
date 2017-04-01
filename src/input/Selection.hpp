@@ -9,9 +9,10 @@ class Selection {
 
 public:
   Selection();
+  Selection& operator=(const Selection& other);
 
   void setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor);
-  glm::vec4 getColor();
+  glm::vec4 getColor() const;
 
   void start(glm::ivec2 point);
   void from(glm::ivec2 point);
@@ -20,13 +21,13 @@ public:
 
   void markInvalid();
   void markValid();
-  bool isValid();
+  bool isValid() const;
 
-  bool isSelecting();
+  bool isSelecting() const;
   void reset();
 
-  glm::ivec2 getFrom();
-  glm::ivec2 getTo();
+  glm::ivec2 getFrom() const;
+  glm::ivec2 getTo() const;
 
 private:
   bool selecting;

@@ -20,6 +20,8 @@
 
 namespace states {
 
+enum MapStateAction { PLACE_BUILDING = 0, PLACE_ROAD = 1 };
+
 class MapState : public engine::GameState {
 
 public:
@@ -41,10 +43,13 @@ private:
   rendering::WorldRenderer renderer;
   world::Geometry geometry;
   world::World world;
-  input::Selection selection;
+  std::unique_ptr<input::Selection> selection;
 
   void createRandomWorld();
   data::City city;
+
+  MapStateAction currentAction;
+  void setCurrentAction(MapStateAction action);
 
   // TODO(kantoniak): Move actions to InputHandler
   glm::vec2 dragStart = glm::vec2();
