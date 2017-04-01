@@ -7,6 +7,7 @@
 
 #include "../engine/Engine.hpp"
 #include "../settings.hpp"
+#include "../rendering/stb_image.h"
 
 namespace input {
 
