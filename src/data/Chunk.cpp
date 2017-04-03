@@ -36,6 +36,20 @@ void Chunk::addBuilding(data::buildings::Building building) {
   residential.push_back(building);
 }
 
+bool Chunk::removeBuilding(data::buildings::Building building) {
+  auto toRemove = residential.end();
+  for (auto it = residential.begin(); it != residential.end(); it++) {
+    if ((*it).x == building.x && (*it).y == building.y) {
+      toRemove = it;
+    }
+  }
+  if (toRemove == residential.end()) {
+    return false;
+  }
+  residential.erase(toRemove);
+  return true;
+}
+
 void Chunk::addRoad(data::roads::Road road) {
   roads.push_back(road);
 }

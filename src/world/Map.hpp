@@ -35,6 +35,8 @@ public:
   void addRoad(data::roads::Road road);
   void addRoads(std::vector<data::roads::Road> roads);
 
+  void removeBuilding(data::buildings::Building building);
+
 protected:
   std::vector<data::Chunk*> chunks;
   data::City* currentCity;

@@ -240,6 +240,13 @@ void MapState::onMouseButton(int button, int action, int mods) {
         renderer.markTileDataForUpdate();
       }
     }
+
+    if (MapStateAction::BULDOZE == currentAction) {
+      for (data::buildings::Building b : geometry.getBuildings(selection->getFrom(), selection->getTo())) {
+        world.getMap().removeBuilding(b);
+      }
+      renderer.markBuildingDataForUpdate();
+    }
   }
   if (button == GLFW_MOUSE_BUTTON_RIGHT) {
     if (action == GLFW_PRESS) {

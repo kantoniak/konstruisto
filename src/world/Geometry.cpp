@@ -108,6 +108,22 @@ bool Geometry::checkCollisions(data::roads::Road& road) {
   return false;
 }
 
+std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 from, const glm::ivec2 to) const {
+  std::vector<data::buildings::Building> result;
+
+  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
+    for (data::buildings::Building building : chunk->getResidentials()) {
+      const glm::ivec2 b2 = glm::vec2(building.x, building.y);
+      const glm::ivec2 b1 = getEnd(building);
+      if (checkRectIntersection(to, from, b1, b2)) {
+        result.push_back(building);
+      }
+    }
+  }
+
+  return result;
+}
+
 std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Road& road) const {
   // FIXME(kantoniak): Roads have some bugs either in splitting or rendering. Investigate.
   data::roads::Road toSplit = road;
@@ -142,11 +158,11 @@ std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Ro
   return result;
 }
 
-World& Geometry::getWorld() {
+World& Geometry::getWorld() const {
   return *world;
 }
 
-engine::Engine& Geometry::getEngine() {
+engine::Engine& Geometry::getEngine() const {
   return *engine;
 }
 

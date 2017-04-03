@@ -2,6 +2,7 @@
 #define DATA_CHUNK_HPP
 
 #include <glm/glm.hpp>
+#include <algorithm>
 #include <vector>
 
 #include "buildings.hpp"
@@ -28,6 +29,7 @@ public:
   unsigned int getResidentialSize();
 
   void addBuilding(data::buildings::Building building);
+  bool removeBuilding(data::buildings::Building building);
 
   void addRoad(data::roads::Road road);
   roadList getRoads();

@@ -31,14 +31,16 @@ public:
   bool checkCollisions(data::buildings::Building& building);
   bool checkCollisions(data::roads::Road& road);
 
+  std::vector<data::buildings::Building> getBuildings(const glm::ivec2 from, const glm::ivec2 to) const;
+
   std::vector<data::roads::Road> splitRoadByChunks(const data::roads::Road& road) const;
 
 protected:
   World* world;
   engine::Engine* engine;
 
-  World& getWorld();
-  engine::Engine& getEngine();
+  World& getWorld() const;
+  engine::Engine& getEngine() const;
 
   const glm::ivec2 getEnd(data::buildings::Building& building) const;
   const glm::ivec2 getEnd(data::roads::Road& road) const;

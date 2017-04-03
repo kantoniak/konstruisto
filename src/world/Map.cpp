@@ -71,6 +71,14 @@ void Map::addRoads(std::vector<data::roads::Road> roads) {
   }
 }
 
+void Map::removeBuilding(data::buildings::Building building) {
+  for (data::Chunk* chunk : chunks) {
+    if (chunk->removeBuilding(building)) {
+      buildingCount--;
+    }
+  }
+}
+
 data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) {
   for (unsigned long it = 0; it < chunks.size(); it++) {
     if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {

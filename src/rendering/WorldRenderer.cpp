@@ -220,11 +220,13 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     resendBuildingData = false;
   }
 
-  glUseProgram(buildingsShaderProgram);
-  glBindVertexArray(buildingsVAO);
+  if (world.getMap().getBuildingCount() > 0) {
+    glUseProgram(buildingsShaderProgram);
+    glBindVertexArray(buildingsVAO);
 
-  glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+    glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+  }
 
   glBindVertexArray(0);
   glFlush();
@@ -396,6 +398,10 @@ void WorldRenderer::setLeftMenuActiveIcon(int index) {
 
 void WorldRenderer::sendBuildingData() {
   const unsigned int buildingCount = world.getMap().getBuildingCount();
+  if (buildingCount < 1) {
+    return;
+  }
+
   std::vector<glm::vec3> buildingPositions;
   buildingPositions.reserve(2 * buildingCount);
 
