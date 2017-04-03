@@ -6,8 +6,8 @@
 #include <glm/glm.hpp>
 
 #include "../engine/Engine.hpp"
-#include "../settings.hpp"
 #include "../rendering/stb_image.h"
+#include "../settings.hpp"
 
 namespace input {
 
