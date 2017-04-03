@@ -55,7 +55,7 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     // With roads
     for (data::roads::Road road : chunk->getRoads()) {
-      const glm::ivec2 b2 = glm::vec2(road.x, road.y);
+      const glm::ivec2 b2 = road.position.getGlobal();
       const glm::ivec2 b1 = getEnd(road);
       if (checkRectIntersection(a1, a2, b1, b2)) {
         return true;
@@ -75,7 +75,7 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
 }
 
 bool Geometry::checkCollisions(data::roads::Road& road) {
-  const glm::ivec2 a2 = glm::vec2(road.x, road.y);
+  const glm::ivec2 a2 = road.position.getGlobal();
   const glm::ivec2 a1 = getEnd(road);
 
   if (!getWorld().getMap().chunkExists(fieldToChunk(a1)) || !getWorld().getMap().chunkExists(fieldToChunk(a2))) {
@@ -89,7 +89,7 @@ bool Geometry::checkCollisions(data::roads::Road& road) {
       if (other.direction != road.direction) {
         continue;
       }
-      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
+      const glm::ivec2 b2 = other.position.getGlobal();
       const glm::ivec2 b1 = getEnd(other);
       if (checkRectIntersection(a1, a2, b1, b2)) {
         return true;
@@ -121,9 +121,9 @@ const glm::ivec2 Geometry::getEnd(data::buildings::Building& building) const {
 }
 
 const glm::ivec2 Geometry::getEnd(data::roads::Road& road) const {
-  return glm::ivec2(
-      road.x + (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
-      road.y + (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width) -
-          1);
+  return road.position.getGlobal() +
+         glm::ivec2(
+             (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
+             (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
 }
 }

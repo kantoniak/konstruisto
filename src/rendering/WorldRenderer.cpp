@@ -476,20 +476,20 @@ void WorldRenderer::sendTileData() {
 void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {
 
   if (road.direction == data::roads::Direction::W) {
-    for (long x = road.x; x < road.x + road.length; x++) {
+    for (long x = road.position.getLocal().x; x < road.position.getLocal().x + road.length; x++) {
       for (int i = 0; i < 6; i++) {
-        unsigned int index = road.y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-        if (x == road.x) {
+        unsigned int index = road.position.getLocal().y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
+        if (x == road.position.getLocal().x) {
           tiles[index] = 1;
-        } else if (x == road.x + road.length - 1) {
+        } else if (x == road.position.getLocal().x + road.length - 1) {
           tiles[index] = 3;
         } else {
           tiles[index] = 2;
         }
-        index = (road.y + 1) * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-        if (x == road.x) {
+        index = (road.position.getLocal().y + 1) * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
+        if (x == road.position.getLocal().x) {
           tiles[index] = 11;
-        } else if (x == road.x + road.length - 1) {
+        } else if (x == road.position.getLocal().x + road.length - 1) {
           tiles[index] = 13;
         } else {
           tiles[index] = 12;
@@ -499,31 +499,31 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
   }
 
   if (road.direction == data::roads::Direction::N) {
-    for (long y = road.y; y < road.y + road.length; y++) {
+    for (long y = road.position.getLocal().y; y < road.position.getLocal().y + road.length; y++) {
       for (int i = 0; i < 6; i++) {
-        unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x) * 6 + i;
+        unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x) * 6 + i;
         if (tiles[index] == 2) {
           tiles[index] = 4;
         } else if (tiles[index] == 12) {
           tiles[index] = 9;
         } else {
-          if (y == road.y) {
+          if (y == road.position.getLocal().y) {
             tiles[index] = 1;
-          } else if (y == road.y + road.length - 1) {
+          } else if (y == road.position.getLocal().y + road.length - 1) {
             tiles[index] = 11;
           } else {
             tiles[index] = 6;
           }
         }
-        index = y * data::Chunk::SIDE_LENGTH * 6 + (road.x + 1) * 6 + i;
+        index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x + 1) * 6 + i;
         if (tiles[index] == 2) {
           tiles[index] = 5;
         } else if (tiles[index] == 12) {
           tiles[index] = 10;
         } else {
-          if (y == road.y) {
+          if (y == road.position.getLocal().y) {
             tiles[index] = 3;
-          } else if (y == road.y + road.length - 1) {
+          } else if (y == road.position.getLocal().y + road.length - 1) {
             tiles[index] = 13;
           } else {
             tiles[index] = 8;

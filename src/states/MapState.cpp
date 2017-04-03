@@ -87,8 +87,7 @@ void MapState::update(std::chrono::milliseconds delta) {
     glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
-    road.x = selection->getFrom().x;
-    road.y = selection->getFrom().y;
+    road.position.setGlobal(selection->getFrom());
     if (size.x > size.y) {
       road.direction = data::roads::Direction::W;
       road.length = size.x;
@@ -224,8 +223,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
       glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
       data::roads::Road road;
       road.type = data::roads::Standard.typeId;
-      road.x = selection->getFrom().x;
-      road.y = selection->getFrom().y;
+      road.position.setGlobal(selection->getFrom());
       if (size.x > size.y) {
         road.direction = data::roads::Direction::W;
         road.length = size.x;
@@ -282,8 +280,7 @@ void MapState::createRandomWorld() {
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
-    road.x = 0;
-    road.y = rand() % (data::Chunk::SIDE_LENGTH - 2);
+    road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH - 2)));
     road.direction = data::roads::Direction::W;
     road.length = data::Chunk::SIDE_LENGTH;
     if (!geometry.checkCollisions(road)) {
@@ -293,8 +290,7 @@ void MapState::createRandomWorld() {
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
-    road.y = 0;
-    road.x = rand() % (data::Chunk::SIDE_LENGTH - 2);
+    road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH - 2), 0));
     road.direction = data::roads::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH;
     if (!geometry.checkCollisions(road)) {
