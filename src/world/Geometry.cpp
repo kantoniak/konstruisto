@@ -108,6 +108,40 @@ bool Geometry::checkCollisions(data::roads::Road& road) {
   return false;
 }
 
+std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Road& road) const {
+  // FIXME(kantoniak): Roads have some bugs either in splitting or rendering. Investigate.
+  data::roads::Road toSplit = road;
+  std::vector<data::roads::Road> result;
+
+  int newLength;
+  int oldLength;
+  do {
+
+    if (data::roads::Direction::N == toSplit.direction) {
+      newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().y);
+    } else {
+      newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().x);
+    }
+    oldLength = toSplit.length;
+    toSplit.length = newLength;
+
+    result.push_back(toSplit);
+
+    glm::ivec2 localPos = toSplit.position.getLocal();
+    if (data::roads::Direction::N == toSplit.direction) {
+      localPos.y = 0;
+      toSplit.position.setLocal(localPos, toSplit.position.getChunk() + glm::ivec2(0, 1));
+    } else {
+      localPos.x = 0;
+      toSplit.position.setLocal(localPos, toSplit.position.getChunk() + glm::ivec2(1, 0));
+    }
+    toSplit.length = oldLength - newLength;
+
+  } while (oldLength != newLength);
+
+  return result;
+}
+
 World& Geometry::getWorld() {
   return *world;
 }

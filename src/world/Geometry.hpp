@@ -1,6 +1,8 @@
 #ifndef WORLD_GEOMETRY_HPP
 #define WORLD_GEOMETRY_HPP
 
+#include <algorithm>
+
 #include "../data/Chunk.hpp"
 #include "../engine/Engine.hpp"
 #include "Camera.hpp"
@@ -28,6 +30,8 @@ public:
   // TODO(kantoniak): Return structure with object IDs by type
   bool checkCollisions(data::buildings::Building& building);
   bool checkCollisions(data::roads::Road& road);
+
+  std::vector<data::roads::Road> splitRoadByChunks(const data::roads::Road& road) const;
 
 protected:
   World* world;

@@ -232,7 +232,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
         road.length = size.y;
       }
       if (!geometry.checkCollisions(road)) {
-        world.getMap().addRoad(road);
+        world.getMap().addRoads(geometry.splitRoadByChunks(road));
         renderer.markTileDataForUpdate();
       }
     }
@@ -280,21 +280,21 @@ void MapState::createRandomWorld() {
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
-    road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH - 2)));
+    road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - 2)));
     road.direction = data::roads::Direction::W;
-    road.length = data::Chunk::SIDE_LENGTH;
+    road.length = data::Chunk::SIDE_LENGTH * mapSize.x;
     if (!geometry.checkCollisions(road)) {
-      world.getMap().addRoad(road);
+      world.getMap().addRoads(geometry.splitRoadByChunks(road));
     }
   }
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
-    road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH - 2), 0));
+    road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - 2), 0));
     road.direction = data::roads::Direction::N;
-    road.length = data::Chunk::SIDE_LENGTH;
+    road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
     if (!geometry.checkCollisions(road)) {
-      world.getMap().addRoad(road);
+      world.getMap().addRoads(geometry.splitRoadByChunks(road));
     }
   }
 

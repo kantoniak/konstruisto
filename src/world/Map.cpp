@@ -62,7 +62,13 @@ data::City& Map::getCurrentCity() {
 }
 
 void Map::addRoad(data::roads::Road road) {
-  getChunk(glm::ivec2()).addRoad(road);
+  getChunk(road.position.getChunk()).addRoad(road);
+}
+
+void Map::addRoads(std::vector<data::roads::Road> roads) {
+  for (auto it = roads.begin(); it != roads.end(); it++) {
+    addRoad(*it);
+  }
 }
 
 data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) {

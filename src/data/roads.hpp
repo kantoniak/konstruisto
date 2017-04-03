@@ -24,6 +24,9 @@ public:
   glm::ivec2 getGlobal() const {
     return global;
   }
+  glm::ivec2 getChunk() const {
+    return global / 64;
+  }
 };
 
 struct RoadDefinition {
