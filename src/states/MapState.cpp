@@ -196,6 +196,10 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   if (key == GLFW_KEY_X && action == GLFW_PRESS) {
     setCurrentAction(MapStateAction::PLACE_ROAD);
   }
+
+  if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::BULDOZE);
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int mods) {
@@ -335,6 +339,10 @@ void MapState::setCurrentAction(MapStateAction action) {
   case MapStateAction::PLACE_ROAD:
     selection = std::make_unique<input::LineSelection>(data::roads::Standard.width);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+    break;
+  case MapStateAction::BULDOZE:
+    selection = std::make_unique<input::Selection>();
+    selection->setColors(glm::vec4(1, 0.f, 0.f, 0.2f), glm::vec4(1, 0.f, 0.f, 0.6f), glm::vec4(1, 0, 0, 1.f));
     break;
   }
 }

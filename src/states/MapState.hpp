@@ -21,7 +21,7 @@
 
 namespace states {
 
-enum MapStateAction { PLACE_BUILDING = 0, PLACE_ROAD = 1 };
+enum MapStateAction { PLACE_BUILDING = 0, PLACE_ROAD = 1, BULDOZE = 2 };
 
 class MapState : public engine::GameState {
 
