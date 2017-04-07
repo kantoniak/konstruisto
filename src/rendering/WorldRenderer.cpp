@@ -87,10 +87,11 @@ bool WorldRenderer::setupTextures() {
     unsigned char* pixels = stbi_load("assets/textures/road.png", &width, &height, nullptr, STBI_rgb_alpha);
 
     // Texture of the ground
+    // TODO(kantoniak): Better system for atlas sizing
     glGenTextures(1, &roadTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 160, 160, 1);
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 160, 160, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 320, 320, 1);
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 320, 320, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -491,14 +492,13 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& 
 
   int maxX = lot.position.getLocal().x + lot.size.x;
   int maxY = lot.position.getLocal().y + lot.size.y;
-  for (int x = lot.position.getLocal().x; x < maxX && x < (int) data::Chunk::SIDE_LENGTH; x++) {
+  for (int x = lot.position.getLocal().x; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
     for (int y = lot.position.getLocal().y; y < maxY; y++) {
       for (int i = 0; i < 6; i++) {
-        tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] = 14;
+        tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] = 24;
       }
-    } 
+    }
   }
-
 }
 
 void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {
@@ -516,11 +516,11 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
         }
         index = (road.position.getLocal().y + 1) * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
         if (x == road.position.getLocal().x) {
-          tiles[index] = 11;
+          tiles[index] = 21;
         } else if (x == road.position.getLocal().x + road.length - 1) {
-          tiles[index] = 13;
+          tiles[index] = 23;
         } else {
-          tiles[index] = 12;
+          tiles[index] = 22;
         }
       }
     }
@@ -532,29 +532,29 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
         unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x) * 6 + i;
         if (tiles[index] == 2) {
           tiles[index] = 4;
-        } else if (tiles[index] == 12) {
-          tiles[index] = 9;
+        } else if (tiles[index] == 22) {
+          tiles[index] = 14;
         } else {
           if (y == road.position.getLocal().y) {
             tiles[index] = 1;
           } else if (y == road.position.getLocal().y + road.length - 1) {
-            tiles[index] = 11;
+            tiles[index] = 21;
           } else {
-            tiles[index] = 6;
+            tiles[index] = 11;
           }
         }
         index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x + 1) * 6 + i;
         if (tiles[index] == 2) {
           tiles[index] = 5;
-        } else if (tiles[index] == 12) {
-          tiles[index] = 10;
+        } else if (tiles[index] == 22) {
+          tiles[index] = 15;
         } else {
           if (y == road.position.getLocal().y) {
             tiles[index] = 3;
           } else if (y == road.position.getLocal().y + road.length - 1) {
-            tiles[index] = 13;
+            tiles[index] = 23;
           } else {
-            tiles[index] = 8;
+            tiles[index] = 13;
           }
         }
       }
