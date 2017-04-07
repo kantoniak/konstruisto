@@ -2,7 +2,7 @@
 #define DATA_DIRECTION_HPP
 
 namespace data {
-enum class Direction { N, W };
+enum class Direction { N, W, S, E };
 }
 
 #endif

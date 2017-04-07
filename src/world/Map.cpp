@@ -40,6 +40,15 @@ Map::chunkListIter Map::getChunkIterator() {
   return chunks.begin();
 }
 
+bool Map::addLot(data::Lot lot) {
+  glm::ivec2 chunkPos = lot.position.getChunk();
+  if (!chunkExists(chunkPos)) {
+    return false;
+  }
+  getChunk(chunkPos).addLot(lot);
+  return true;
+}
+
 void Map::addBuilding(data::buildings::Building building) {
   glm::ivec2 chunk = glm::ivec2(building.x, building.y) / (int)data::Chunk::SIDE_LENGTH;
   if (chunkExists(chunk)) {

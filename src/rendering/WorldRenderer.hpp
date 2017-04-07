@@ -57,6 +57,7 @@ protected:
   bool resendTileData = false;
   void sendTileData();
 
+  void paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles);
   void paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles);
 
   // Terrain

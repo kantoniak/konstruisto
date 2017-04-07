@@ -454,7 +454,11 @@ void WorldRenderer::sendTileData() {
     }
 
     // Generate tiles
+    // FIXME(kantoniak): Paint objects from neighbouring chunks, too
     std::fill(tiles.begin(), tiles.end(), 0);
+    for (data::Lot lot : chunk->getLots()) {
+      this->paintLotOnTiles(lot, tiles);
+    }
     for (data::roads::Road road : chunk->getRoads()) {
       this->paintRoadOnTiles(road, tiles);
     }
@@ -481,6 +485,20 @@ void WorldRenderer::sendTileData() {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+}
+
+void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles) {
+
+  int maxX = lot.position.getLocal().x + lot.size.x;
+  int maxY = lot.position.getLocal().y + lot.size.y;
+  for (int x = lot.position.getLocal().x; x < maxX && x < (int) data::Chunk::SIDE_LENGTH; x++) {
+    for (int y = lot.position.getLocal().y; y < maxY; y++) {
+      for (int i = 0; i < 6; i++) {
+        tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] = 14;
+      }
+    } 
+  }
+
 }
 
 void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {

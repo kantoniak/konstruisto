@@ -25,6 +25,8 @@ public:
   bool chunkExists(glm::ivec2 chunkPosition);
   chunkListIter getChunkIterator();
 
+  bool addLot(data::Lot lot);
+
   void addBuilding(data::buildings::Building building);
   unsigned int getBuildingCount();
 

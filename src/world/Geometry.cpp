@@ -172,8 +172,7 @@ const glm::ivec2 Geometry::getEnd(data::buildings::Building& building) const {
 
 const glm::ivec2 Geometry::getEnd(data::roads::Road& road) const {
   return road.position.getGlobal() +
-         glm::ivec2(
-             (road.direction == data::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
-             (road.direction == data::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
+         glm::ivec2((road.direction == data::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
+                    (road.direction == data::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
 }
 }

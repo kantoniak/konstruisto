@@ -291,6 +291,21 @@ void MapState::createRandomWorld() {
     }
   }
 
+  for (int x = 0; x < mapSize.x; x++) {
+    for (int y = 0; y < mapSize.y; y++) {
+      auto chunkPos = glm::ivec2(x, y);
+      int lotX = 0;
+      for (int i = 1; i < 11; i++) {
+        data::Lot lot;
+        lot.position.setLocal(glm::ivec2(lotX + 2, 2), chunkPos);
+        lot.size = glm::ivec2(i, 6);
+        lot.direction = data::Direction::S;
+        world.getMap().addLot(lot);
+        lotX += 1 + i;
+      }
+    }
+  }
+
   const unsigned int roadsCountPerDir = 4;
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::roads::Road road;

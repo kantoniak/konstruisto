@@ -5,12 +5,14 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "Lot.hpp"
 #include "buildings.hpp"
 #include "roads.hpp"
 
 namespace data {
 
 class Chunk {
+  typedef const std::vector<data::Lot> lotList;
   typedef const std::vector<data::buildings::Building> residentialList;
   typedef std::vector<data::buildings::Building>::const_iterator residentialListIter;
   typedef const std::vector<data::roads::Road> roadList;
@@ -28,6 +30,9 @@ public:
   residentialListIter getResidentialIterator();
   unsigned int getResidentialSize();
 
+  void addLot(data::Lot lot);
+  lotList getLots();
+
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
@@ -40,6 +45,8 @@ private:
 
   std::vector<data::buildings::Building> residential;
   unsigned int residentialSize;
+
+  std::vector<data::Lot> lots;
 
   std::vector<data::roads::Road> roads;
 };

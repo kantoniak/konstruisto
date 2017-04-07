@@ -32,6 +32,14 @@ unsigned int Chunk::getResidentialSize() {
   return residentialSize;
 }
 
+void Chunk::addLot(data::Lot lot) {
+  lots.push_back(lot);
+}
+
+Chunk::lotList Chunk::getLots() {
+  return lots;
+}
+
 void Chunk::addBuilding(data::buildings::Building building) {
   residential.push_back(building);
 }
