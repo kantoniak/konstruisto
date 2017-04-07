@@ -485,7 +485,7 @@ void WorldRenderer::sendTileData() {
 
 void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {
 
-  if (road.direction == data::roads::Direction::W) {
+  if (road.direction == data::Direction::W) {
     for (long x = road.position.getLocal().x; x < road.position.getLocal().x + road.length; x++) {
       for (int i = 0; i < 6; i++) {
         unsigned int index = road.position.getLocal().y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
@@ -508,7 +508,7 @@ void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloa
     }
   }
 
-  if (road.direction == data::roads::Direction::N) {
+  if (road.direction == data::Direction::N) {
     for (long y = road.position.getLocal().y; y < road.position.getLocal().y + road.length; y++) {
       for (int i = 0; i < 6; i++) {
         unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x) * 6 + i;

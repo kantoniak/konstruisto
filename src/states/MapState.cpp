@@ -89,10 +89,10 @@ void MapState::update(std::chrono::milliseconds delta) {
     road.type = data::roads::Standard.typeId;
     road.position.setGlobal(selection->getFrom());
     if (size.x > size.y) {
-      road.direction = data::roads::Direction::W;
+      road.direction = data::Direction::W;
       road.length = size.x;
     } else {
-      road.direction = data::roads::Direction::N;
+      road.direction = data::Direction::N;
       road.length = size.y;
     }
     if (!geometry.checkCollisions(road)) {
@@ -233,10 +233,10 @@ void MapState::onMouseButton(int button, int action, int mods) {
       road.type = data::roads::Standard.typeId;
       road.position.setGlobal(selection->getFrom());
       if (size.x > size.y) {
-        road.direction = data::roads::Direction::W;
+        road.direction = data::Direction::W;
         road.length = size.x;
       } else {
-        road.direction = data::roads::Direction::N;
+        road.direction = data::Direction::N;
         road.length = size.y;
       }
       if (!geometry.checkCollisions(road)) {
@@ -296,7 +296,7 @@ void MapState::createRandomWorld() {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
     road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - 2)));
-    road.direction = data::roads::Direction::W;
+    road.direction = data::Direction::W;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.x;
     if (!geometry.checkCollisions(road)) {
       world.getMap().addRoads(geometry.splitRoadByChunks(road));
@@ -306,7 +306,7 @@ void MapState::createRandomWorld() {
     data::roads::Road road;
     road.type = data::roads::Standard.typeId;
     road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - 2), 0));
-    road.direction = data::roads::Direction::N;
+    road.direction = data::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
     if (!geometry.checkCollisions(road)) {
       world.getMap().addRoads(geometry.splitRoadByChunks(road));

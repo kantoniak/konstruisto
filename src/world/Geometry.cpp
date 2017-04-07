@@ -133,7 +133,7 @@ std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Ro
   int oldLength;
   do {
 
-    if (data::roads::Direction::N == toSplit.direction) {
+    if (data::Direction::N == toSplit.direction) {
       newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().y);
     } else {
       newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().x);
@@ -144,7 +144,7 @@ std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Ro
     result.push_back(toSplit);
 
     glm::ivec2 localPos = toSplit.position.getLocal();
-    if (data::roads::Direction::N == toSplit.direction) {
+    if (data::Direction::N == toSplit.direction) {
       localPos.y = 0;
       toSplit.position.setLocal(localPos, toSplit.position.getChunk() + glm::ivec2(0, 1));
     } else {
@@ -173,7 +173,7 @@ const glm::ivec2 Geometry::getEnd(data::buildings::Building& building) const {
 const glm::ivec2 Geometry::getEnd(data::roads::Road& road) const {
   return road.position.getGlobal() +
          glm::ivec2(
-             (road.direction == data::roads::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
-             (road.direction == data::roads::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
+             (road.direction == data::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
+             (road.direction == data::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
 }
 }

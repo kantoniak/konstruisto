@@ -1,8 +1,8 @@
 #ifndef DATA_CHUNK_HPP
 #define DATA_CHUNK_HPP
 
-#include <glm/glm.hpp>
 #include <algorithm>
+#include <glm/glm.hpp>
 #include <vector>
 
 #include "buildings.hpp"
