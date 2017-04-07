@@ -194,6 +194,10 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   }
 
   if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::PLACE_ZONE);
+  }
+
+  if (key == GLFW_KEY_C && action == GLFW_PRESS) {
     setCurrentAction(MapStateAction::PLACE_ROAD);
   }
 
@@ -340,6 +344,10 @@ void MapState::setCurrentAction(MapStateAction action) {
 
   switch (action) {
   case MapStateAction::PLACE_BUILDING:
+    selection = std::make_unique<input::Selection>();
+    selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+    break;
+  case MapStateAction::PLACE_ZONE:
     selection = std::make_unique<input::Selection>();
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
