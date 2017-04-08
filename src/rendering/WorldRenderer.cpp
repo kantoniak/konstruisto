@@ -492,16 +492,65 @@ unsigned int WorldRenderer::getTile(int x, int y) const {
   return y * ATLAS_SIDE + x + 1;
 }
 
+void WorldRenderer::setTile(std::vector<GLfloat>& tiles, int x, int y, unsigned int tile) {
+  for (int i = 0; i < 6; i++) {
+    tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] = tile;
+  }
+}
+
 void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles) {
 
-  int maxX = lot.position.getLocal().x + lot.size.x;
-  int maxY = lot.position.getLocal().y + lot.size.y;
-  for (int x = lot.position.getLocal().x; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
-    for (int y = lot.position.getLocal().y; y < maxY; y++) {
-      for (int i = 0; i < 6; i++) {
-        tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] =  getTile(3, 2);
-      }
+  int minX = lot.position.getLocal().x;
+  int minY = lot.position.getLocal().y;
+  int maxX = minX + lot.size.x - 1;
+  int maxY = minY + lot.size.y - 1;
+  for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+    setTile(tiles, x, minY, getTile(6, 2));
+    for (int y = minY + 1; y < maxY; y++) {
+      setTile(tiles, x, y, getTile(6, 3));
     }
+    setTile(tiles, x, maxY, getTile(6, 4));
+  }
+  for (int y = minY + 1; y < maxY; y++) {
+    setTile(tiles, minX, y, getTile(5, 3));
+    setTile(tiles, maxX, y, getTile(7, 3));
+  }
+  setTile(tiles, minX, minY, getTile(5, 2));
+  setTile(tiles, maxX, minY, getTile(7, 2));
+  setTile(tiles, minX, maxY, getTile(5, 4));
+  setTile(tiles, maxX, maxY, getTile(7, 4));
+
+  // Render markers
+  if (data::Direction::N == lot.direction) {
+    setTile(tiles, minX, maxY, getTile(5, 1));
+    for (int x = minX + 1; x < maxX; x++) {
+      setTile(tiles, x, maxY, getTile(6, 1));
+    }
+    setTile(tiles, maxX, maxY, getTile(7, 1));
+  }
+
+  if (data::Direction::S == lot.direction) {
+    setTile(tiles, minX, minY, getTile(5, 0));
+    for (int x = minX + 1; x < maxX; x++) {
+      setTile(tiles, x, minY, getTile(6, 0));
+    }
+    setTile(tiles, maxX, minY, getTile(7, 0));
+  }
+
+  if (data::Direction::W == lot.direction) {
+    setTile(tiles, maxX, minY, getTile(9, 0));
+    for (int y = minY + 1; y < maxY; y++) {
+      setTile(tiles, maxX, y, getTile(9, 1));
+    }
+    setTile(tiles, maxX, maxY, getTile(9, 2));
+  }
+
+  if (data::Direction::E == lot.direction) {
+    setTile(tiles, minX, minY, getTile(8, 0));
+    for (int y = minY + 1; y < maxY; y++) {
+      setTile(tiles, minX, y, getTile(8, 1));
+    }
+    setTile(tiles, minX, maxY, getTile(8, 2));
   }
 }
 

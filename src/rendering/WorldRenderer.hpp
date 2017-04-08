@@ -56,10 +56,11 @@ protected:
 
   bool resendTileData = false;
   void sendTileData();
-  
+
   // Tiles
   const int ATLAS_SIDE = 10;
   unsigned int getTile(int x, int y) const;
+  void setTile(std::vector<GLfloat>& tiles, int x, int y, unsigned int tile);
 
   void paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles);
   void paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles);

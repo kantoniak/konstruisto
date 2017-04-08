@@ -295,11 +295,24 @@ void MapState::createRandomWorld() {
     for (int y = 0; y < mapSize.y; y++) {
       auto chunkPos = glm::ivec2(x, y);
       int lotX = 0;
-      for (int i = 1; i < 11; i++) {
+      for (int i = 2; i < 11; i++) {
         data::Lot lot;
         lot.position.setLocal(glm::ivec2(lotX + 2, 2), chunkPos);
         lot.size = glm::ivec2(i, 6);
-        lot.direction = data::Direction::S;
+        switch (i % 4) {
+        case 0:
+          lot.direction = data::Direction::N;
+          break;
+        case 1:
+          lot.direction = data::Direction::S;
+          break;
+        case 2:
+          lot.direction = data::Direction::W;
+          break;
+        case 3:
+          lot.direction = data::Direction::E;
+          break;
+        }
         world.getMap().addLot(lot);
         lotX += 1 + i;
       }
