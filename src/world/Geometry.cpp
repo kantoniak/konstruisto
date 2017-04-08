@@ -54,7 +54,7 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
 
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     // With roads
-    for (data::roads::Road road : chunk->getRoads()) {
+    for (data::Road road : chunk->getRoads()) {
       const glm::ivec2 b2 = road.position.getGlobal();
       const glm::ivec2 b1 = getEnd(road);
       if (checkRectIntersection(a1, a2, b1, b2)) {
@@ -74,7 +74,7 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
   return false;
 }
 
-bool Geometry::checkCollisions(data::roads::Road& road) {
+bool Geometry::checkCollisions(data::Road& road) {
   const glm::ivec2 a2 = road.position.getGlobal();
   const glm::ivec2 a1 = getEnd(road);
 
@@ -85,7 +85,7 @@ bool Geometry::checkCollisions(data::roads::Road& road) {
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     // With roads
     // TODO(kantoniak): Handle invalid intersections
-    for (data::roads::Road other : chunk->getRoads()) {
+    for (data::Road other : chunk->getRoads()) {
       if (other.direction != road.direction) {
         continue;
       }
@@ -124,10 +124,10 @@ std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 f
   return result;
 }
 
-std::vector<data::roads::Road> Geometry::splitRoadByChunks(const data::roads::Road& road) const {
+std::vector<data::Road> Geometry::splitRoadByChunks(const data::Road& road) const {
   // FIXME(kantoniak): Roads have some bugs either in splitting or rendering. Investigate.
-  data::roads::Road toSplit = road;
-  std::vector<data::roads::Road> result;
+  data::Road toSplit = road;
+  std::vector<data::Road> result;
 
   int newLength;
   int oldLength;
@@ -170,9 +170,9 @@ const glm::ivec2 Geometry::getEnd(data::buildings::Building& building) const {
   return glm::ivec2(building.x + building.width - 1, building.y + building.length - 1);
 }
 
-const glm::ivec2 Geometry::getEnd(data::roads::Road& road) const {
+const glm::ivec2 Geometry::getEnd(data::Road& road) const {
   return road.position.getGlobal() +
-         glm::ivec2((road.direction == data::Direction::W ? road.length : data::roads::getDefinition(road).width) - 1,
-                    (road.direction == data::Direction::N ? road.length : data::roads::getDefinition(road).width) - 1);
+         glm::ivec2((road.direction == data::Direction::W ? road.length : road.getType().width) - 1,
+                    (road.direction == data::Direction::N ? road.length : road.getType().width) - 1);
 }
 }

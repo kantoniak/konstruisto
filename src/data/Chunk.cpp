@@ -58,7 +58,7 @@ bool Chunk::removeBuilding(data::buildings::Building building) {
   return true;
 }
 
-void Chunk::addRoad(data::roads::Road road) {
+void Chunk::addRoad(data::Road road) {
   roads.push_back(road);
 }
 

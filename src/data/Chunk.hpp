@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "Lot.hpp"
+#include "Road.hpp"
 #include "buildings.hpp"
-#include "roads.hpp"
 
 namespace data {
 
@@ -15,7 +15,7 @@ class Chunk {
   typedef const std::vector<data::Lot> lotList;
   typedef const std::vector<data::buildings::Building> residentialList;
   typedef std::vector<data::buildings::Building>::const_iterator residentialListIter;
-  typedef const std::vector<data::roads::Road> roadList;
+  typedef const std::vector<data::Road> roadList;
 
 public:
   constexpr unsigned static int SIDE_LENGTH = 64;
@@ -36,7 +36,7 @@ public:
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
-  void addRoad(data::roads::Road road);
+  void addRoad(data::Road road);
   roadList getRoads();
 
 private:
@@ -48,7 +48,7 @@ private:
 
   std::vector<data::Lot> lots;
 
-  std::vector<data::roads::Road> roads;
+  std::vector<data::Road> roads;
 };
 }
 

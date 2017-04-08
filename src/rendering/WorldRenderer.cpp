@@ -460,7 +460,7 @@ void WorldRenderer::sendTileData() {
     for (data::Lot lot : chunk->getLots()) {
       this->paintLotOnTiles(lot, tiles);
     }
-    for (data::roads::Road road : chunk->getRoads()) {
+    for (data::Road road : chunk->getRoads()) {
       this->paintRoadOnTiles(road, tiles);
     }
 
@@ -554,7 +554,7 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& 
   }
 }
 
-void WorldRenderer::paintRoadOnTiles(data::roads::Road& road, std::vector<GLfloat>& tiles) {
+void WorldRenderer::paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& tiles) {
 
   if (road.direction == data::Direction::W) {
     for (long x = road.position.getLocal().x; x < road.position.getLocal().x + road.length; x++) {

@@ -70,11 +70,11 @@ data::City& Map::getCurrentCity() {
   return *currentCity;
 }
 
-void Map::addRoad(data::roads::Road road) {
+void Map::addRoad(data::Road road) {
   getChunk(road.position.getChunk()).addRoad(road);
 }
 
-void Map::addRoads(std::vector<data::roads::Road> roads) {
+void Map::addRoads(std::vector<data::Road> roads) {
   for (auto it = roads.begin(); it != roads.end(); it++) {
     addRoad(*it);
   }

@@ -85,8 +85,8 @@ void MapState::update(std::chrono::milliseconds delta) {
 
   if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
     glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-    data::roads::Road road;
-    road.type = data::roads::Standard.typeId;
+    data::Road road;
+    road.setType(data::RoadTypes.Standard);
     road.position.setGlobal(selection->getFrom());
     if (size.x > size.y) {
       road.direction = data::Direction::W;
@@ -229,8 +229,8 @@ void MapState::onMouseButton(int button, int action, int mods) {
 
     if (MapStateAction::PLACE_ROAD == currentAction) {
       glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-      data::roads::Road road;
-      road.type = data::roads::Standard.typeId;
+      data::Road road;
+      road.setType(data::RoadTypes.Standard);
       road.position.setGlobal(selection->getFrom());
       if (size.x > size.y) {
         road.direction = data::Direction::W;
@@ -321,8 +321,8 @@ void MapState::createRandomWorld() {
 
   const unsigned int roadsCountPerDir = 4;
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
-    data::roads::Road road;
-    road.type = data::roads::Standard.typeId;
+    data::Road road;
+    road.setType(data::RoadTypes.Standard);
     road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - 2)));
     road.direction = data::Direction::W;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.x;
@@ -331,8 +331,8 @@ void MapState::createRandomWorld() {
     }
   }
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
-    data::roads::Road road;
-    road.type = data::roads::Standard.typeId;
+    data::Road road;
+    road.setType(data::RoadTypes.Standard);
     road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - 2), 0));
     road.direction = data::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
@@ -380,7 +380,7 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ROAD:
-    selection = std::make_unique<input::LineSelection>(data::roads::Standard.width);
+    selection = std::make_unique<input::LineSelection>(data::RoadTypes.Standard.width);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::BULDOZE:
