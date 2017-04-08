@@ -12,8 +12,9 @@ Just go with `make rebuild run`. To build release configuration: `make rebuild r
 2. Install GLEW in `ext/glew-2.0.0`
 3. Install GLFW in `ext/glew-3.2.1`
 4. Extract `glm` library to `ext/glm`
-5. Build and install `nanovg` (see below)
-6. You will need `windres` in `PATH` from `mingw-w64`
+5. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
+6. Build and install `nanovg` (see below)
+7. You will need `windres` in `PATH` from `mingw-w64`
 
 ### Deps for Linux
 
@@ -21,8 +22,9 @@ Just go with `make rebuild run`. To build release configuration: `make rebuild r
 2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
 3. Install `libglfw3-dev` (3.2.1): https://launchpad.net/ubuntu/+source/glfw3
 4. Extract `glm` library to `ext/glm`
-5. Build and install `nanovg` (see below)
-6. You will need `windres` in `PATH` (see `/usr/bin/x86_64-w64-mingw32-windres` from `mingw-w64` package)
+5. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
+6. Build and install `nanovg` (see below)
+7. You will need `windres` in `PATH` (see `/usr/bin/x86_64-w64-mingw32-windres` from `mingw-w64` package)
 
 ### Building `nanovg`
 

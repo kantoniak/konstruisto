@@ -42,6 +42,8 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-windows
 
+	INCLUDES += -I$(EXTDIR)/stb/
+
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
 else
 	SYSTEM := LINUX
@@ -50,6 +52,8 @@ else
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-linux
+
+	INCLUDES += -I$(EXTDIR)/stb/
 
 	LIBS := -lglfw -lGLEW -lGL -lGLU -lnanovg
 endif
