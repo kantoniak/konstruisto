@@ -58,11 +58,11 @@ bool Chunk::removeBuilding(data::buildings::Building building) {
   return true;
 }
 
-void Chunk::addRoad(data::Road road) {
-  roads.push_back(road);
+void Chunk::addRoad(Road road) {
+  roadGraph.addRoad(road);
 }
 
-Chunk::roadList Chunk::getRoads() {
-  return roads;
+const std::vector<Road>& Chunk::getRoads() {
+  return roadGraph.getRoads();
 }
 }
