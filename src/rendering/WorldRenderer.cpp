@@ -463,6 +463,9 @@ void WorldRenderer::sendTileData() {
     for (data::Road road : chunk->getRoads()) {
       this->paintRoadOnTiles(road, tiles);
     }
+    for (data::RoadGraph::Node node : chunk->getRoadGraph().getNodes()) {
+      this->paintRoadNodeOnTiles(node, tiles);
+    }
 
     // Concatenate
     for (unsigned int i = 0; i < verticesCount; i++) {
@@ -556,61 +559,45 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& 
 
 void WorldRenderer::paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& tiles) {
 
-  if (road.direction == data::Direction::W) {
-    for (long x = road.position.getLocal().x; x < road.position.getLocal().x + road.length; x++) {
-      for (int i = 0; i < 6; i++) {
-        unsigned int index = road.position.getLocal().y * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-        if (x == road.position.getLocal().x) {
-          tiles[index] = getTile(0, 0);
-        } else if (x == road.position.getLocal().x + road.length - 1) {
-          tiles[index] = getTile(2, 0);
-        } else {
-          tiles[index] = getTile(1, 0);
-        }
-        index = (road.position.getLocal().y + 1) * data::Chunk::SIDE_LENGTH * 6 + x * 6 + i;
-        if (x == road.position.getLocal().x) {
-          tiles[index] = getTile(0, 2);
-        } else if (x == road.position.getLocal().x + road.length - 1) {
-          tiles[index] = getTile(2, 2);
-        } else {
-          tiles[index] = getTile(1, 2);
-        }
+  if (road.direction == data::Direction::N) {
+    int minX = road.position.getLocal().x;
+    int minY = road.position.getLocal().y;
+    int maxX = minX + road.getType().width - 1;
+    int maxY = minY + road.length - 1;
+
+    for (int y = minY + 1; y < maxY && y < (int)data::Chunk::SIDE_LENGTH; y++) {
+      setTile(tiles, minX, y, getTile(0, 1));
+      for (int x = minX + 1; x < maxX; x++) {
+        setTile(tiles, x, y, getTile(1, 1));
       }
+      setTile(tiles, maxX, y, getTile(2, 1));
     }
   }
 
-  if (road.direction == data::Direction::N) {
-    for (long y = road.position.getLocal().y; y < road.position.getLocal().y + road.length; y++) {
-      for (int i = 0; i < 6; i++) {
-        unsigned int index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x) * 6 + i;
-        if (tiles[index] == 2) {
-          tiles[index] = getTile(3, 0);
-        } else if (tiles[index] == 22) {
-          tiles[index] = getTile(3, 1);
-        } else {
-          if (y == road.position.getLocal().y) {
-            tiles[index] = getTile(0, 0);
-          } else if (y == road.position.getLocal().y + road.length - 1) {
-            tiles[index] = getTile(0, 2);
-          } else {
-            tiles[index] = getTile(0, 1);
-          }
-        }
-        index = y * data::Chunk::SIDE_LENGTH * 6 + (road.position.getLocal().x + 1) * 6 + i;
-        if (tiles[index] == 2) {
-          tiles[index] = getTile(4, 0);
-        } else if (tiles[index] == 22) {
-          tiles[index] = getTile(4, 1);
-        } else {
-          if (y == road.position.getLocal().y) {
-            tiles[index] = getTile(2, 0);
-          } else if (y == road.position.getLocal().y + road.length - 1) {
-            tiles[index] = getTile(2, 2);
-          } else {
-            tiles[index] = getTile(2, 1);
-          }
-        }
+  if (road.direction == data::Direction::W) {
+    int minX = road.position.getLocal().x;
+    int minY = road.position.getLocal().y;
+    int maxX = minX + road.length - 1;
+    int maxY = minY + road.getType().width - 1;
+
+    for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+      setTile(tiles, x, minY, getTile(1, 0));
+      for (int y = minY + 1; y < maxY; y++) {
+        setTile(tiles, x, y, getTile(1, 1));
       }
+      setTile(tiles, x, maxY, getTile(1, 2));
+    }
+  }
+}
+
+void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, std::vector<GLfloat>& tiles) {
+  int minX = node.position.getLocal().x;
+  int minY = node.position.getLocal().y;
+  int maxX = minX + node.size.x - 1;
+  int maxY = minY + node.size.y - 1;
+  for (int x = minX; x <= maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+    for (int y = minY; y <= maxY; y++) {
+      setTile(tiles, x, y, getTile(3, 2));
     }
   }
 }

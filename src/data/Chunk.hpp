@@ -39,6 +39,8 @@ public:
   void addRoad(Road road);
   const std::vector<Road>& getRoads();
 
+  const RoadGraph& getRoadGraph();
+
 private:
   unsigned int objectId;
   glm::ivec2 position;

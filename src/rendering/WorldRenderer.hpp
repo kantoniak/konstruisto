@@ -64,6 +64,7 @@ protected:
 
   void paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles);
   void paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& tiles);
+  void paintRoadNodeOnTiles(const data::RoadGraph::Node& node, std::vector<GLfloat>& tiles);
 
   // Terrain
   GLuint shaderProgram;

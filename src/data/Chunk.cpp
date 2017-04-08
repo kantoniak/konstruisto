@@ -65,4 +65,8 @@ void Chunk::addRoad(Road road) {
 const std::vector<Road>& Chunk::getRoads() {
   return roadGraph.getRoads();
 }
+
+const RoadGraph& Chunk::getRoadGraph() {
+  return roadGraph;
+}
 }
