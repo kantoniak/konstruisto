@@ -74,37 +74,76 @@ bool Geometry::checkCollisions(const data::buildings::Building& building) const 
   return false;
 }
 
+// Works only when roads have same width
 bool Geometry::checkCollisions(const data::Road& road) const {
-  const glm::ivec2 a2 = road.position.getGlobal();
-  const glm::ivec2 a1 = getEnd(road);
-
-  if (!getWorld().getMap().chunkExists(fieldToChunk(a1)) || !getWorld().getMap().chunkExists(fieldToChunk(a2))) {
+  if (!getWorld().getMap().chunkExists(road.position.getChunk())) {
     return true;
   }
 
-  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
-    // With roads
-    // TODO(kantoniak): Handle invalid intersections
-    for (data::Road other : chunk->getRoads()) {
-      if (other.direction != road.direction) {
-        continue;
+  const data::Chunk& chunk = getWorld().getMap().getChunk(road.position.getChunk());
+
+  // With intersections
+  // TODO
+
+  // With roads
+  for (const data::Road& other : chunk.getRoads()) {
+    if (!checkIntersection(road, other)) {
+      continue;
+    }
+
+    // Same direction
+    if (other.direction == road.direction) {
+      if (road.direction == data::Direction::N && road.position.getGlobal().x != other.position.getGlobal().x) {
+        return true;
       }
-      const glm::ivec2 b2 = other.position.getGlobal();
-      const glm::ivec2 b1 = getEnd(other);
-      if (checkRectIntersection(a1, a2, b1, b2)) {
+      if (road.direction == data::Direction::W && road.position.getGlobal().y != other.position.getGlobal().y) {
         return true;
       }
     }
 
-    // With buildings
-    for (data::buildings::Building other : chunk->getResidentials()) {
-      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
-      const glm::ivec2 b1 = getEnd(other);
-      if (checkRectIntersection(a1, a2, b1, b2)) {
-        return true;
+    // Different direction
+    if (other.direction != road.direction) {
+      if (road.direction == data::Direction::N) {
+        if (road.position.getGlobal().x < other.position.getGlobal().x || getEnd(other).x < getEnd(road).x) {
+          return true;
+        }
+        if (other.position.getGlobal().y < road.position.getGlobal().y &&
+            road.position.getGlobal().y <= getEnd(other).y) {
+          return true;
+        }
+        if (other.position.getGlobal().y <= getEnd(road).y && getEnd(road).y < getEnd(other).y) {
+          return true;
+        }
+      }
+      if (road.direction == data::Direction::W) {
+        if (road.position.getGlobal().y < other.position.getGlobal().y || getEnd(other).y < getEnd(road).y) {
+          return true;
+        }
+        if (other.position.getGlobal().x < road.position.getGlobal().x &&
+            road.position.getGlobal().x <= getEnd(other).x) {
+          return true;
+        }
+        if (other.position.getGlobal().x <= getEnd(road).x && getEnd(road).x < getEnd(other).x) {
+          return true;
+        }
       }
     }
   }
+
+  // Handle roads from neighbouring chunks
+  // TODO
+
+  // With buildings
+  const glm::ivec2 a2 = road.position.getGlobal();
+  const glm::ivec2 a1 = getEnd(road);
+  for (const data::buildings::Building& other : chunk.getResidentials()) {
+    const glm::ivec2 b2 = glm::vec2(other.x, other.y);
+    const glm::ivec2 b1 = getEnd(other);
+    if (checkRectIntersection(a1, a2, b1, b2)) {
+      return true;
+    }
+  }
+
   return false;
 }
 
@@ -166,12 +205,26 @@ engine::Engine& Geometry::getEngine() const {
   return *engine;
 }
 
+bool Geometry::checkIntersection(const data::Road& a, const data::Road& b) const {
+  const glm::ivec2 a2 = a.position.getGlobal();
+  const glm::ivec2 a1 = getEnd(a);
+  const glm::ivec2 b2 = b.position.getGlobal();
+  const glm::ivec2 b1 = getEnd(b);
+  return checkRectIntersection(a1, a2, b1, b2);
+}
+
 const glm::ivec2 Geometry::getEnd(const data::buildings::Building& building) const {
   return glm::ivec2(building.x + building.width - 1, building.y + building.length - 1);
 }
 
 const glm::ivec2 Geometry::getEnd(const data::Road& road) const {
   return road.position.getGlobal() +
+         glm::ivec2((road.direction == data::Direction::W ? road.length : road.getType().width) - 1,
+                    (road.direction == data::Direction::N ? road.length : road.getType().width) - 1);
+}
+
+const glm::ivec2 Geometry::getLocalEnd(const data::Road& road) const {
+  return road.position.getLocal() +
          glm::ivec2((road.direction == data::Direction::W ? road.length : road.getType().width) - 1,
                     (road.direction == data::Direction::N ? road.length : road.getType().width) - 1);
 }

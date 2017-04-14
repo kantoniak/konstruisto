@@ -42,8 +42,11 @@ protected:
   World& getWorld() const;
   engine::Engine& getEngine() const;
 
+  bool checkIntersection(const data::Road& a, const data::Road& b) const;
+
   const glm::ivec2 getEnd(const data::buildings::Building& building) const;
   const glm::ivec2 getEnd(const data::Road& road) const;
+  const glm::ivec2 getLocalEnd(const data::Road& road) const;
 };
 }
 
