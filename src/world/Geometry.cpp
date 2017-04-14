@@ -87,51 +87,32 @@ bool Geometry::checkCollisions(const data::Road& road) const {
 
   // With roads
   for (const data::Road& other : chunk.getRoads()) {
-    if (!checkIntersection(road, other)) {
-      continue;
-    }
-
-    // Same direction
-    if (other.direction == road.direction) {
-      if (road.direction == data::Direction::N && road.position.getGlobal().x != other.position.getGlobal().x) {
-        return true;
-      }
-      if (road.direction == data::Direction::W && road.position.getGlobal().y != other.position.getGlobal().y) {
-        return true;
-      }
-    }
-
-    // Different direction
-    if (other.direction != road.direction) {
-      if (road.direction == data::Direction::N) {
-        if (road.position.getGlobal().x < other.position.getGlobal().x || getEnd(other).x < getEnd(road).x) {
-          return true;
-        }
-        if (other.position.getGlobal().y < road.position.getGlobal().y &&
-            road.position.getGlobal().y <= getEnd(other).y) {
-          return true;
-        }
-        if (other.position.getGlobal().y <= getEnd(road).y && getEnd(road).y < getEnd(other).y) {
-          return true;
-        }
-      }
-      if (road.direction == data::Direction::W) {
-        if (road.position.getGlobal().y < other.position.getGlobal().y || getEnd(other).y < getEnd(road).y) {
-          return true;
-        }
-        if (other.position.getGlobal().x < road.position.getGlobal().x &&
-            road.position.getGlobal().x <= getEnd(other).x) {
-          return true;
-        }
-        if (other.position.getGlobal().x <= getEnd(road).x && getEnd(road).x < getEnd(other).x) {
-          return true;
-        }
-      }
+    if (checkCollisions(road, other)) {
+      return true;
     }
   }
 
   // Handle roads from neighbouring chunks
-  // TODO
+  if (data::Direction::W == road.direction &&
+      0 == road.position.getLocal().x &&
+      getWorld().getMap().chunkExists(road.position.getChunk() - glm::ivec2(1, 0))) {
+    const data::Chunk& otherChunk = getWorld().getMap().getChunk(road.position.getChunk() - glm::ivec2(1, 0));
+    for (const data::Road& other : otherChunk.getRoads()) {
+      if (checkCollisions(road, other)) {
+        return true;
+      }
+    }
+  }
+  if (data::Direction::N == road.direction &&
+      0 == road.position.getLocal().y &&
+      getWorld().getMap().chunkExists(road.position.getChunk() - glm::ivec2(0, 1))) {
+    const data::Chunk& otherChunk = getWorld().getMap().getChunk(road.position.getChunk() - glm::ivec2(0, 1));
+    for (const data::Road& other : otherChunk.getRoads()) {
+      if (checkCollisions(road, other)) {
+        return true;
+      }
+    }
+  }
 
   // With buildings
   const glm::ivec2 a2 = road.position.getGlobal();
@@ -203,6 +184,52 @@ World& Geometry::getWorld() const {
 
 engine::Engine& Geometry::getEngine() const {
   return *engine;
+}
+
+bool Geometry::checkCollisions(const data::Road& road, const data::Road& other) const {
+  if (!checkIntersection(road, other)) {
+    return false;
+  }
+
+  // Same direction
+  if (other.direction == road.direction) {
+    if (road.direction == data::Direction::N && road.position.getGlobal().x != other.position.getGlobal().x) {
+      return true;
+    }
+    if (road.direction == data::Direction::W && road.position.getGlobal().y != other.position.getGlobal().y) {
+      return true;
+    }
+  }
+
+  // Different direction
+  if (other.direction != road.direction) {
+    if (road.direction == data::Direction::N) {
+      if (road.position.getGlobal().x < other.position.getGlobal().x || getEnd(other).x < getEnd(road).x) {
+        return true;
+      }
+      if (other.position.getGlobal().y < road.position.getGlobal().y &&
+          road.position.getGlobal().y <= getEnd(other).y) {
+        return true;
+      }
+      if (other.position.getGlobal().y <= getEnd(road).y && getEnd(road).y < getEnd(other).y) {
+        return true;
+      }
+    }
+    if (road.direction == data::Direction::W) {
+      if (road.position.getGlobal().y < other.position.getGlobal().y || getEnd(other).y < getEnd(road).y) {
+        return true;
+      }
+      if (other.position.getGlobal().x < road.position.getGlobal().x &&
+          road.position.getGlobal().x <= getEnd(other).x) {
+        return true;
+      }
+      if (other.position.getGlobal().x <= getEnd(road).x && getEnd(road).x < getEnd(other).x) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 bool Geometry::checkIntersection(const data::Road& a, const data::Road& b) const {
