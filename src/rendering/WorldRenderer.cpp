@@ -560,25 +560,27 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& 
 void WorldRenderer::paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& tiles) {
 
   if (road.direction == data::Direction::N) {
-    int minX = road.position.getLocal().x;
-    int minY = road.position.getLocal().y;
-    int maxX = minX + road.getType().width - 1;
-    int maxY = minY + road.length - 1;
+    const int minX = road.position.getLocal().x;
+    const int minY = road.position.getLocal().y;
+    const int maxX = minX + road.getType().width - 1;
+    const int maxY = minY + road.length - 1;
 
     for (int y = minY + 1; y < maxY && y < (int)data::Chunk::SIDE_LENGTH; y++) {
       setTile(tiles, minX, y, getTile(0, 1));
-      for (int x = minX + 1; x < maxX; x++) {
+      for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
         setTile(tiles, x, y, getTile(1, 1));
       }
-      setTile(tiles, maxX, y, getTile(2, 1));
+      if (maxX < (int)data::Chunk::SIDE_LENGTH) {
+        setTile(tiles, maxX, y, getTile(2, 1));
+      }
     }
   }
 
   if (road.direction == data::Direction::W) {
-    int minX = road.position.getLocal().x;
-    int minY = road.position.getLocal().y;
-    int maxX = minX + road.length - 1;
-    int maxY = minY + road.getType().width - 1;
+    const int minX = road.position.getLocal().x;
+    const int minY = road.position.getLocal().y;
+    const int maxX = minX + road.length - 1;
+    const int maxY = minY + road.getType().width - 1;
 
     for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
       setTile(tiles, x, minY, getTile(1, 0));
