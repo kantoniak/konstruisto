@@ -30,11 +30,11 @@ bool Geometry::hitField(glm::vec2 entryPoint, glm::ivec2& hit) {
   return true;
 }
 
-glm::ivec2 Geometry::pointToField(glm::vec3 point) {
+glm::ivec2 Geometry::pointToField(glm::vec3 point) const {
   return glm::ivec2(floor(point.x), floor(point.z));
 }
 
-glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) {
+glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) const {
   glm::vec2 chunk = glm::vec2(field) / static_cast<float>(data::Chunk::SIDE_LENGTH);
   return glm::ivec2(floor(chunk.x), floor(chunk.y));
 }
@@ -44,7 +44,7 @@ bool Geometry::checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tv
   return !(a1.y < b2.y || a2.y > b1.y || a1.x < b2.x || a2.x > b1.x);
 }
 
-bool Geometry::checkCollisions(data::buildings::Building& building) {
+bool Geometry::checkCollisions(const data::buildings::Building& building) const {
   const glm::ivec2 a2 = glm::vec2(building.x, building.y);
   const glm::ivec2 a1 = getEnd(building);
 
@@ -74,7 +74,7 @@ bool Geometry::checkCollisions(data::buildings::Building& building) {
   return false;
 }
 
-bool Geometry::checkCollisions(data::Road& road) {
+bool Geometry::checkCollisions(const data::Road& road) const {
   const glm::ivec2 a2 = road.position.getGlobal();
   const glm::ivec2 a1 = getEnd(road);
 
@@ -166,11 +166,11 @@ engine::Engine& Geometry::getEngine() const {
   return *engine;
 }
 
-const glm::ivec2 Geometry::getEnd(data::buildings::Building& building) const {
+const glm::ivec2 Geometry::getEnd(const data::buildings::Building& building) const {
   return glm::ivec2(building.x + building.width - 1, building.y + building.length - 1);
 }
 
-const glm::ivec2 Geometry::getEnd(data::Road& road) const {
+const glm::ivec2 Geometry::getEnd(const data::Road& road) const {
   return road.position.getGlobal() +
          glm::ivec2((road.direction == data::Direction::W ? road.length : road.getType().width) - 1,
                     (road.direction == data::Direction::N ? road.length : road.getType().width) - 1);
