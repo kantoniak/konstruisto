@@ -27,6 +27,15 @@ Map::chunkList Map::getChunks() {
   return chunks;
 }
 
+const data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) const {
+  for (unsigned long it = 0; it < chunks.size(); it++) {
+    if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {
+      return *(chunks[it]);
+    }
+  }
+  throw std::invalid_argument("Chunk does not exist");
+}
+
 bool Map::chunkExists(glm::ivec2 chunkPosition) {
   for (data::Chunk* chunk : getChunks()) {
     if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {
@@ -45,14 +54,14 @@ bool Map::addLot(data::Lot lot) {
   if (!chunkExists(chunkPos)) {
     return false;
   }
-  getChunk(chunkPos).addLot(lot);
+  getNonConstChunk(chunkPos).addLot(lot);
   return true;
 }
 
 void Map::addBuilding(data::buildings::Building building) {
   glm::ivec2 chunk = glm::ivec2(building.x, building.y) / (int)data::Chunk::SIDE_LENGTH;
   if (chunkExists(chunk)) {
-    getChunk(chunk).addBuilding(building);
+    getNonConstChunk(chunk).addBuilding(building);
     buildingCount++;
   }
 }
@@ -71,7 +80,7 @@ data::City& Map::getCurrentCity() {
 }
 
 void Map::addRoad(data::Road road) {
-  getChunk(road.position.getChunk()).addRoad(road);
+  getNonConstChunk(road.position.getChunk()).addRoad(road);
 }
 
 void Map::addRoads(std::vector<data::Road> roads) {
@@ -88,7 +97,7 @@ void Map::removeBuilding(data::buildings::Building building) {
   }
 }
 
-data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) {
+data::Chunk& Map::getNonConstChunk(glm::ivec2 chunkPosition) const {
   for (unsigned long it = 0; it < chunks.size(); it++) {
     if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {
       return *(chunks[it]);

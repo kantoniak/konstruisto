@@ -13,6 +13,7 @@ public:
   void setGlobal(glm::ivec2 global);
   void setLocal(glm::ivec2 local, glm::ivec2 chunk);
   glm::ivec2 getLocal() const;
+  glm::ivec2 getLocal(const glm::ivec2 chunk) const;
   glm::ivec2 getGlobal() const;
   glm::ivec2 getChunk() const;
 };

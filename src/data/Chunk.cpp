@@ -16,19 +16,19 @@ void Chunk::setPosition(glm::ivec2 position) {
   this->position = position;
 }
 
-glm::ivec2 Chunk::getPosition() {
+glm::ivec2 Chunk::getPosition() const {
   return position;
 }
 
-Chunk::residentialList Chunk::getResidentials() {
+Chunk::residentialList Chunk::getResidentials() const {
   return residential;
 }
 
-Chunk::residentialListIter Chunk::getResidentialIterator() {
+Chunk::residentialListIter Chunk::getResidentialIterator() const {
   return residential.begin();
 }
 
-unsigned int Chunk::getResidentialSize() {
+unsigned int Chunk::getResidentialSize() const {
   return residentialSize;
 }
 
@@ -36,7 +36,7 @@ void Chunk::addLot(data::Lot lot) {
   lots.push_back(lot);
 }
 
-Chunk::lotList Chunk::getLots() {
+Chunk::lotList Chunk::getLots() const {
   return lots;
 }
 
@@ -62,11 +62,11 @@ void Chunk::addRoad(Road road) {
   roadGraph.addRoad(road);
 }
 
-const std::vector<Road>& Chunk::getRoads() {
+const std::vector<Road>& Chunk::getRoads() const {
   return roadGraph.getRoads();
 }
 
-const RoadGraph& Chunk::getRoadGraph() {
+const RoadGraph& Chunk::getRoadGraph() const {
   return roadGraph;
 }
 }

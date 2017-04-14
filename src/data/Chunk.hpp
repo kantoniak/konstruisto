@@ -24,22 +24,22 @@ public:
   void setObjectId(unsigned int objectId);
 
   void setPosition(glm::ivec2 position);
-  glm::ivec2 getPosition();
+  glm::ivec2 getPosition() const;
 
-  residentialList getResidentials();
-  residentialListIter getResidentialIterator();
-  unsigned int getResidentialSize();
+  residentialList getResidentials() const;
+  residentialListIter getResidentialIterator() const;
+  unsigned int getResidentialSize() const;
 
   void addLot(data::Lot lot);
-  lotList getLots();
+  lotList getLots() const;
 
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
   void addRoad(Road road);
-  const std::vector<Road>& getRoads();
+  const std::vector<Road>& getRoads() const;
 
-  const RoadGraph& getRoadGraph();
+  const RoadGraph& getRoadGraph() const;
 
 private:
   unsigned int objectId;

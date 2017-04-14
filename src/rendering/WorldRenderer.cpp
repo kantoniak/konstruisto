@@ -455,17 +455,24 @@ void WorldRenderer::sendTileData() {
     }
 
     // Generate tiles
-    // FIXME(kantoniak): Paint objects from neighbouring chunks, too
     std::fill(tiles.begin(), tiles.end(), 0);
-    for (data::Lot lot : chunk->getLots()) {
-      this->paintLotOnTiles(lot, tiles);
+
+    glm::ivec2 toBottomRight = chunk->getPosition() - glm::ivec2(1, 1);
+    if (world.getMap().chunkExists(toBottomRight)) {
+      this->paintOnTiles(world.getMap().getChunk(toBottomRight), chunk->getPosition(), tiles);
     }
-    for (data::Road road : chunk->getRoads()) {
-      this->paintRoadOnTiles(road, tiles);
+
+    glm::ivec2 toRight = chunk->getPosition() - glm::ivec2(1, 0);
+    if (world.getMap().chunkExists(toRight)) {
+      this->paintOnTiles(world.getMap().getChunk(toRight), chunk->getPosition(), tiles);
     }
-    for (data::RoadGraph::Node node : chunk->getRoadGraph().getNodes()) {
-      this->paintRoadNodeOnTiles(node, tiles);
+
+    glm::ivec2 toBottom = chunk->getPosition() - glm::ivec2(0, 1);
+    if (world.getMap().chunkExists(toBottom)) {
+      this->paintOnTiles(world.getMap().getChunk(toBottom), chunk->getPosition(), tiles);
     }
+
+    this->paintOnTiles(*chunk, chunk->getPosition(), tiles);
 
     // Concatenate
     for (unsigned int i = 0; i < verticesCount; i++) {
@@ -496,18 +503,33 @@ unsigned int WorldRenderer::getTile(int x, int y) const {
 }
 
 void WorldRenderer::setTile(std::vector<GLfloat>& tiles, int x, int y, unsigned int tile) {
+  if (x < 0 || (int)data::Chunk::SIDE_LENGTH <= x || y < 0 || (int)data::Chunk::SIDE_LENGTH <= y) {
+    return;
+  }
   for (int i = 0; i < 6; i++) {
     tiles[(y * data::Chunk::SIDE_LENGTH + x) * 6 + i] = tile;
   }
 }
 
-void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& tiles) {
+void WorldRenderer::paintOnTiles(const data::Chunk& chunk, const glm::ivec2& position, std::vector<GLfloat>& tiles) {
+  for (data::Lot lot : chunk.getLots()) {
+    this->paintLotOnTiles(lot, position, tiles);
+  }
+  for (data::Road road : chunk.getRoads()) {
+    this->paintRoadOnTiles(road, position, tiles);
+  }
+  for (data::RoadGraph::Node node : chunk.getRoadGraph().getNodes()) {
+    this->paintRoadNodeOnTiles(node, position, tiles);
+  }
+}
 
-  int minX = lot.position.getLocal().x;
-  int minY = lot.position.getLocal().y;
+void WorldRenderer::paintLotOnTiles(const data::Lot& lot, const glm::ivec2& position, std::vector<GLfloat>& tiles) {
+
+  int minX = lot.position.getLocal(position).x;
+  int minY = lot.position.getLocal(position).y;
   int maxX = minX + lot.size.x - 1;
   int maxY = minY + lot.size.y - 1;
-  for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+  for (int x = minX + 1; x < maxX; x++) {
     setTile(tiles, x, minY, getTile(6, 2));
     for (int y = minY + 1; y < maxY; y++) {
       setTile(tiles, x, y, getTile(6, 3));
@@ -557,32 +579,30 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, std::vector<GLfloat>& 
   }
 }
 
-void WorldRenderer::paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& tiles) {
+void WorldRenderer::paintRoadOnTiles(data::Road& road, const glm::ivec2& position, std::vector<GLfloat>& tiles) {
 
   if (road.direction == data::Direction::N) {
-    const int minX = road.position.getLocal().x;
-    const int minY = road.position.getLocal().y;
+    const int minX = road.position.getLocal(position).x;
+    const int minY = road.position.getLocal(position).y;
     const int maxX = minX + road.getType().width - 1;
     const int maxY = minY + road.length - 1;
 
-    for (int y = minY + 1; y < maxY && y < (int)data::Chunk::SIDE_LENGTH; y++) {
+    for (int y = minY + 1; y < maxY; y++) {
       setTile(tiles, minX, y, getTile(0, 1));
-      for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+      for (int x = minX + 1; x < maxX; x++) {
         setTile(tiles, x, y, getTile(1, 1));
       }
-      if (maxX < (int)data::Chunk::SIDE_LENGTH) {
-        setTile(tiles, maxX, y, getTile(2, 1));
-      }
+      setTile(tiles, maxX, y, getTile(2, 1));
     }
   }
 
   if (road.direction == data::Direction::W) {
-    const int minX = road.position.getLocal().x;
-    const int minY = road.position.getLocal().y;
+    const int minX = road.position.getLocal(position).x;
+    const int minY = road.position.getLocal(position).y;
     const int maxX = minX + road.length - 1;
     const int maxY = minY + road.getType().width - 1;
 
-    for (int x = minX + 1; x < maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+    for (int x = minX + 1; x < maxX; x++) {
       setTile(tiles, x, minY, getTile(1, 0));
       for (int y = minY + 1; y < maxY; y++) {
         setTile(tiles, x, y, getTile(1, 1));
@@ -592,12 +612,13 @@ void WorldRenderer::paintRoadOnTiles(data::Road& road, std::vector<GLfloat>& til
   }
 }
 
-void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, std::vector<GLfloat>& tiles) {
-  int minX = node.position.getLocal().x;
-  int minY = node.position.getLocal().y;
+void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, const glm::ivec2& position,
+                                         std::vector<GLfloat>& tiles) {
+  int minX = node.position.getLocal(position).x;
+  int minY = node.position.getLocal(position).y;
   int maxX = minX + node.size.x - 1;
   int maxY = minY + node.size.y - 1;
-  for (int x = minX; x <= maxX && x < (int)data::Chunk::SIDE_LENGTH; x++) {
+  for (int x = minX; x <= maxX; x++) {
     for (int y = minY; y <= maxY; y++) {
       setTile(tiles, x, y, getTile(3, 2));
     }
