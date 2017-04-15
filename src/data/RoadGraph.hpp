@@ -17,7 +17,7 @@ public:
   public:
     // TODO(kantoniak): Switch to C++17 and use <optional>
     Road *N, *S, *W, *E;
-    bool hasN, hasS, hasW, hasE;
+    bool hasN = false, hasS = false, hasW = false, hasE = false;
     Position position;
     glm::ivec2 size;
   };

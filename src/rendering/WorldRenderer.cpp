@@ -623,5 +623,57 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
       setTile(tiles, x, y, getTile(3, 2));
     }
   }
+
+  unsigned int tile = getTile(3, 2);
+
+  if (node.size.x == node.size.y) {
+    // minX, minY
+    if (node.hasS && node.hasE) {
+      tile = getTile(3, 0);
+    } else if (node.hasS) {
+      tile = getTile(0, 1);
+    } else if (node.hasE) {
+      tile = getTile(1, 0);
+    } else {
+      tile = getTile(0, 0);
+    }
+    setTile(tiles, minX, minY, tile);
+
+    // minX, maxY
+    if (node.hasN && node.hasE) {
+      tile = getTile(3, 1);
+    } else if (node.hasN) {
+      tile = getTile(0, 1);
+    } else if (node.hasE) {
+      tile = getTile(1, 2);
+    } else {
+      tile = getTile(0, 2);
+    }
+    setTile(tiles, minX, maxY, tile);
+
+    // maxX, minY
+    if (node.hasS && node.hasW) {
+      tile = getTile(4, 0);
+    } else if (node.hasS) {
+      tile = getTile(2, 1);
+    } else if (node.hasW) {
+      tile = getTile(1, 0);
+    } else {
+      tile = getTile(2, 0);
+    }
+    setTile(tiles, maxX, minY, tile);
+
+    // maxX, maxY
+    if (node.hasN && node.hasW) {
+      tile = getTile(4, 1);
+    } else if (node.hasN) {
+      tile = getTile(2, 1);
+    } else if (node.hasW) {
+      tile = getTile(1, 2);
+    } else {
+      tile = getTile(2, 2);
+    }
+    setTile(tiles, maxX, maxY, tile);
+  }
 }
 }

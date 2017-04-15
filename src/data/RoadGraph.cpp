@@ -66,12 +66,12 @@ void RoadGraph::addRoad(const Road& road) {
     if (Direction::N == current.direction) {
       end.position.setGlobal(current.position.getGlobal() + glm::ivec2(0, current.length - 1));
       end.size = glm::ivec2(current.getType().width, 1);
-      end.hasE = true;
+      end.hasS = true;
       end.S = &current;
     } else {
       end.position.setGlobal(current.position.getGlobal() + glm::ivec2(current.length - 1, 0));
       end.size = glm::ivec2(1, current.getType().width);
-      end.hasE  = true;
+      end.hasE = true;
       end.E = &current;
     }
     nodesCopy.push_back(end);
