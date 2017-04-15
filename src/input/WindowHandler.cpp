@@ -49,13 +49,13 @@ bool WindowHandler::createMainWindow() {
     window = glfwCreateWindow(viewportSize.x, viewportSize.y, windowTitle.c_str(), nullptr, nullptr);
   }
   glViewport(0, 0, viewportSize.x, viewportSize.y);
-  glfwSetWindowUserPointer(window, this);
 
   if (!window) {
     engine.getLogger().severe("Window creation failed.");
     glfwTerminate();
     return false;
   }
+  glfwSetWindowUserPointer(window, this);
 
 #ifndef _WIN32
   // Windows will use embedded icon, set manually for other systems
