@@ -1,5 +1,5 @@
 #include "RoadGraph.hpp"
-
+#include <iostream>
 namespace data {
 
 void RoadGraph::addRoad(const Road& road) {
@@ -10,6 +10,10 @@ void RoadGraph::addRoad(const Road& road) {
 
   Road& current = roadsCopy.back();
 
+  // We will later check intersections in the middle basing on this.
+  glm::ivec2 middleStart = current.position.getGlobal();
+  glm::ivec2 middleEnd = getEnd(current);
+
   /// Start
   if (hasNodeAt(nodes, current.position.getGlobal()) && getNodeAt(nodes, current.position.getGlobal()).isSquare()) {
     // Hit intersection
@@ -18,9 +22,11 @@ void RoadGraph::addRoad(const Road& road) {
     if (Direction::W == current.direction) {
       node.hasW = true;
       node.W = &current;
+      middleStart.x += current.getType().width;
     } else {
       node.hasN = true;
       node.N = &current;
+      middleStart.y += current.getType().width;
     }
 
   } else if (hasRoadAt(roads, current.position.getGlobal())) {
@@ -30,9 +36,11 @@ void RoadGraph::addRoad(const Road& road) {
     if (Direction::W == current.direction) {
       newNode.hasW = true;
       newNode.W = &current;
+      middleStart.x += current.getType().width;
     } else {
       newNode.hasN = true;
       newNode.N = &current;
+      middleStart.y += current.getType().width;
     }
 
   } else {
@@ -44,10 +52,12 @@ void RoadGraph::addRoad(const Road& road) {
       start.size = glm::ivec2(current.getType().width, 1);
       start.hasN = true;
       start.N = &current;
+      middleStart.y += 1;
     } else {
       start.size = glm::ivec2(1, current.getType().width);
       start.hasW = true;
       start.W = &current;
+      middleStart.x += 1;
     }
     nodesCopy.push_back(start);
   }
@@ -61,9 +71,11 @@ void RoadGraph::addRoad(const Road& road) {
     if (Direction::W == current.direction) {
       node.hasE = true;
       node.E = &current;
+      middleEnd.x -= current.getType().width;
     } else {
       node.hasS = true;
       node.S = &current;
+      middleEnd.y -= current.getType().width;
     }
 
   } else if (hasRoadAt(roads, getEnd(current))) {
@@ -73,9 +85,11 @@ void RoadGraph::addRoad(const Road& road) {
     if (Direction::W == current.direction) {
       newNode.hasE = true;
       newNode.E = &current;
+      middleEnd.x -= current.getType().width;
     } else {
       newNode.hasS = true;
       newNode.S = &current;
+      middleEnd.y -= current.getType().width;
     }
 
   } else {
@@ -87,16 +101,65 @@ void RoadGraph::addRoad(const Road& road) {
       end.size = glm::ivec2(current.getType().width, 1);
       end.hasS = true;
       end.S = &current;
+      middleEnd.y -= 1;
     } else {
       end.position.setGlobal(current.position.getGlobal() + glm::ivec2(current.length - 1, 0));
       end.size = glm::ivec2(1, current.getType().width);
       end.hasE = true;
       end.E = &current;
+      middleEnd.x -= 1;
     }
     nodesCopy.push_back(end);
   }
 
   /// Middle
+  if (Direction::W == current.direction) {
+    for (int x = middleStart.x; x <= middleEnd.x; x++) {
+      glm::ivec2 testedPoint = glm::ivec2(x, current.position.getGlobal().y);
+
+      // TODO(kantoniak): if (hasNode) add to node and continue
+      if (hasRoadAt(roads, testedPoint)) {
+        roadsCopy.push_back(current);
+        Road& oldCurrent = roadsCopy.back();
+        oldCurrent.length = x - current.position.getGlobal().x;
+        current.position.setGlobal(testedPoint);
+        current.length -= oldCurrent.length;
+        oldCurrent.length += oldCurrent.getType().width;
+
+        Node& newNode = divideRoadAt(roadsCopy, nodesCopy, testedPoint);
+        newNode.hasE = true;
+        newNode.E = &oldCurrent;
+        newNode.hasW = true;
+        newNode.W = &current;
+
+        x += oldCurrent.getType().width;
+        continue;
+      }
+    }
+  } else {
+    for (int y = middleStart.y; y <= middleEnd.y; y++) {
+      glm::ivec2 testedPoint = glm::ivec2(current.position.getGlobal().x, y);
+
+      // TODO(kantoniak): if (hasNode) add to node and continue
+      if (hasRoadAt(roads, testedPoint)) {
+        roadsCopy.push_back(current);
+        Road& oldCurrent = roadsCopy.back();
+        oldCurrent.length = y - current.position.getGlobal().y;
+        current.position.setGlobal(testedPoint);
+        current.length -= oldCurrent.length;
+        oldCurrent.length += oldCurrent.getType().width;
+
+        Node& newNode = divideRoadAt(roadsCopy, nodesCopy, testedPoint);
+        newNode.hasS = true;
+        newNode.S = &oldCurrent;
+        newNode.hasN = true;
+        newNode.N = &current;
+
+        y += oldCurrent.getType().width;
+        continue;
+      }
+    }
+  }
 
   nodes.swap(nodesCopy);
   roads.swap(roadsCopy);
