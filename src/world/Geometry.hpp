@@ -30,7 +30,7 @@ public:
   // TODO(kantoniak): Return structure with object IDs by type
   bool checkCollisions(const data::buildings::Building& building) const;
   bool checkCollisions(const data::Road& road) const;
-  
+
   std::vector<data::buildings::Building> getBuildings(const glm::ivec2 from, const glm::ivec2 to) const;
 
   std::vector<data::Road> splitRoadByChunks(const data::Road& road) const;

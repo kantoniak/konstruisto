@@ -39,9 +39,7 @@ void RoadGraph::addRoad(const Road& road) {
       start.W = &current;
     }
     nodesCopy.push_back(start);
-
   }
-
 
   /// End
   // TODO: Hit intersection
@@ -75,14 +73,12 @@ void RoadGraph::addRoad(const Road& road) {
       end.E = &current;
     }
     nodesCopy.push_back(end);
-
   }
 
   /// Middle
 
   nodes.swap(nodesCopy);
   roads.swap(roadsCopy);
-
 }
 
 const std::vector<Road>& RoadGraph::getRoads() const {
@@ -128,7 +124,7 @@ RoadGraph::Node& RoadGraph::getNodeAt(std::vector<Node>& nodes, const glm::ivec2
 
 RoadGraph::Node& RoadGraph::divideRoadAt(std::vector<Road>& roads, std::vector<Node>& nodes, const glm::ivec2 global) {
   Road& oldRoad = getRoadAt(roads, global);
-  
+
   // Create extension road
   roads.push_back(Road());
   Road& newRoad = roads.back();

@@ -93,8 +93,7 @@ bool Geometry::checkCollisions(const data::Road& road) const {
   }
 
   // Handle roads from neighbouring chunks
-  if (data::Direction::W == road.direction &&
-      0 == road.position.getLocal().x &&
+  if (data::Direction::W == road.direction && 0 == road.position.getLocal().x &&
       getWorld().getMap().chunkExists(road.position.getChunk() - glm::ivec2(1, 0))) {
     const data::Chunk& otherChunk = getWorld().getMap().getChunk(road.position.getChunk() - glm::ivec2(1, 0));
     for (const data::Road& other : otherChunk.getRoads()) {
@@ -103,8 +102,7 @@ bool Geometry::checkCollisions(const data::Road& road) const {
       }
     }
   }
-  if (data::Direction::N == road.direction &&
-      0 == road.position.getLocal().y &&
+  if (data::Direction::N == road.direction && 0 == road.position.getLocal().y &&
       getWorld().getMap().chunkExists(road.position.getChunk() - glm::ivec2(0, 1))) {
     const data::Chunk& otherChunk = getWorld().getMap().getChunk(road.position.getChunk() - glm::ivec2(0, 1));
     for (const data::Road& other : otherChunk.getRoads()) {
