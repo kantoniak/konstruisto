@@ -77,8 +77,17 @@ CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
-$(OBJDIR)/windows.rc.o:
-	windres $(SRCDIR)/windows.rc $(OBJDIR)/windows.rc.o
+all: clean build run
+
+rebuild: clean build
+
+clean:
+	@echo "Removing $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)..."
+	@$(RM) $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
+	@echo "Removing $(OBJDIR)/*..."
+	@$(RM_R) ./$(OBJDIR)/*
+
+build: $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
 
 $(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJDIR)/windows.rc.o $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
@@ -90,24 +99,15 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "[COMPILE] $< $@"
 	@$(CXX) -c -o $@ $< $(CPPFLAGS) $(DEFINES)
 
-clean:
-	@echo "Removing $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)..."
-	@$(RM) $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
-	@echo "Removing $(OBJDIR)/*..."
-	@$(RM_R) ./$(OBJDIR)/*
-
-format-all:
-	clang-format -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
-
-build: $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
-
-rebuild: clean build
+$(OBJDIR)/windows.rc.o:
+	windres $(SRCDIR)/windows.rc $(OBJDIR)/windows.rc.o
 
 run:
 	@echo
 	@cd $(BINDIR); ./$(PROJECT_NAME)$(EXTENSION)
 
-all: clean build run
+format-all:
+	clang-format -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
 
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
