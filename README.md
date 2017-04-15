@@ -21,9 +21,18 @@ Just go with `make rebuild run`. To build release configuration: `make rebuild r
 1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
 2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
 3. Install `libglfw3-dev` (3.2.1): https://launchpad.net/ubuntu/+source/glfw3
-4. Extract `glm` library to `ext/glm`
-5. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
-6. Build and install `nanovg` (see below)
+4. Download `glm` and extract to `ext/glm`
+    ```
+    wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip && unzip glm-0.9.8.4.zip -d ext/ && rm glm-0.9.8.4.zip
+    ```
+5. Download `stb_image.h` to `ext/stb/stb/stb_image.h`
+    ```
+    mkdir -p ext/stb/stb/ && wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h -P ext/stb/stb/
+    ```
+6. Build and install `nanovg`
+    ```
+    git clone git@github.com:memononen/nanovg.git ext/nanovg && (cd ext/nanovg && premake4 --cc=gcc gmake && mv build/ build-linux/ && cd build-linux/ && make config=release64 nanovg)
+    ```
 7. You will need `windres` in `PATH` (see `/usr/bin/x86_64-w64-mingw32-windres` from `mingw-w64` package)
 
 ### Building `nanovg`

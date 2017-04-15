@@ -45,6 +45,8 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/stb/
 
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
+
+	OBJ_FILES += $(OBJDIR)/windows.rc.o
 else
 	SYSTEM := LINUX
 
@@ -89,7 +91,7 @@ clean:
 
 build: $(BINDIR)/$(PROJECT_NAME)$(EXTENSION)
 
-$(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJDIR)/windows.rc.o $(OBJ_FILES)
+$(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
 	@echo "[LINK] $(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
 	@$(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
