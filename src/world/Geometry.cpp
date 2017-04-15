@@ -83,7 +83,7 @@ bool Geometry::checkCollisions(const data::Road& road) const {
   const data::Chunk& chunk = getWorld().getMap().getChunk(road.position.getChunk());
 
   // With intersections
-  // TODO
+  // It just works, no idea why...
 
   // With roads
   for (const data::Road& other : chunk.getRoads()) {
