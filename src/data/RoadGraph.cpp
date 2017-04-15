@@ -125,6 +125,30 @@ RoadGraph::Node& RoadGraph::getNodeAt(std::vector<Node>& nodes, const glm::ivec2
 RoadGraph::Node& RoadGraph::divideRoadAt(std::vector<Road>& roads, std::vector<Node>& nodes, const glm::ivec2 global) {
   Road& oldRoad = getRoadAt(roads, global);
 
+  // Special: Handle division at start
+  {
+    const glm::ivec2& desired = oldRoad.position.getGlobal();
+    if (global.x == desired.x && global.y == desired.y) {
+      Node& node = getNodeAt(nodes, global);
+      node.size = glm::ivec2(1, 1) * oldRoad.getType().width;
+      return node;
+    }
+  }
+
+  // Special: Handle division at end
+  {
+    const glm::ivec2& desired = getEnd(oldRoad) - glm::ivec2(1, 1) * (oldRoad.getType().width - 1);
+    if (global.x == desired.x && global.y == desired.y) {
+      const glm::ivec2 nodePos =
+          getEnd(oldRoad) -
+          (Direction::N == oldRoad.direction ? glm::ivec2(1, 0) : glm::ivec2(0, 1)) * (oldRoad.getType().width - 1);
+      Node& node = getNodeAt(nodes, nodePos);
+      node.position.setGlobal(global);
+      node.size = glm::ivec2(1, 1) * oldRoad.getType().width;
+      return node;
+    }
+  }
+
   // Create extension road
   roads.push_back(Road());
   Road& newRoad = roads.back();
