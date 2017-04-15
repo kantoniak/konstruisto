@@ -95,7 +95,16 @@ void MapState::update(std::chrono::milliseconds delta) {
       road.direction = data::Direction::N;
       road.length = size.y;
     }
-    if (!geometry.checkCollisions(road)) {
+
+    // Collisions
+    bool valid = true;
+    const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
+    for (const data::Road& road : toInsert) {
+      if (geometry.checkCollisions(road)) {
+        valid = false;
+      }
+    }
+    if (valid) {
       selection->markValid();
     } else {
       selection->markInvalid();
@@ -239,8 +248,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
         road.direction = data::Direction::N;
         road.length = size.y;
       }
-      if (!geometry.checkCollisions(road)) {
-        world.getMap().addRoads(geometry.splitRoadByChunks(road));
+      if (addRoadIfNoCollisions(road)) {
         renderer.markTileDataForUpdate();
       }
     }
@@ -326,18 +334,7 @@ void MapState::createRandomWorld() {
     road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - 2)));
     road.direction = data::Direction::W;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.x;
-
-    const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
-    bool hasCollision = false;
-    for (const data::Road& road : toInsert) {
-      if (geometry.checkCollisions(road)) {
-        hasCollision = true;
-        break;
-      }
-    }
-    if (!hasCollision) {
-      world.getMap().addRoads(toInsert);
-    }
+    addRoadIfNoCollisions(road);
   }
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::Road road;
@@ -345,18 +342,7 @@ void MapState::createRandomWorld() {
     road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - 2), 0));
     road.direction = data::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
-
-    const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
-    bool hasCollision = false;
-    for (const data::Road& road : toInsert) {
-      if (geometry.checkCollisions(road)) {
-        hasCollision = true;
-        break;
-      }
-    }
-    if (!hasCollision) {
-      world.getMap().addRoads(toInsert);
-    }
+    addRoadIfNoCollisions(road);
   }
 
   constexpr unsigned int minBuildingSide = 2;
@@ -382,6 +368,17 @@ void MapState::createRandomWorld() {
   }
 
   world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
+}
+
+bool MapState::addRoadIfNoCollisions(const data::Road& road) {
+  const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
+  for (const data::Road& road : toInsert) {
+    if (geometry.checkCollisions(road)) {
+      return false;
+    }
+  }
+  world.getMap().addRoads(toInsert);
+  return true;
 }
 
 void MapState::setCurrentAction(MapStateAction action) {

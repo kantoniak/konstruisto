@@ -42,6 +42,8 @@ protected:
   World& getWorld() const;
   engine::Engine& getEngine() const;
 
+  bool roadEndOutsideChunk(const data::Road& road) const;
+
   bool checkCollisions(const data::Road& road, const data::Road& other) const;
   bool checkIntersection(const data::Road& a, const data::Road& b) const;
 

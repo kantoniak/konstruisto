@@ -46,8 +46,9 @@ private:
   world::World world;
   std::unique_ptr<input::Selection> selection;
 
-  void createRandomWorld();
   data::City city;
+  void createRandomWorld();
+  bool addRoadIfNoCollisions(const data::Road& road);
 
   MapStateAction currentAction;
   void setCurrentAction(MapStateAction action);

@@ -143,35 +143,22 @@ std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 f
 }
 
 std::vector<data::Road> Geometry::splitRoadByChunks(const data::Road& road) const {
-  // FIXME(kantoniak): Roads have some bugs either in splitting or rendering. Investigate.
-  data::Road toSplit = road;
   std::vector<data::Road> result;
+  data::Road current = road;
 
-  int newLength;
-  int oldLength;
-  do {
-
-    if (data::Direction::N == toSplit.direction) {
-      newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().y);
+  while (roadEndOutsideChunk(current)) {
+    data::Road toInsert = current;
+    if (data::Direction::N == toInsert.direction) {
+      toInsert.length = data::Chunk::SIDE_LENGTH - toInsert.position.getLocal().y;
+      current.position.setGlobal(current.position.getGlobal() + glm::ivec2(0, toInsert.length));
     } else {
-      newLength = std::min((int)toSplit.length, 64 - toSplit.position.getLocal().x);
+      toInsert.length = data::Chunk::SIDE_LENGTH - toInsert.position.getLocal().x;
+      current.position.setGlobal(current.position.getGlobal() + glm::ivec2(toInsert.length, 0));
     }
-    oldLength = toSplit.length;
-    toSplit.length = newLength;
-
-    result.push_back(toSplit);
-
-    glm::ivec2 localPos = toSplit.position.getLocal();
-    if (data::Direction::N == toSplit.direction) {
-      localPos.y = 0;
-      toSplit.position.setLocal(localPos, toSplit.position.getChunk() + glm::ivec2(0, 1));
-    } else {
-      localPos.x = 0;
-      toSplit.position.setLocal(localPos, toSplit.position.getChunk() + glm::ivec2(1, 0));
-    }
-    toSplit.length = oldLength - newLength;
-
-  } while (oldLength != newLength);
+    current.length -= toInsert.length;
+    result.push_back(toInsert);
+  }
+  result.push_back(current);
 
   return result;
 }
@@ -182,6 +169,11 @@ World& Geometry::getWorld() const {
 
 engine::Engine& Geometry::getEngine() const {
   return *engine;
+}
+
+bool Geometry::roadEndOutsideChunk(const data::Road& road) const {
+  glm::ivec2 localEnd = getLocalEnd(road);
+  return (int)data::Chunk::SIDE_LENGTH <= localEnd.x || (int)data::Chunk::SIDE_LENGTH <= localEnd.y;
 }
 
 bool Geometry::checkCollisions(const data::Road& road, const data::Road& other) const {
