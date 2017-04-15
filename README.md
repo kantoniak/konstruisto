@@ -33,7 +33,6 @@ Just go with `make rebuild run`. To build release configuration: `make rebuild r
     ```
     git clone git@github.com:memononen/nanovg.git ext/nanovg && (cd ext/nanovg && premake4 --cc=gcc gmake && mv build/ build-linux/ && cd build-linux/ && make config=release64 nanovg)
     ```
-7. You will need `windres` in `PATH` (see `/usr/bin/x86_64-w64-mingw32-windres` from `mingw-w64` package)
 
 ### Building `nanovg`
 
