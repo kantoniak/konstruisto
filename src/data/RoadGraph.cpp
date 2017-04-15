@@ -11,8 +11,19 @@ void RoadGraph::addRoad(const Road& road) {
   Road& current = roadsCopy.back();
 
   /// Start
-  // TODO: Hit intersection
-  if (hasRoadAt(roads, current.position.getGlobal())) {
+  if (hasNodeAt(nodes, current.position.getGlobal()) && getNodeAt(nodes, current.position.getGlobal()).isSquare()) {
+    // Hit intersection
+
+    Node& node = getNodeAt(nodesCopy, current.position.getGlobal());
+    if (Direction::W == current.direction) {
+      node.hasW = true;
+      node.W = &current;
+    } else {
+      node.hasN = true;
+      node.N = &current;
+    }
+
+  } else if (hasRoadAt(roads, current.position.getGlobal())) {
     // Hit road
 
     Node& newNode = divideRoadAt(roadsCopy, nodesCopy, current.position.getGlobal());
@@ -42,13 +53,23 @@ void RoadGraph::addRoad(const Road& road) {
   }
 
   /// End
-  // TODO: Hit intersection
-  if (hasRoadAt(roads, getEnd(current))) {
+  const glm::ivec2 endIntersectionPos = getEnd(current) - glm::ivec2(1, 1) * (current.getType().width - 1);
+  if (hasNodeAt(nodes, endIntersectionPos) && getNodeAt(nodes, endIntersectionPos).isSquare()) {
+    // Hit intersection
+
+    Node& node = getNodeAt(nodesCopy, endIntersectionPos);
+    if (Direction::W == current.direction) {
+      node.hasE = true;
+      node.E = &current;
+    } else {
+      node.hasS = true;
+      node.S = &current;
+    }
+
+  } else if (hasRoadAt(roads, getEnd(current))) {
     // Hit road
 
-    const glm::ivec2 divisionPoint = getEnd(current) - glm::ivec2(1, 1) * (current.getType().width - 1);
-
-    Node& newNode = divideRoadAt(roadsCopy, nodesCopy, divisionPoint);
+    Node& newNode = divideRoadAt(roadsCopy, nodesCopy, endIntersectionPos);
     if (Direction::W == current.direction) {
       newNode.hasE = true;
       newNode.E = &current;
@@ -109,6 +130,17 @@ Road& RoadGraph::getRoadAt(std::vector<Road>& roads, const glm::ivec2 global) co
     }
   }
   throw std::invalid_argument("Road does not exist");
+}
+
+bool RoadGraph::hasNodeAt(const std::vector<Node>& nodes, const glm::ivec2 global) const {
+  for (const Node& node : nodes) {
+    const glm::ivec2 b2 = node.position.getGlobal();
+    const glm::ivec2 b1 = node.position.getGlobal() + node.size - glm::ivec2(1, 1);
+    if (checkRectIntersection(global, global, b1, b2)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 RoadGraph::Node& RoadGraph::getNodeAt(std::vector<Node>& nodes, const glm::ivec2 global) const {

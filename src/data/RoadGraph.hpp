@@ -20,6 +20,10 @@ public:
     bool hasN = false, hasS = false, hasW = false, hasE = false;
     Position position;
     glm::ivec2 size;
+
+    bool isSquare() const {
+      return size.x == size.y;
+    }
   };
 
   void addRoad(const Road& road);
@@ -34,6 +38,8 @@ private:
   bool hasRoadAt(const std::vector<Road>& roads, const glm::ivec2 global) const;
   Road& getRoadAt(std::vector<Road>& roads, const glm::ivec2 global) const;
 
+  // TODO(kantoniak): I need <optional> so bad...
+  bool hasNodeAt(const std::vector<Node>& nodes, const glm::ivec2 global) const;
   Node& getNodeAt(std::vector<Node>& nodes, const glm::ivec2 global) const;
 
   Node& divideRoadAt(std::vector<Road>& roads, std::vector<Node>& nodes, const glm::ivec2 global);
