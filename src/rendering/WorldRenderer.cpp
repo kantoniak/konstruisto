@@ -626,7 +626,7 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
 
   unsigned int tile = getTile(3, 2);
 
-  if (node.size.x == node.size.y) {
+  if (node.isSquare()) {
     // minX, minY
     if (node.hasS && node.hasE) {
       tile = getTile(3, 0);
@@ -674,6 +674,34 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
       tile = getTile(2, 2);
     }
     setTile(tiles, maxX, maxY, tile);
+  }
+
+  if (!node.isSquare()) {
+    if (node.size.x > node.size.y) {
+      if (node.hasN && node.hasS) {
+        // Should never happen unless we cover chunk borders
+        setTile(tiles, maxX, maxY, getTile(2, 1));
+        setTile(tiles, minX, maxY, getTile(0, 1));
+      } else if (node.hasN) {
+        setTile(tiles, maxX, maxY, getTile(2, 0));
+        setTile(tiles, minX, maxY, getTile(0, 0));
+      } else {
+        setTile(tiles, maxX, maxY, getTile(2, 2));
+        setTile(tiles, minX, maxY, getTile(0, 2));
+      }
+    } else {
+      if (node.hasW && node.hasE) {
+        // Should never happen unless we cover chunk borders
+        setTile(tiles, maxX, maxY, getTile(1, 2));
+        setTile(tiles, maxX, minY, getTile(1, 2));
+      } else if (node.hasW) {
+        setTile(tiles, maxX, maxY, getTile(0, 2));
+        setTile(tiles, maxX, minY, getTile(0, 0));
+      } else {
+        setTile(tiles, maxX, maxY, getTile(2, 2));
+        setTile(tiles, maxX, minY, getTile(2, 0));
+      }
+    }
   }
 }
 }
