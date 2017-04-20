@@ -15,7 +15,8 @@ void RoadGraph::addRoad(const Road& road) {
   glm::ivec2 middleEnd = getEnd(current);
 
   /// Start
-  if (hasNodeAt(nodes, current.position.getGlobal()) && getNodeAt(nodes, current.position.getGlobal()).isSquare()) {
+  if (hasNodeAt(nodes, current.position.getGlobal()) &&
+      getNodeAt(nodes, current.position.getGlobal()).isIntersection()) {
     // Hit intersection
 
     Node& node = getNodeAt(nodesCopy, current.position.getGlobal());
@@ -64,7 +65,7 @@ void RoadGraph::addRoad(const Road& road) {
 
   /// End
   const glm::ivec2 endIntersectionPos = getEnd(current) - glm::ivec2(1, 1) * (current.getType().width - 1);
-  if (hasNodeAt(nodes, endIntersectionPos) && getNodeAt(nodes, endIntersectionPos).isSquare()) {
+  if (hasNodeAt(nodes, endIntersectionPos) && getNodeAt(nodes, endIntersectionPos).isIntersection()) {
     // Hit intersection
 
     Node& node = getNodeAt(nodesCopy, endIntersectionPos);

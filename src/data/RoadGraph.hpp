@@ -21,7 +21,7 @@ public:
     Position position;
     glm::ivec2 size;
 
-    bool isSquare() const {
+    bool isIntersection() const {
       return size.x == size.y;
     }
   };

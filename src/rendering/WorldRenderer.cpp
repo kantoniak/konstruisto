@@ -626,7 +626,7 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
 
   unsigned int tile = getTile(3, 2);
 
-  if (node.isSquare()) {
+  if (node.isIntersection()) {
     // minX, minY
     if (node.hasS && node.hasE) {
       tile = getTile(3, 0);
@@ -676,7 +676,7 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
     setTile(tiles, maxX, maxY, tile);
   }
 
-  if (!node.isSquare()) {
+  if (!node.isIntersection()) {
     if (node.size.x > node.size.y) {
       if (node.hasN && node.hasS) {
         // Should never happen unless we cover chunk borders
