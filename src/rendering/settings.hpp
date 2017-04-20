@@ -6,6 +6,7 @@ namespace rendering {
 struct settings {
   bool renderNormals = false;
   bool renderSelection = true;
+  bool renderRoadNodesAsMarkers = false;
 };
 }
 

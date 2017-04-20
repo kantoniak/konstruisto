@@ -618,10 +618,14 @@ void WorldRenderer::paintRoadNodeOnTiles(const data::RoadGraph::Node& node, cons
   int minY = node.position.getLocal(position).y;
   int maxX = minX + node.size.x - 1;
   int maxY = minY + node.size.y - 1;
-  for (int x = minX; x <= maxX; x++) {
-    for (int y = minY; y <= maxY; y++) {
-      setTile(tiles, x, y, getTile(3, 2));
+
+  if (engine.getSettings().rendering.renderRoadNodesAsMarkers) {
+    for (int x = minX; x <= maxX; x++) {
+      for (int y = minY; y <= maxY; y++) {
+        setTile(tiles, x, y, getTile(3, 2));
+      }
     }
+    return;
   }
 
   unsigned int tile = getTile(3, 2);

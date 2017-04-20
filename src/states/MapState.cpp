@@ -175,6 +175,13 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
     engine.getSettings().rendering.renderNormals = !engine.getSettings().rendering.renderNormals;
   }
 
+  if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+    engine.getLogger().debug("Road nodes debug: %s",
+                             (engine.getSettings().rendering.renderRoadNodesAsMarkers ? "on" : "off"));
+    engine.getSettings().rendering.renderRoadNodesAsMarkers = !engine.getSettings().rendering.renderRoadNodesAsMarkers;
+    renderer.markTileDataForUpdate();
+  }
+
   if (key == GLFW_KEY_G && action == GLFW_PRESS) {
     engine.getSettings().world.showGrid = !engine.getSettings().world.showGrid;
   }
