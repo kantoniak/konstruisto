@@ -61,7 +61,6 @@ private:
   template <typename T>
   bool checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const;
   bool checkIntersection(const data::Road& a, const data::Road& b) const;
-  const glm::ivec2 getEnd(const data::Road& road) const;
 };
 }
 

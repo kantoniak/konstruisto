@@ -29,6 +29,7 @@ public:
 
   void setType(const RoadType& type);
   const RoadType getType() const;
+  const glm::ivec2 getEnd() const;
 };
 }
 

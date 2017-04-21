@@ -15,4 +15,9 @@ const RoadType Road::getType() const {
     return RoadType{};
   }
 }
+
+const glm::ivec2 Road::getEnd() const {
+  return position.getGlobal() + glm::ivec2((direction == data::Direction::W ? length : getType().width) - 1,
+                                           (direction == data::Direction::N ? length : getType().width) - 1);
+}
 }
