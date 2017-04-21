@@ -5,7 +5,7 @@ namespace data {
 void RoadGraph::addRoad(const Road& road) {
 
   std::vector<Road> roadsCopy = roads;
-  std::vector<Node> nodesCopy = nodes;
+  std::vector<Node> nodesCopy = getNodesCopy(roadsCopy);
   roadsCopy.push_back(road);
 
   Road& current = roadsCopy.back();
@@ -15,19 +15,43 @@ void RoadGraph::addRoad(const Road& road) {
   glm::ivec2 middleEnd = getEnd(current);
 
   /// Start
-  if (hasNodeAt(nodes, current.position.getGlobal()) &&
-      getNodeAt(nodes, current.position.getGlobal()).isIntersection()) {
-    // Hit intersection
-
+  if (hasNodeAt(nodes, current.position.getGlobal())) {
     Node& node = getNodeAt(nodesCopy, current.position.getGlobal());
-    if (Direction::W == current.direction) {
-      node.hasW = true;
-      node.W = &current;
-      middleStart.x += current.getType().width;
+    
+    if (getNodeAt(nodes, current.position.getGlobal()).isIntersection()) {
+      // Hit intersection
+
+      if (Direction::W == current.direction) {
+        node.hasW = true;
+        node.W = &current;
+        middleStart.x += current.getType().width;
+      } else {
+        node.hasN = true;
+        node.N = &current;
+        middleStart.y += current.getType().width;
+      }
     } else {
-      node.hasN = true;
-      node.N = &current;
-      middleStart.y += current.getType().width;
+      // Hit road start/end
+
+      assert(Direction::N == current.direction || (!node.hasN && !node.hasS));
+      assert(Direction::W == current.direction || (!node.hasW && !node.hasE));
+      assert(node.isStartNode() || node.isEndNode());
+      // TODO(kantoniak): Write XOR and check for a single road on this node.
+
+      if (node.isStartNode()) {
+
+      } else {
+        std::cout << "END NODE" << std::endl;
+        Road& oldRoad = (road.direction == Direction::N ? *(node.N) : *(node.W));
+        //oldRoad.length += current.length - 1;
+        oldRoad.length = 10;
+        current = oldRoad;
+        current.length = 100;
+
+        deleteNode(nodesCopy, node);
+        roadsCopy.pop_back();
+      }
+
     }
 
   } else if (hasRoadAt(roads, current.position.getGlobal())) {
@@ -218,6 +242,17 @@ RoadGraph::Node& RoadGraph::getNodeAt(std::vector<Node>& nodes, const glm::ivec2
   throw std::invalid_argument("Node does not exist");
 }
 
+std::vector<RoadGraph::Node> RoadGraph::getNodesCopy(std::vector<Road>& roadsCopy) const {
+  auto result = nodes;
+  for (size_t i=0; i<nodes.size(); i++) {
+    result[i].N = nodes[i].N ? roadsCopy.data() + (nodes[i].N - roads.data()) : nullptr;
+    result[i].S = nodes[i].S ? roadsCopy.data() + (nodes[i].S - roads.data()) : nullptr;
+    result[i].W = nodes[i].W ? roadsCopy.data() + (nodes[i].W - roads.data()) : nullptr;
+    result[i].E = nodes[i].E ? roadsCopy.data() + (nodes[i].E - roads.data()) : nullptr;
+  }
+  return result;
+}
+
 RoadGraph::Node& RoadGraph::divideRoadAt(std::vector<Road>& roads, std::vector<Node>& nodes, const glm::ivec2 global) {
   Road& oldRoad = getRoadAt(roads, global);
 
@@ -290,6 +325,16 @@ RoadGraph::Node& RoadGraph::divideRoadAt(std::vector<Road>& roads, std::vector<N
   }
 
   return newNode;
+}
+
+void RoadGraph::deleteNode(std::vector<Node>& nodes, Node& node) {
+  if (nodes.back().position.getGlobal() == node.position.getGlobal()) {
+    nodes.pop_back();
+    return;
+  }
+
+  node = nodes.back();
+  nodes.pop_back();
 }
 
 template <typename T>
