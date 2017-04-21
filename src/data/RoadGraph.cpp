@@ -3,6 +3,11 @@
 namespace data {
 
 void RoadGraph::addRoad(const Road& road) {
+  roads.push_back(road);
+  //Road& current = roads.back();
+}
+
+/*void RoadGraph::addRoad(const Road& road) {
 
   std::vector<Road> roadsCopy = roads;
   std::vector<Node> nodesCopy = getNodesCopy(roadsCopy);
@@ -187,7 +192,7 @@ void RoadGraph::addRoad(const Road& road) {
 
   nodes.swap(nodesCopy);
   roads.swap(roadsCopy);
-}
+}*/
 
 const std::vector<Road>& RoadGraph::getRoads() const {
   return roads;
