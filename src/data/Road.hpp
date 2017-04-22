@@ -1,6 +1,8 @@
 #ifndef DATA_ROAD_HPP
 #define DATA_ROAD_HPP
 
+#include <string>
+
 #include "glm/glm.hpp"
 #include "glm/gtc/integer.hpp"
 
@@ -30,6 +32,8 @@ public:
   void setType(const RoadType& type);
   const RoadType getType() const;
   const glm::ivec2 getEnd() const;
+
+  std::string describe() const;
 };
 }
 

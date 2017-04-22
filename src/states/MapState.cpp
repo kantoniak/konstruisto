@@ -334,7 +334,10 @@ void MapState::createRandomWorld() {
     }
   }
 
-  const unsigned int roadsCountPerDir = 4;
+  // TEST road division
+  renderer.markTileDataForUpdate();
+
+  /*const unsigned int roadsCountPerDir = 4;
   for (unsigned int i = 0; i < roadsCountPerDir; i++) {
     data::Road road;
     road.setType(data::RoadTypes.Standard);
@@ -350,7 +353,7 @@ void MapState::createRandomWorld() {
     road.direction = data::Direction::N;
     road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
     addRoadIfNoCollisions(road);
-  }
+  }*/
 
   constexpr unsigned int minBuildingSide = 2;
   constexpr unsigned int maxBuildingSideDifference = 3;

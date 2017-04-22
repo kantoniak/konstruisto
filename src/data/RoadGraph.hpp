@@ -36,24 +36,35 @@ public:
     }
   };
 
+  void test();
+
   void addRoad(const Road& road);
+  Node& addStartNode(Road& road);
+  Node& addEndNode(Road& road);
+  void pinRoadToNodeAndIterate(Road& road, Node& node);
+  bool posIsNotRoadEnd(const glm::ivec2 pos, const Road& road) const;
+  void iterateNewRoad(Road& road, glm::ivec2 startPoint);
   const std::vector<Road>& getRoads() const;
 
   const std::vector<Node>& getNodes() const;
+
+  void describe() const;
 
 private:
   std::vector<Road> roads;
   std::vector<Node> nodes;
 
-  bool hasRoadAt(const std::vector<Road>& roads, const glm::ivec2 global) const;
-  Road& getRoadAt(std::vector<Road>& roads, const glm::ivec2 global) const;
+  bool hasRoadAt(const glm::ivec2 global) const;
+  bool hasRoadAt(const glm::ivec2 global, const Road& toIgnore) const;
+  Road& getRoadAt(const glm::ivec2 global);
+  Road& getRoadAt(const glm::ivec2 global, const Road& toIgnore);
 
   // TODO(kantoniak): I need <optional> so bad...
-  bool hasNodeAt(const std::vector<Node>& nodes, const glm::ivec2 global) const;
-  Node& getNodeAt(std::vector<Node>& nodes, const glm::ivec2 global) const;
+  bool hasNodeAt(const glm::ivec2 global) const;
+  Node& getNodeAt(const glm::ivec2 global);
   std::vector<Node> getNodesCopy(std::vector<Road>& roadsCopy) const;
 
-  Node& divideRoadAt(std::vector<Road>& roads, std::vector<Node>& nodes, const glm::ivec2 global);
+  Node& divideRoadAt(const glm::ivec2 global, const Road& toIgnore);
 
   void deleteNode(std::vector<Node>& nodes, Node& a);
 

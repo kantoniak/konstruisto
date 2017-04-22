@@ -14,6 +14,9 @@ void Chunk::setObjectId(unsigned int objectId) {
 
 void Chunk::setPosition(glm::ivec2 position) {
   this->position = position;
+  if (position == glm::ivec2(0, 0)) {
+    roadGraph.test();
+  }
 }
 
 glm::ivec2 Chunk::getPosition() const {
