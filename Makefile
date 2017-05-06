@@ -79,6 +79,14 @@ CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
 OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
+ifeq ($(OS), Windows_NT)
+ifeq ($(CONFIG), RELEASE)
+	RELEASE_DLLS += libstdc++-6.dll
+	RELEASE_DLLS += libgcc_s_seh-1.dll
+	RELEASE_DLLS += libwinpthread-1.dll
+endif
+endif
+
 all: clean build run
 
 rebuild: clean build
@@ -114,13 +122,18 @@ format-all:
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
 
-release-zip: rebuild
+release-zip: rebuild $(RELEASE_DLLS)
 	@echo "Copying to releases/$(RELEASE_ZIP_NAME)..."
 	@mkdir -p "releases/$(RELEASE_ZIP_NAME)"
 	@cd $(BINDIR); cp -r assets "../releases/$(RELEASE_ZIP_NAME)"
 	@cd $(BINDIR); cp "$(PROJECT_NAME)$(EXTENSION)" "../releases/$(RELEASE_ZIP_NAME)"
+	@cd $(EXTDIR)/dlls/; cp -t "../../releases/$(RELEASE_ZIP_NAME)" $(RELEASE_DLLS)
 	@echo "Zipping to releases/$(RELEASE_ZIP_NAME).zip..."
 	@cd releases; zip -r "$(RELEASE_ZIP_NAME).zip" "$(RELEASE_ZIP_NAME)"
+
+%.dll:
+	@mkdir -p $(EXTDIR)/dlls
+	@wget -q -nv -N http://konstruisto.com/download/dlls/$@ -O $(EXTDIR)/dlls/$@
 
 
 help:
