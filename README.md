@@ -5,6 +5,7 @@ Simple city-builder using OpenGL. For Windows and Linux. See http://konstruisto.
 ## Building
 
 Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`. `make help` shows possible options.
+For development, also build tests (see below).
 
 ### Deps for Windows
 
@@ -48,6 +49,14 @@ You will need `premake4` [(download)](https://premake.github.io/download.html).
     cd build-[windows|linux]
     make config=release64 nanovg
     ```
+
+### Building Google Test
+
+    wget https://github.com/google/googletest/archive/release-1.8.0.zip --no-check-certificate && unzip release-1.8.0 -d ext/ && rm release-1.8.0
+    mkdir -p ext/googletest-release-1.8.0/googletest/lib/ && cd ext/googletest-release-1.8.0/googletest/lib/
+    clang++ -isystem ../include -I../ -pthread -c "../src/gtest-all.cc"
+    ar -rv libgtest.a gtest-all.o
+    cd -
 
 ## Author and <img src="https://opensource.org/files/osi_symbol.png" height="20" alt="Open Source" /> license
 
