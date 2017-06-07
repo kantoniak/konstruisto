@@ -350,18 +350,18 @@ void WorldRenderer::renderUI() {
       nvgFill(context);
     }
 
-    x = (buttonSide - UI::ICON_SIDE) / 2;
+    x = (buttonSide - UI::ICON_SIDE_24) / 2;
     y += x;
 
-    engine.getUI().renderIcon(UI::ICON_BUILDING, x, y);
+    engine.getUI().renderIcon(UI::ICON_BUILDING, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
-    engine.getUI().renderIcon(UI::ICON_ZONES, x, y);
+    engine.getUI().renderIcon(UI::ICON_ZONES, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
-    engine.getUI().renderIcon(UI::ICON_ROAD, x, y);
+    engine.getUI().renderIcon(UI::ICON_ROAD, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
-    engine.getUI().renderIcon(UI::ICON_BULDOZER, x, y);
+    engine.getUI().renderIcon(UI::ICON_BULDOZER, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
-    engine.getUI().renderIcon(UI::ICON_MORE, x, y);
+    engine.getUI().renderIcon(UI::ICON_MORE, x, y, UI::ICON_SIDE_24);
   }
 }
 

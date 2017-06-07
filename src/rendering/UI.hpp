@@ -35,7 +35,7 @@ public:
   const NVGcolor getAccentColor() const;
 
   void renderLogo(float x, float y);
-  void renderIcon(unsigned int icon, float x, float y);
+  void renderIcon(unsigned int icon, float x, float y, const unsigned char size = ICON_SIDE);
 
   static constexpr const char* FONT_SSP_REGULAR = "Source Sans Pro Regular";
   static constexpr const char* FONT_SSP_BOLD = "Source Sans Pro Bold";
@@ -43,6 +43,7 @@ public:
   static constexpr const char* LOGO_PATH = "assets/textures/ui/logo.png";
 
   static constexpr const unsigned char ICON_SIDE = 16;
+  static constexpr const unsigned char ICON_SIDE_24 = 24;
   static constexpr const unsigned int ICON_SPEED_0 = 1;
   static constexpr const unsigned int ICON_SPEED_1 = 2;
   static constexpr const unsigned int ICON_SPEED_2 = 3;

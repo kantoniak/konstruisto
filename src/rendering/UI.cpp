@@ -95,12 +95,12 @@ void UI::renderLogo(float x, float y) {
   nvgFill(nvgContext);
 }
 
-void UI::renderIcon(unsigned int icon, float x, float y) {
-  NVGpaint paint = nvgImagePattern(nvgContext, x, y, ICON_SIDE, ICON_SIDE, 0, icons[icon],
+void UI::renderIcon(unsigned int icon, float x, float y, const unsigned char size) {
+  NVGpaint paint = nvgImagePattern(nvgContext, x, y, size, size, 0, icons[icon],
                                    1.0f); // nvglImageHandleGL3 gives texture handle
   nvgFillPaint(nvgContext, paint);
   nvgBeginPath(nvgContext);
-  nvgRect(nvgContext, x, y, ICON_SIDE, ICON_SIDE);
+  nvgRect(nvgContext, x, y, size, size);
   nvgFill(nvgContext);
 }
 
