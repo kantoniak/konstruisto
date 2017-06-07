@@ -7,7 +7,11 @@ Simple city-builder using OpenGL. For Windows and Linux. See http://konstruisto.
 Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`. `make help` shows possible options.
 For development, also build tests (see below).
 
-### Deps for Windows
+### Dependencies
+
+There is a script `ext/setup-deps.sh` which will setup `glm`, `stb_image` and Google Test for you. I will update it in the future.
+
+#### Deps for Windows
 
 1. You will need `make`, `clang`, `clang++`, `clang-format` in `PATH`.
 2. Install GLEW in `ext/glew-2.0.0`
@@ -17,7 +21,7 @@ For development, also build tests (see below).
 6. Build and install `nanovg` (see below)
 7. You will need `windres` in `PATH` from `mingw-w64`
 
-### Deps for Linux
+#### Deps for Linux
 
 1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
 2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
@@ -35,7 +39,7 @@ For development, also build tests (see below).
     git clone git@github.com:memononen/nanovg.git ext/nanovg && (cd ext/nanovg && premake4 --cc=gcc gmake && mv build/ build-linux/ && cd build-linux/ && make config=release64 nanovg)
     ```
 
-### Building `nanovg`
+#### Building `nanovg`
 
 You will need `premake4` [(download)](https://premake.github.io/download.html).
 
@@ -49,14 +53,6 @@ You will need `premake4` [(download)](https://premake.github.io/download.html).
     cd build-[windows|linux]
     make config=release64 nanovg
     ```
-
-### Building Google Test
-
-    wget https://github.com/google/googletest/archive/release-1.8.0.zip --no-check-certificate && unzip release-1.8.0 -d ext/ && rm release-1.8.0
-    mkdir -p ext/googletest-release-1.8.0/googletest/lib/ && cd ext/googletest-release-1.8.0/googletest/lib/
-    clang++ -isystem ../include -I../ -pthread -c "../src/gtest-all.cc"
-    ar -rv libgtest.a gtest-all.o
-    cd -
 
 ## Author and <img src="https://opensource.org/files/osi_symbol.png" height="20" alt="Open Source" /> license
 
