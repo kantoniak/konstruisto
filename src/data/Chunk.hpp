@@ -6,8 +6,6 @@
 #include <vector>
 
 #include "Lot.hpp"
-#include "Road.hpp"
-#include "RoadGraph.hpp"
 #include "buildings.hpp"
 
 namespace data {
@@ -36,11 +34,6 @@ public:
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
-  void addRoad(Road road);
-  const std::vector<Road>& getRoads() const;
-
-  const RoadGraph& getRoadGraph() const;
-
 private:
   unsigned int objectId;
   glm::ivec2 position;
@@ -49,8 +42,6 @@ private:
   unsigned int residentialSize;
 
   std::vector<data::Lot> lots;
-
-  RoadGraph roadGraph;
 };
 }
 

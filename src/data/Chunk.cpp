@@ -14,9 +14,6 @@ void Chunk::setObjectId(unsigned int objectId) {
 
 void Chunk::setPosition(glm::ivec2 position) {
   this->position = position;
-  if (position == glm::ivec2(0, 0)) {
-    roadGraph.test();
-  }
 }
 
 glm::ivec2 Chunk::getPosition() const {
@@ -59,17 +56,5 @@ bool Chunk::removeBuilding(data::buildings::Building building) {
   }
   residential.erase(toRemove);
   return true;
-}
-
-void Chunk::addRoad(Road road) {
-  roadGraph.addRoad(road);
-}
-
-const std::vector<Road>& Chunk::getRoads() const {
-  return roadGraph.getRoads();
-}
-
-const RoadGraph& Chunk::getRoadGraph() const {
-  return roadGraph;
 }
 }

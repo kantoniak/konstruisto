@@ -48,7 +48,6 @@ private:
 
   data::City city;
   void createRandomWorld();
-  bool addRoadIfNoCollisions(const data::Road& road);
 
   MapStateAction currentAction;
   void setCurrentAction(MapStateAction action);
