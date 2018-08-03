@@ -35,9 +35,6 @@ public:
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
 
-  void addRoad(data::Road road);
-  void addRoads(std::vector<data::Road> roads);
-
   void removeBuilding(data::buildings::Building building);
 
 protected:

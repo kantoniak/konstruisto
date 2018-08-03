@@ -29,11 +29,8 @@ public:
 
   // TODO(kantoniak): Return structure with object IDs by type
   bool checkCollisions(const data::buildings::Building& building) const;
-  bool checkCollisions(const data::Road& road) const;
 
   std::vector<data::buildings::Building> getBuildings(const glm::ivec2 from, const glm::ivec2 to) const;
-
-  std::vector<data::Road> splitRoadByChunks(const data::Road& road) const;
 
 protected:
   World* world;
@@ -42,14 +39,7 @@ protected:
   World& getWorld() const;
   engine::Engine& getEngine() const;
 
-  bool roadEndOutsideChunk(const data::Road& road) const;
-
-  bool checkCollisions(const data::Road& road, const data::Road& other) const;
-  bool checkIntersection(const data::Road& a, const data::Road& b) const;
-
   const glm::ivec2 getEnd(const data::buildings::Building& building) const;
-  const glm::ivec2 getEnd(const data::Road& road) const;
-  const glm::ivec2 getLocalEnd(const data::Road& road) const;
 };
 }
 

@@ -84,31 +84,7 @@ void MapState::update(std::chrono::milliseconds delta) {
   }
 
   if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
-    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-    data::Road road;
-    road.setType(data::RoadTypes.Standard);
-    road.position.setGlobal(selection->getFrom());
-    if (size.x > size.y) {
-      road.direction = data::Direction::W;
-      road.length = size.x;
-    } else {
-      road.direction = data::Direction::N;
-      road.length = size.y;
-    }
-
-    // Collisions
-    bool valid = true;
-    const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
-    for (const data::Road& road : toInsert) {
-      if (geometry.checkCollisions(road)) {
-        valid = false;
-      }
-    }
-    if (valid) {
-      selection->markValid();
-    } else {
-      selection->markInvalid();
-    }
+    // FIXME(kantoniak): Selecting roads
   }
 
   world.update(delta);
@@ -244,20 +220,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
     }
 
     if (MapStateAction::PLACE_ROAD == currentAction) {
-      glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-      data::Road road;
-      road.setType(data::RoadTypes.Standard);
-      road.position.setGlobal(selection->getFrom());
-      if (size.x > size.y) {
-        road.direction = data::Direction::W;
-        road.length = size.x;
-      } else {
-        road.direction = data::Direction::N;
-        road.length = size.y;
-      }
-      if (addRoadIfNoCollisions(road)) {
-        renderer.markTileDataForUpdate();
-      }
+		// Add road
     }
 
     if (MapStateAction::BULDOZE == currentAction) {
@@ -380,17 +343,6 @@ void MapState::createRandomWorld() {
   world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
 }
 
-bool MapState::addRoadIfNoCollisions(const data::Road& road) {
-  const std::vector<data::Road> toInsert = geometry.splitRoadByChunks(road);
-  for (const data::Road& road : toInsert) {
-    if (geometry.checkCollisions(road)) {
-      return false;
-    }
-  }
-  world.getMap().addRoads(toInsert);
-  return true;
-}
-
 void MapState::setCurrentAction(MapStateAction action) {
   currentAction = action;
   renderer.setLeftMenuActiveIcon(currentAction - MapStateAction::PLACE_BUILDING);
@@ -405,7 +357,7 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ROAD:
-    selection = std::make_unique<input::LineSelection>(data::RoadTypes.Standard.width);
+    selection = std::make_unique<input::LineSelection>(1);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::BULDOZE:

@@ -79,16 +79,6 @@ data::City& Map::getCurrentCity() {
   return *currentCity;
 }
 
-void Map::addRoad(data::Road road) {
-  getNonConstChunk(road.position.getChunk()).addRoad(road);
-}
-
-void Map::addRoads(std::vector<data::Road> roads) {
-  for (auto it = roads.begin(); it != roads.end(); it++) {
-    addRoad(*it);
-  }
-}
-
 void Map::removeBuilding(data::buildings::Building building) {
   for (data::Chunk* chunk : chunks) {
     if (chunk->removeBuilding(building)) {
