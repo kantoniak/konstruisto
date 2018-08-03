@@ -10,7 +10,8 @@ releases/*
 ext/*
 !ext/setup-deps.sh
 
-# Visual Studio Code
+# Visual Studio & VS Code
+.vs/*
 .vscode/*
 
 # Vim
