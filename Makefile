@@ -45,8 +45,6 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/stb/
 
 	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
-
-	OBJ_FILES += $(OBJDIR)/windows.rc.o
 else
 	SYSTEM := LINUX
 
@@ -80,11 +78,14 @@ OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES)
 RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
 ifeq ($(OS), Windows_NT)
-ifeq ($(CONFIG), RELEASE)
-	RELEASE_DLLS += libstdc++-6.dll
-	RELEASE_DLLS += libgcc_s_seh-1.dll
-	RELEASE_DLLS += libwinpthread-1.dll
-endif
+	ifeq ($(CONFIG), RELEASE)
+		RELEASE_DLLS += libstdc++-6.dll
+		RELEASE_DLLS += libgcc_s_seh-1.dll
+		RELEASE_DLLS += libwinpthread-1.dll
+	endif
+
+	CXX=clang++ -target x86_64-w64-pc-windows-gnu
+	OBJ_FILES += $(OBJDIR)/windows.rc.o
 endif
 
 all: clean build run
@@ -104,7 +105,7 @@ $(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJ_FILES)
 	@echo "[LINK] $(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
 	@$(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp	
 	@mkdir -p $(@D)
 	@echo "[COMPILE] $< $@"
 	@$(CXX) -c -o $@ $< $(CPPFLAGS) $(DEFINES)
@@ -134,7 +135,6 @@ release-zip: rebuild $(RELEASE_DLLS)
 %.dll:
 	@mkdir -p $(EXTDIR)/dlls
 	@wget -q -nv -N http://konstruisto.com/download/dlls/$@ -O $(EXTDIR)/dlls/$@
-
 
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
