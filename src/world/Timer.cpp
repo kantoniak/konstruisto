@@ -1,5 +1,7 @@
 #include "Timer.hpp"
 
+#include <sstream>
+
 namespace world {
 void Timer::init() {
   isPaused = true;
@@ -8,7 +10,7 @@ void Timer::init() {
   currentSpeed = 3;
 
   time_t t = time(NULL);
-  dateToShow = *(gmtime(&t));
+  gmtime_s(&dateToShow, &t);
   dateToShow.tm_year -= 30;
   dateToShow.tm_mon = 1;
   dateToShow.tm_mday = 1;

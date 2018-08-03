@@ -10,6 +10,7 @@ class Selection {
 public:
   Selection();
   Selection& operator=(const Selection& other);
+  virtual ~Selection() = default;
 
   void setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor);
   glm::vec4 getColor() const;

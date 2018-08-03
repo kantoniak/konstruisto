@@ -1,8 +1,6 @@
 #ifndef INPUT_LINESELECTION_HPP
 #define INPUT_LINESELECTION_HPP
 
-#include <cmath>
-
 #include "Selection.hpp"
 
 namespace input {
