@@ -293,8 +293,9 @@ void WorldRenderer::renderUI() {
   // Icon backgrounds
   short speedIcon = world.getTimer().paused() ? 0 : world.getTimer().getSpeed();
   nvgBeginPath(context);
-  nvgRect(context, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
-                       2 * topbarInnerMargin + speedIcon * (UI::ICON_SIDE + topbarInnerMargin),
+  nvgRect(context,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + dateWidth +
+              2 * topbarInnerMargin + speedIcon * (UI::ICON_SIDE + topbarInnerMargin),
           topbarHeight / 2 - UI::ICON_SIDE / 2, UI::ICON_SIDE, UI::ICON_SIDE);
   nvgFillColor(context, iconBackgroundColor);
   nvgFill(context);
@@ -309,11 +310,13 @@ void WorldRenderer::renderUI() {
   nvgFontSize(context, 19.0f);
   nvgText(context, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + topbarOuterMargin + topbarInnerMargin,
           topbarHeight / 2, date.c_str(), nullptr);
-  nvgText(context, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
-                       topbarInnerMargin,
+  nvgText(context,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
+              topbarInnerMargin,
           topbarHeight / 2, people.c_str(), nullptr);
-  nvgText(context, viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
-                       topbarInnerMargin * 2 + peopleWidth,
+  nvgText(context,
+          viewport.x / 2 - topbarWidth / 2 + cityNameBlockWidth + dateBlockWidth + 2 * topbarOuterMargin +
+              topbarInnerMargin * 2 + peopleWidth,
           topbarHeight / 2, money.c_str(), nullptr);
 
   // Speed numbers
