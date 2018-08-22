@@ -67,9 +67,7 @@ int main(int argc, char** argv) {
   rendering::Renderer renderer(engine);
   rendering::UI ui(engine);
 
-  if (!windowHandler.createMainWindow() ||
-      !renderer.init() ||
-      !ui.init()) {
+  if (!windowHandler.createMainWindow() || !renderer.init() || !ui.init()) {
     engine.stop();
     return 1;
   }

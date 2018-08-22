@@ -220,7 +220,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
     }
 
     if (MapStateAction::PLACE_ROAD == currentAction) {
-		// Add road
+      // Add road
     }
 
     if (MapStateAction::BULDOZE == currentAction) {
