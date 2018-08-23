@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Lot.hpp"
+#include "RoadGraph.hpp"
 #include "buildings.hpp"
 
 namespace data {
@@ -28,6 +29,8 @@ public:
   residentialListIter getResidentialIterator() const;
   unsigned int getResidentialSize() const;
 
+  const RoadGraph& getRoadGraph() const;
+
   void addLot(data::Lot lot);
   lotList getLots() const;
 
@@ -37,6 +40,8 @@ public:
 private:
   unsigned int objectId;
   glm::ivec2 position;
+
+  RoadGraph roadGraph;
 
   std::vector<data::buildings::Building> residential;
   unsigned int residentialSize;
