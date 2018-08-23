@@ -2,7 +2,7 @@
 
 namespace data {
 
-Chunk::Chunk() {
+Chunk::Chunk() : roadGraph(SIDE_LENGTH) {
   objectId = 0;
   position = glm::ivec2();
   residentialSize = 0;
@@ -30,6 +30,10 @@ Chunk::residentialListIter Chunk::getResidentialIterator() const {
 
 unsigned int Chunk::getResidentialSize() const {
   return residentialSize;
+}
+
+const RoadGraph& Chunk::getRoadGraph() const {
+  return this->roadGraph;
 }
 
 void Chunk::addLot(data::Lot lot) {

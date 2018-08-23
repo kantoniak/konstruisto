@@ -515,6 +515,8 @@ void WorldRenderer::setTile(std::vector<GLfloat>& tiles, int x, int y, unsigned 
 }
 
 void WorldRenderer::paintOnTiles(const data::Chunk& chunk, const glm::ivec2& position, std::vector<GLfloat>& tiles) {
+  this->paintRoadsOnTiles(chunk.getRoadGraph(), tiles);
+
   for (data::Lot lot : chunk.getLots()) {
     this->paintLotOnTiles(lot, position, tiles);
   }
@@ -573,6 +575,18 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, const glm::ivec2& posi
       setTile(tiles, minX, y, getTile(8, 1));
     }
     setTile(tiles, minX, maxY, getTile(8, 2));
+  }
+}
+
+void WorldRenderer::paintRoadsOnTiles(const data::RoadGraph& roads, std::vector<GLfloat>& tiles) {
+
+  for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
+    for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
+      if (roads.getLayerData()[y * data::Chunk::SIDE_LENGTH + x] > 0) {
+        // TODO(kantoniak)
+        setTile(tiles, x, y, getTile(1, 1));
+      }
+    }
   }
 }
 }
