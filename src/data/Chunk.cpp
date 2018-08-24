@@ -32,6 +32,10 @@ unsigned int Chunk::getResidentialSize() const {
   return residentialSize;
 }
 
+void Chunk::addRoad(data::Road road) {
+  this->roadGraph.addRoad(road);
+}
+
 const RoadGraph& Chunk::getRoadGraph() const {
   return this->roadGraph;
 }

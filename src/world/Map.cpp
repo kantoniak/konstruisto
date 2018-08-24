@@ -79,6 +79,10 @@ data::City& Map::getCurrentCity() {
   return *currentCity;
 }
 
+void Map::addRoad(data::Road road) {
+  getNonConstChunk(road.getTiles()[0].getChunk()).addRoad(road);
+}
+
 void Map::removeBuilding(data::buildings::Building building) {
   for (data::Chunk* chunk : chunks) {
     if (chunk->removeBuilding(building)) {

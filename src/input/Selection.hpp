@@ -2,6 +2,9 @@
 #define INPUT_SELECTION_HPP
 
 #include <glm/glm.hpp>
+#include <vector>
+
+#include "../data/Position.hpp"
 
 namespace input {
 
@@ -29,6 +32,7 @@ public:
 
   virtual glm::ivec2 getFrom() const;
   virtual glm::ivec2 getTo() const;
+  virtual const std::vector<data::Position> getSelected() const;
 
 protected:
   bool selecting;
