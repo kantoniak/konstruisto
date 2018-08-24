@@ -7,6 +7,7 @@
 
 #include "../data/Chunk.hpp"
 #include "../data/City.hpp"
+#include "../data/Road.hpp"
 
 namespace world {
 
@@ -34,6 +35,8 @@ public:
   // TODO(kantoniak): Map::setCurrentCity() - change parameter to ObjId one day
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
+
+  void addRoad(data::Road road);
 
   void removeBuilding(data::buildings::Building building);
 

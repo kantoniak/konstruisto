@@ -29,6 +29,7 @@ public:
   residentialListIter getResidentialIterator() const;
   unsigned int getResidentialSize() const;
 
+  void addRoad(data::Road road);
   const RoadGraph& getRoadGraph() const;
 
   void addLot(data::Lot lot);

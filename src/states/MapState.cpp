@@ -84,7 +84,8 @@ void MapState::update(std::chrono::milliseconds delta) {
   }
 
   if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
-    // FIXME(kantoniak): Selecting roads
+    // FIXME(kantoniak): Selection outside the map
+    selection->markValid();
   }
 
   world.update(delta);
@@ -220,7 +221,9 @@ void MapState::onMouseButton(int button, int action, int mods) {
     }
 
     if (MapStateAction::PLACE_ROAD == currentAction) {
-      // Add road
+      // TODO(kantoniak): Collisions with buildings
+      world.getMap().addRoad(data::Road(selection->getSelected()));
+      renderer.markTileDataForUpdate();
     }
 
     if (MapStateAction::BULDOZE == currentAction) {

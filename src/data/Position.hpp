@@ -10,6 +10,8 @@ private:
   glm::ivec2 global;
 
 public:
+  Position();
+  Position(glm::ivec2 global);
   void setGlobal(glm::ivec2 global);
   void setLocal(glm::ivec2 local, glm::ivec2 chunk);
   glm::ivec2 getLocal() const;

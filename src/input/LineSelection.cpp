@@ -1,7 +1,6 @@
 #include "LineSelection.hpp"
 
 #include <algorithm>
-#include <iostream>
 
 namespace input {
 LineSelection::LineSelection(unsigned short lineWidth) : lineWidth(lineWidth) {
@@ -29,5 +28,22 @@ glm::ivec2 LineSelection::getTo() const {
   } else {
     return glm::ivec2(std::max(toPoint.x, fromPoint.x + lineWidth - 1), fromPoint.y + lineWidth - 1);
   }
+}
+
+const std::vector<data::Position> LineSelection::getSelected() const {
+  const glm::ivec2 start = this->getFrom();
+
+  const glm::ivec2 diff = toPoint - fromPoint;
+  const bool goesNorth = std::abs(diff.y) > std::abs(diff.x);
+
+  int length = 1 + (goesNorth ? std::abs(diff.y) : std::abs(diff.x));
+
+  std::vector<data::Position> result;
+  for (int i = 0; i < length; i++) {
+    const glm::ivec2 toAdd = goesNorth ? glm::ivec2(0, i) : glm::ivec2(i, 0);
+    result.push_back(data::Position(start + toAdd));
+  }
+
+  return result;
 }
 }

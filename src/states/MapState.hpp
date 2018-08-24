@@ -7,6 +7,7 @@
 
 #include "../data/CameraState.hpp"
 #include "../data/City.hpp"
+#include "../data/Road.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
 #include "../input/LineSelection.hpp"

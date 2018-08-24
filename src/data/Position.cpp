@@ -1,6 +1,12 @@
 #include "Position.hpp"
 
 namespace data {
+Position::Position() {
+}
+
+Position::Position(glm::ivec2 global) : global(global) {
+}
+
 void Position::setGlobal(glm::ivec2 global) {
   this->global = global;
 }
