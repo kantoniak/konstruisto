@@ -14,9 +14,44 @@ void Map::cleanup() {
 
 void Map::createChunk(glm::ivec2 position) {
   // TODO(kantoniak): Check if chunk exists already
-  data::Chunk* chunk = new data::Chunk;
+  data::Chunk* chunk = new data::Chunk();
   chunk->setPosition(position);
   chunks.push_back(chunk);
+  this->setChunkNeighbors(*chunk);
+}
+
+void Map::setChunkNeighbors(data::Chunk& chunk) {
+  glm::ivec2 position = chunk.getPosition();
+
+  glm::ivec2 neighborPos = position;
+  neighborPos.x = position.x + 1;
+  if (chunkExists(neighborPos)) {
+    data::Chunk& neighbor = getNonConstChunk(neighborPos);
+    chunk.setNeighborE(&neighbor);
+    neighbor.setNeighborW(&chunk);
+  }
+
+  neighborPos.x = position.x - 1;
+  if (chunkExists(neighborPos)) {
+    data::Chunk& neighbor = getNonConstChunk(neighborPos);
+    chunk.setNeighborW(&neighbor);
+    neighbor.setNeighborE(&chunk);
+  }
+
+  neighborPos.x = position.x;
+  neighborPos.y = position.y + 1;
+  if (chunkExists(neighborPos)) {
+    data::Chunk& neighbor = getNonConstChunk(neighborPos);
+    chunk.setNeighborS(&neighbor);
+    neighbor.setNeighborN(&chunk);
+  }
+
+  neighborPos.y = position.y - 1;
+  if (chunkExists(neighborPos)) {
+    data::Chunk& neighbor = getNonConstChunk(neighborPos);
+    chunk.setNeighborN(&neighbor);
+    neighbor.setNeighborS(&chunk);
+  }
 }
 
 unsigned int Map::getChunksCount() {
@@ -80,6 +115,9 @@ data::City& Map::getCurrentCity() {
 }
 
 void Map::addRoad(data::Road road) {
+  if (!chunkExists(road.getTiles()[0].getChunk())) {
+    return;
+  }
   getNonConstChunk(road.getTiles()[0].getChunk()).addRoad(road);
 }
 

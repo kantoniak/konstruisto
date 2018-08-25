@@ -29,11 +29,26 @@ public:
 
   RoadGraph(unsigned int sideLength);
 
+  void setNeighborN(RoadGraph* neigborN);
+  void setNeighborS(RoadGraph* neigborS);
+  void setNeighborW(RoadGraph* neigborW);
+  void setNeighborE(RoadGraph* neigborE);
+
   void addRoad(const data::Road road);
 
 private:
+  RoadGraph* neighborN;
+  RoadGraph* neighborS;
+  RoadGraph* neighborW;
+  RoadGraph* neighborE;
+
   void update();
   void updateIndex(unsigned int i);
+
+  bool noRoadToN(unsigned int i) const;
+  bool noRoadToS(unsigned int i) const;
+  bool noRoadToW(unsigned int i) const;
+  bool noRoadToE(unsigned int i) const;
 };
 }
 

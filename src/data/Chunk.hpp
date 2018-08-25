@@ -29,6 +29,11 @@ public:
   residentialListIter getResidentialIterator() const;
   unsigned int getResidentialSize() const;
 
+  void setNeighborN(Chunk* neigborN);
+  void setNeighborS(Chunk* neigborS);
+  void setNeighborW(Chunk* neigborW);
+  void setNeighborE(Chunk* neigborE);
+
   void addRoad(data::Road road);
   const RoadGraph& getRoadGraph() const;
 

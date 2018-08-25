@@ -1,10 +1,25 @@
 #include "RoadGraph.hpp"
 
-#include <iostream>
-
 namespace data {
 
-RoadGraph::RoadGraph(unsigned int sideLength) : Layer(sideLength) {
+RoadGraph::RoadGraph(unsigned int sideLength)
+    : Layer(sideLength), neighborN(nullptr), neighborS(nullptr), neighborW(nullptr), neighborE(nullptr) {
+}
+
+void RoadGraph::setNeighborN(RoadGraph* neighborN) {
+  this->neighborN = neighborN;
+}
+
+void RoadGraph::setNeighborS(RoadGraph* neighborS) {
+  this->neighborS = neighborS;
+}
+
+void RoadGraph::setNeighborW(RoadGraph* neighborW) {
+  this->neighborW = neighborW;
+}
+
+void RoadGraph::setNeighborE(RoadGraph* neighborE) {
+  this->neighborE = neighborE;
 }
 
 void RoadGraph::addRoad(const data::Road road) {
@@ -27,21 +42,65 @@ void RoadGraph::updateIndex(unsigned int i) {
     return;
   }
   char newValue = 1 | 2 | 4 | 8;
-  if (i < sideLength || this->layerData[i - sideLength] == NO_ROAD) {
+  if (noRoadToN(i)) {
     newValue ^= 1;
   }
-  if (i + sideLength >= sideLength * sideLength || this->layerData[i + sideLength] == NO_ROAD) {
+  if (noRoadToS(i)) {
     newValue ^= 2;
   }
-  if (i % sideLength == 0 || this->layerData[i - 1] == NO_ROAD) {
+  if (noRoadToW(i)) {
     newValue ^= 4;
   }
-  if (i % sideLength == sideLength - 1 || this->layerData[i + 1] == NO_ROAD) {
+  if (noRoadToE(i)) {
     newValue ^= 8;
   }
   if (newValue == 0) {
     newValue = ROAD_NSWE;
   }
   this->layerData[i] = newValue;
+}
+
+bool RoadGraph::noRoadToN(unsigned int i) const {
+  if (i < sideLength) {
+    if (neighborN == nullptr) {
+      return true;
+    }
+    return neighborN->layerData[sideLength * (sideLength - 1) + i] == NO_ROAD;
+  } else {
+    return this->layerData[i - sideLength] == NO_ROAD;
+  }
+}
+
+bool RoadGraph::noRoadToS(unsigned int i) const {
+  if (i + sideLength >= sideLength * sideLength) {
+    if (neighborS == nullptr) {
+      return true;
+    }
+    return neighborS->layerData[i % sideLength] == NO_ROAD;
+  } else {
+    return this->layerData[i + sideLength] == NO_ROAD;
+  }
+}
+
+bool RoadGraph::noRoadToW(unsigned int i) const {
+  if (i % sideLength == 0) {
+    if (neighborW == nullptr) {
+      return true;
+    }
+    return neighborW->layerData[i + sideLength - 1] == NO_ROAD;
+  } else {
+    return this->layerData[i - 1] == NO_ROAD;
+  }
+}
+
+bool RoadGraph::noRoadToE(unsigned int i) const {
+  if (i % sideLength == sideLength - 1) {
+    if (neighborE == nullptr) {
+      return true;
+    }
+    return neighborE->layerData[i - sideLength + 1] == NO_ROAD;
+  } else {
+    return this->layerData[i + 1] == NO_ROAD;
+  }
 }
 }
