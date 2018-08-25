@@ -32,6 +32,22 @@ unsigned int Chunk::getResidentialSize() const {
   return residentialSize;
 }
 
+void Chunk::setNeighborN(Chunk* neigborN) {
+  this->roadGraph.setNeighborN(&(neigborN->roadGraph));
+}
+
+void Chunk::setNeighborS(Chunk* neigborS) {
+  this->roadGraph.setNeighborS(&(neigborS->roadGraph));
+}
+
+void Chunk::setNeighborW(Chunk* neigborW) {
+  this->roadGraph.setNeighborW(&(neigborW->roadGraph));
+}
+
+void Chunk::setNeighborE(Chunk* neigborE) {
+  this->roadGraph.setNeighborE(&(neigborE->roadGraph));
+}
+
 void Chunk::addRoad(data::Road road) {
   this->roadGraph.addRoad(road);
 }
