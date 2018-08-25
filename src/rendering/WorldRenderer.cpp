@@ -459,22 +459,6 @@ void WorldRenderer::sendTileData() {
 
     // Generate tiles
     std::fill(tiles.begin(), tiles.end(), 0);
-
-    glm::ivec2 toBottomRight = chunk->getPosition() - glm::ivec2(1, 1);
-    if (world.getMap().chunkExists(toBottomRight)) {
-      this->paintOnTiles(world.getMap().getChunk(toBottomRight), chunk->getPosition(), tiles);
-    }
-
-    glm::ivec2 toRight = chunk->getPosition() - glm::ivec2(1, 0);
-    if (world.getMap().chunkExists(toRight)) {
-      this->paintOnTiles(world.getMap().getChunk(toRight), chunk->getPosition(), tiles);
-    }
-
-    glm::ivec2 toBottom = chunk->getPosition() - glm::ivec2(0, 1);
-    if (world.getMap().chunkExists(toBottom)) {
-      this->paintOnTiles(world.getMap().getChunk(toBottom), chunk->getPosition(), tiles);
-    }
-
     this->paintOnTiles(*chunk, chunk->getPosition(), tiles);
 
     // Concatenate

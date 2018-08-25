@@ -222,7 +222,11 @@ void MapState::onMouseButton(int button, int action, int mods) {
 
     if (MapStateAction::PLACE_ROAD == currentAction) {
       // TODO(kantoniak): Collisions with buildings
-      world.getMap().addRoad(data::Road(selection->getSelected()));
+      input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
+      const std::vector<input::LineSelection> selections = s->divideByChunk();
+      for (auto selection : selections) {
+        world.getMap().addRoad(data::Road(selection.getSelected()));
+      }
       renderer.markTileDataForUpdate();
     }
 

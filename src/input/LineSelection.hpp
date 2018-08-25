@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "../data/Chunk.hpp"
 #include "../data/Position.hpp"
 #include "Selection.hpp"
 
@@ -17,9 +18,12 @@ public:
   virtual glm::ivec2 getTo() const;
 
   virtual const std::vector<data::Position> getSelected() const;
+  const std::vector<LineSelection> divideByChunk() const;
 
 private:
   unsigned short lineWidth;
+
+  unsigned int getLength() const;
 };
 }
 
