@@ -28,6 +28,13 @@ glm::ivec2 Position::getGlobal() const {
 }
 
 glm::ivec2 Position::getChunk() const {
-  return global / 64;
+  glm::ivec2 result = global / 64;
+  if (global.x < 0) {
+    result.x--;
+  }
+  if (global.y < 0) {
+    result.y--;
+  }
+  return result;
 }
 }
