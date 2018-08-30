@@ -224,9 +224,11 @@ void MapState::onMouseButton(int button, int action, int mods) {
       // TODO(kantoniak): Collisions with buildings
       input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
       const std::vector<input::LineSelection> selections = s->divideByChunk();
-      for (auto selection : selections) {
-        world.getMap().addRoad(data::Road(selection.getSelected()));
+      std::vector<data::Road> roads;
+      for (auto& selection : selections) {
+        roads.push_back(data::Road(selection.getSelected()));
       }
+      world.getMap().addRoads(roads);
       renderer.markTileDataForUpdate();
     }
 

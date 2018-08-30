@@ -35,6 +35,7 @@ public:
   void setNeighborE(Chunk* neigborE);
 
   void addRoad(data::Road road);
+  void updateRoadGraph(const std::vector<data::Position>& tiles);
   const RoadGraph& getRoadGraph() const;
 
   void addLot(data::Lot lot);

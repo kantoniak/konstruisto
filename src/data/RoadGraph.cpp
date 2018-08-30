@@ -28,7 +28,12 @@ void RoadGraph::addRoad(const data::Road road) {
     const unsigned int y = tile.getLocal().y;
     this->layerData[y * sideLength + x] = 1;
   }
-  this->update();
+}
+
+void RoadGraph::update(const std::vector<data::Position>& tiles) {
+  for (auto& tile : tiles) {
+    this->updateIndex(tile.getLocalIndex());
+  }
 }
 
 void RoadGraph::update() {

@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <stdexcept>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "../data/Chunk.hpp"
@@ -37,7 +39,7 @@ public:
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
 
-  void addRoad(data::Road road);
+  void addRoads(const std::vector<data::Road> roads);
 
   void removeBuilding(data::buildings::Building building);
 
