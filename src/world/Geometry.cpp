@@ -65,6 +65,24 @@ bool Geometry::checkCollisions(const data::buildings::Building& building) const 
   return false;
 }
 
+bool Geometry::checkCollisions(const data::Road& road) const {
+  std::vector<data::Position> tiles = road.getTiles();
+  const glm::ivec2 a2 = tiles[0].getGlobal();
+  const glm::ivec2 a1 = tiles[tiles.size()-1].getGlobal();
+  
+  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
+    // With buildings
+    for (data::buildings::Building other : chunk->getResidentials()) {
+      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
+      const glm::ivec2 b1 = getEnd(other);
+      if (checkRectIntersection(a1, a2, b1, b2)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 from, const glm::ivec2 to) const {
   std::vector<data::buildings::Building> result;
 

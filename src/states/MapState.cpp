@@ -84,8 +84,18 @@ void MapState::update(std::chrono::milliseconds delta) {
   }
 
   if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
-    // FIXME(kantoniak): Selection outside the map
-    selection->markValid();
+    data::Position from(selection->getFrom());
+    data::Position to(selection->getTo());
+    bool chunkExists = world.getMap().chunkExists(from.getChunk()) && world.getMap().chunkExists(to.getChunk());
+
+    input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
+    bool roadCollides = geometry.checkCollisions(data::Road(s->getSelected()));
+
+    if (!chunkExists || roadCollides) {
+      selection->markInvalid();
+    } else {
+      selection->markValid();
+    }
   }
 
   world.update(delta);
@@ -220,7 +230,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
       }
     }
 
-    if (MapStateAction::PLACE_ROAD == currentAction) {
+    if (MapStateAction::PLACE_ROAD == currentAction && selection->isValid()) {
       // TODO(kantoniak): Collisions with buildings
       input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
       const std::vector<input::LineSelection> selections = s->divideByChunk();
@@ -308,24 +318,6 @@ void MapState::createRandomWorld() {
 
   // TEST road division
   renderer.markTileDataForUpdate();
-
-  /*const unsigned int roadsCountPerDir = 4;
-  for (unsigned int i = 0; i < roadsCountPerDir; i++) {
-    data::Road road;
-    road.setType(data::RoadTypes.Standard);
-    road.position.setGlobal(glm::ivec2(0, rand() % (data::Chunk::SIDE_LENGTH * mapSize.y - 2)));
-    road.direction = data::Direction::W;
-    road.length = data::Chunk::SIDE_LENGTH * mapSize.x;
-    addRoadIfNoCollisions(road);
-  }
-  for (unsigned int i = 0; i < roadsCountPerDir; i++) {
-    data::Road road;
-    road.setType(data::RoadTypes.Standard);
-    road.position.setGlobal(glm::ivec2(rand() % (data::Chunk::SIDE_LENGTH * mapSize.x - 2), 0));
-    road.direction = data::Direction::N;
-    road.length = data::Chunk::SIDE_LENGTH * mapSize.y;
-    addRoadIfNoCollisions(road);
-  }*/
 
   constexpr unsigned int minBuildingSide = 2;
   constexpr unsigned int maxBuildingSideDifference = 3;
