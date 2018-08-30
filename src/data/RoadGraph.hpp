@@ -1,7 +1,10 @@
 #ifndef DATA_ROADGRAPH_HPP
 #define DATA_ROADGRAPH_HPP
 
+#include <vector>
+
 #include "Layer.hpp"
+#include "Position.hpp"
 #include "Road.hpp"
 
 namespace data {
@@ -35,6 +38,7 @@ public:
   void setNeighborE(RoadGraph* neigborE);
 
   void addRoad(const data::Road road);
+  void update(const std::vector<data::Position>& tiles);
 
 private:
   RoadGraph* neighborN;

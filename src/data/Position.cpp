@@ -27,6 +27,11 @@ glm::ivec2 Position::getGlobal() const {
   return global;
 }
 
+unsigned int Position::getLocalIndex() const {
+  const glm::ivec2 local = getLocal();
+  return local.x + local.y * 64;
+}
+
 glm::ivec2 Position::getChunk() const {
   glm::ivec2 result = global / 64;
   if (global.x < 0) {
@@ -37,4 +42,21 @@ glm::ivec2 Position::getChunk() const {
   }
   return result;
 }
+
+std::vector<Position> Position::getNeighbors() const {
+  std::vector<Position> result;
+  result.push_back(Position(global + glm::ivec2(1, -1)));
+  result.push_back(Position(global + glm::ivec2(1, 0)));
+  result.push_back(Position(global + glm::ivec2(1, 1)));
+  result.push_back(Position(global + glm::ivec2(0, -1)));
+  result.push_back(Position(global + glm::ivec2(0, +1)));
+  result.push_back(Position(global + glm::ivec2(-1, -1)));
+  result.push_back(Position(global + glm::ivec2(-1, 0)));
+  result.push_back(Position(global + glm::ivec2(-1, +1)));
+  return result;
+}
+}
+
+bool operator==(const data::Position& a, const data::Position& b) {
+  return a.getGlobal() == b.getGlobal();
 }
