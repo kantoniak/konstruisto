@@ -10,7 +10,11 @@ void Timer::init() {
   currentSpeed = 3;
 
   time_t t = time(NULL);
+#ifdef _WIN32
   gmtime_s(&dateToShow, &t);
+#else
+  gmtime_r(&t, &dateToShow);
+#endif
   dateToShow.tm_year -= 30;
   dateToShow.tm_mon = 1;
   dateToShow.tm_mday = 1;
@@ -79,3 +83,4 @@ unsigned short Timer::getTurnLength() const {
   }
 }
 }
+
