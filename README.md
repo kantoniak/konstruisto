@@ -4,14 +4,14 @@ Simple city-builder using OpenGL. For Windows and Linux. See http://konstruisto.
 
 ## Building
 
-Just go with `make rebuild run`. To build release configuration: `make rebuild run CONFIG=RELEASE`. `make help` shows possible options.
-For development, also build tests (see below).
+1. Setup dependencies (below)
+2. Run `make rebuild run`
+
+To build release configuration: `make rebuild run CONFIG=RELEASE`. Command `make help` shows all possible options.
 
 ### Dependencies
 
-There is a script `ext/setup-deps.sh` which will setup `glm`, `stb_image` and Google Test for you. I will update it in the future.
-
-#### Deps for Windows
+#### Windows dependencies
 
 1. You will need `make`, `clang`, `clang++`, `clang-format` in `PATH`.
 2. Install GLEW in `ext/glew-2.0.0`
@@ -21,25 +21,7 @@ There is a script `ext/setup-deps.sh` which will setup `glm`, `stb_image` and Go
 6. Build and install `nanovg` (see below)
 7. You will need `windres` in `PATH` from `mingw-w64`
 
-#### Deps for Linux
-
-1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
-2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
-3. Install `libglfw3-dev` (3.2.1): https://launchpad.net/ubuntu/+source/glfw3
-4. Download `glm` and extract to `ext/glm`
-    ```
-    wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip && unzip glm-0.9.8.4.zip -d ext/ && rm glm-0.9.8.4.zip
-    ```
-5. Download `stb_image.h` to `ext/stb/stb/stb_image.h`
-    ```
-    mkdir -p ext/stb/stb/ && wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h -P ext/stb/stb/
-    ```
-6. Build and install `nanovg`
-    ```
-    git clone git@github.com:memononen/nanovg.git ext/nanovg && (cd ext/nanovg && premake4 --cc=gcc gmake && mv build/ build-linux/ && cd build-linux/ && make config=release64 nanovg)
-    ```
-
-#### Building `nanovg`
+##### Building `nanovg`
 
 You will need `premake4` [(download)](https://premake.github.io/download.html).
 
@@ -51,6 +33,34 @@ You will need `premake4` [(download)](https://premake.github.io/download.html).
     premake --cc=gcc gmake
     mv build build-[windows|linux]
     cd build-[windows|linux]
+    make config=release64 nanovg
+    ```
+
+#### Linux dependencies
+
+You can just run `setup-deps.sh`, it will setup everything for you. If you want to do everything by hand, here's the list of dependencies:
+
+1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
+2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew
+3. Install `libglfw3-dev` (3.2.1): https://launchpad.net/ubuntu/+source/glfw3
+4. Download `glm` and extract to `ext/glm`
+    ```
+    wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip &&
+    unzip glm-0.9.8.4.zip -d ext/ &&
+    rm glm-0.9.8.4.zip
+    ```
+5. Download `stb_image.h` to `ext/stb/stb/stb_image.h`
+    ```
+    mkdir -p ext/stb/stb/ &&
+    wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h -P ext/stb/stb/
+    ```
+6. Build and install `nanovg` (you will need `premake4`)
+    ```
+    git clone git@github.com:memononen/nanovg.git ext/nanovg &&
+    cd ext/nanovg &&
+    premake4 --cc=gcc gmake &&
+    mv build/ build-linux/ &&
+    cd build-linux/ &&
     make config=release64 nanovg
     ```
 
