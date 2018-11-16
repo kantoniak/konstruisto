@@ -17,9 +17,10 @@ To build release configuration: `make rebuild run CONFIG=RELEASE`. Command `make
 2. Install GLEW in `ext/glew-2.0.0`
 3. Install GLFW in `ext/glew-3.2.1`
 4. Extract `glm` library to `ext/glm`
-5. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
-6. Build and install `nanovg` (see below)
-7. You will need `windres` in `PATH` from `mingw-w64`
+5. Extract `cereal` library to `ext/cereal-1.2.2`
+6. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
+7. Build and install `nanovg` (see below)
+8. You will need `windres` in `PATH` from `mingw-w64`
 
 ##### Building `nanovg`
 
@@ -49,12 +50,18 @@ You can just run `setup-deps.sh`, it will setup everything for you. If you want 
     unzip glm-0.9.8.4.zip -d ext/ &&
     rm glm-0.9.8.4.zip
     ```
-5. Download `stb_image.h` to `ext/stb/stb/stb_image.h`
+5. Download `cereal` and extract to `ext/cereal-1.2.2`
+    ```
+    wget https://github.com/USCiLab/cereal/archive/v1.2.2.zip --no-check-certificate -O cereal-1.2.2.zip &&
+    unzip cereal-1.2.2.zip -d "$EXT" &&
+    rm cereal-1.2.2.zip
+    ```
+6. Download `stb_image.h` to `ext/stb/stb/stb_image.h`
     ```
     mkdir -p ext/stb/stb/ &&
     wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h -P ext/stb/stb/
     ```
-6. Build and install `nanovg` (you will need `premake4`)
+7. Build and install `nanovg` (you will need `premake4`)
     ```
     git clone git@github.com:memononen/nanovg.git ext/nanovg &&
     cd ext/nanovg &&
@@ -75,5 +82,6 @@ Contents of this repository is licensed under GNU General Public License, versio
 * [GLFW 3.2.1](http://www.glfw.org/) under the zlib/libpng license
 * [GLEW 2.0.0](http://glew.sourceforge.net/) under the Modified BSD License, the Mesa 3-D License (MIT) and the Khronos License (MIT)
 * [GLM 0.9.8.4](http://glm.g-truc.net/0.9.8/index.html) under the MIT License
+* [Cereal 1.2.2](http://uscilab.github.io/cereal/) under BSD license
 * [NanoVG](https://github.com/memononen/nanovg) under the zlib/libpng license
 * [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h), a public license image loading library

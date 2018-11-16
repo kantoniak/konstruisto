@@ -20,11 +20,16 @@ wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip --n
 unzip glm-0.9.8.4.zip -d "$EXT" &&
 rm glm-0.9.8.4.zip
 
-# 3. Download stb_image
+# 4. Download cereal
+wget https://github.com/USCiLab/cereal/archive/v1.2.2.zip --no-check-certificate -O cereal-1.2.2.zip &&
+unzip cereal-1.2.2.zip -d "$EXT" &&
+rm cereal-1.2.2.zip
+
+# 5. Download stb_image
 mkdir -p "$EXT/stb/stb/" &&
 wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h --no-check-certificate -P "$EXT/stb/stb/"
 
-# 4. Download and build NanoVG
+# 6. Download and build NanoVG
 git clone git@github.com:memononen/nanovg.git "$EXT/nanovg" &&
 cd "$EXT/nanovg" &&
 premake4 --cc=gcc gmake &&
