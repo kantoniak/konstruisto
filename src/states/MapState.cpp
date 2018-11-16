@@ -3,7 +3,7 @@
 namespace states {
 
 MapState::MapState(engine::Engine& engine)
-    : GameState(engine), renderer(engine, world), pauseState(engine, world, renderer) {
+    : GameState(engine), renderer(engine, world), saveFileHandler(engine), pauseState(engine, world, renderer) {
   suspended = false;
 };
 
@@ -24,6 +24,10 @@ void MapState::init() {
   world.getCamera().init(initialPerspective, initialCamera);
   world.init();
 
+  // Load from file
+  saveFileHandler.loadSave(world);
+
+  // Overwrite by randoms
   geometry.init(engine, world);
   createRandomWorld();
 
@@ -207,6 +211,14 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   if (key == GLFW_KEY_B && action == GLFW_PRESS) {
     setCurrentAction(MapStateAction::BULDOZE);
   }
+
+  if (key == GLFW_KEY_S && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    saveFileHandler.createSave(world);
+  }
+
+  if (key == GLFW_KEY_L && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    saveFileHandler.loadSave(world);
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int mods) {
@@ -340,8 +352,6 @@ void MapState::createRandomWorld() {
       }
     }
   }
-
-  world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
 }
 
 void MapState::setCurrentAction(MapStateAction action) {

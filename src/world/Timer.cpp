@@ -83,4 +83,3 @@ unsigned short Timer::getTurnLength() const {
   }
 }
 }
-

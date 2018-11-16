@@ -22,6 +22,7 @@ public:
   void zoom(float distanceDelta);
   void rotateAroundY(float angleDelta);
   void rotateAroundX(float angleDelta);
+  void emplace(data::CameraState newState);
 
   void updateAspect(float aspect);
 
@@ -37,6 +38,9 @@ public:
   glm::mat4 getViewProjectionMatrix();
 
   glm::vec3 getRay(glm::vec2 point);
+
+  // FIXME(kantoniak): Should not be here
+  data::CameraState getCameraState();
 
 protected:
   glm::vec4 cameraPosition;

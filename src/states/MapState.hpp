@@ -13,6 +13,7 @@
 #include "../input/LineSelection.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../io/SaveFileHandler.hpp"
 #include "../rendering/Renderer.hpp"
 #include "../settings.hpp"
 #include "../world/Camera.hpp"
@@ -47,6 +48,7 @@ private:
   world::World world;
   std::unique_ptr<input::Selection> selection;
 
+  io::SaveFileHandler saveFileHandler;
   data::City city;
   void createRandomWorld();
 
