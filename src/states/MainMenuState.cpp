@@ -9,8 +9,7 @@ void MainMenuState::init() {
   glClearColor(0.086f, 0.086f, 0.086f, 1.f);
 }
 
-void MainMenuState::update(std::chrono::milliseconds delta) {
-  delta = delta;
+void MainMenuState::update(std::chrono::milliseconds) {
 }
 
 void MainMenuState::render() {

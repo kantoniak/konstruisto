@@ -9,8 +9,7 @@ MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, render
 void MapPauseState::init() {
 }
 
-void MapPauseState::update(std::chrono::milliseconds delta) {
-  delta = delta;
+void MapPauseState::update(std::chrono::milliseconds) {
 }
 
 void MapPauseState::render() {
