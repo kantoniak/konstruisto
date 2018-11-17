@@ -39,7 +39,16 @@ You will need `premake4` [(download)](https://premake.github.io/download.html).
 
 #### Linux dependencies
 
-You can just run `setup-deps.sh`, it will setup everything for you. If you want to do everything by hand, here's the list of dependencies:
+You can just run `setup-deps.sh`, it will setup everything for you.
+
+    git clone git@github.com:kantoniak/konstruisto.git konstruisto &&
+    cd konstruisto &&
+    chmod +x setup-deps.sh &&
+    sudo ./setup-deps.sh &&
+    cd - &&
+    make build run
+
+If you want to do everything by hand, here's the list of dependencies:
 
 1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
 2. Install `libglew-dev` (2.0.0): https://launchpad.net/ubuntu/+source/glew

@@ -13,7 +13,7 @@ echo "Dependencies directory: $EXT"
 mkdir -p "$EXT"
 
 # 2. Install packages
-sudo apt-get install libglew-dev libglfw3-dev premake4
+sudo apt-get install clang clang-format libglew-dev libglfw3-dev premake4 windres
 
 # 3. Download GLM
 wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip --no-check-certificate -O glm-0.9.8.4.zip &&
