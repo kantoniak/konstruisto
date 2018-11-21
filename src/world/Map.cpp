@@ -20,6 +20,12 @@ void Map::createChunk(glm::ivec2 position) {
   this->setChunkNeighbors(*chunk);
 }
 
+void Map::loadChunk(data::Chunk & chunk) {
+  data::Chunk* ptr = new data::Chunk(chunk);
+  chunks.push_back(ptr);
+  this->setChunkNeighbors(*ptr);
+}
+
 void Map::setChunkNeighbors(data::Chunk& chunk) {
   glm::ivec2 position = chunk.getPosition();
 

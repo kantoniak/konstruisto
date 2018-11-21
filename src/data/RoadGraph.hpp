@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <cereal/types/vector.hpp>
+
 #include "Layer.hpp"
 #include "Position.hpp"
 #include "Road.hpp"
@@ -31,6 +33,7 @@ public:
   constexpr static char ROAD_NSWE = 16;
 
   RoadGraph(unsigned int sideLength);
+  RoadGraph(const RoadGraph & roadGraph);
 
   void setNeighborN(RoadGraph* neigborN);
   void setNeighborS(RoadGraph* neigborS);
@@ -39,6 +42,14 @@ public:
 
   void addRoad(const data::Road road);
   void update(const std::vector<data::Position>& tiles);
+
+  template <class Archive> void save(Archive& archive) const {
+    archive(layerData);
+  }
+
+  template <class Archive> void load(Archive& archive) {
+    archive(layerData);
+  }
 
 private:
   RoadGraph* neighborN;

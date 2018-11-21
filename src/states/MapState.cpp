@@ -293,7 +293,7 @@ void MapState::createRandomWorld() {
   city.money = 445684;
   world.getMap().setCurrentCity(&city);
 
-  const glm::ivec2 mapSize = glm::ivec2(2, 2);
+  /*const glm::ivec2 mapSize = glm::ivec2(2, 2);
   for (int x = 0; x < mapSize.x; x++) {
     for (int y = 0; y < mapSize.y; y++) {
       world.getMap().createChunk(glm::ivec2(x, y));
@@ -351,7 +351,7 @@ void MapState::createRandomWorld() {
         break;
       }
     }
-  }
+  }*/
 }
 
 void MapState::setCurrentAction(MapStateAction action) {
