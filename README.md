@@ -1,5 +1,9 @@
 <img src="graphics/konstruisto.png" width="360"/>
 
+<p align="center">
+  <img src="readme/screenshot.png" align="center" alt="Project preview" />
+</p>
+
 Simple city-builder using OpenGL. For Windows and Linux. See http://konstruisto.com/ for more.
 
 ## Building
