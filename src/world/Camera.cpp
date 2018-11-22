@@ -41,6 +41,11 @@ void Camera::rotateAroundX(float angleDelta) {
   this->viewChanged = true;
 }
 
+void Camera::emplace(data::CameraState newState) {
+  this->cameraState = newState;
+  this->viewChanged = true;
+}
+
 void Camera::updateAspect(float aspect) {
   this->perspectiveState.aspect = aspect;
   this->updateProjectionMatrix();
@@ -126,5 +131,9 @@ glm::vec3 Camera::getRay(glm::vec2 point) {
   ray = glm::normalize(ray);
 
   return glm::vec3(ray);
+}
+
+data::CameraState Camera::getCameraState() {
+  return this->cameraState;
 }
 }

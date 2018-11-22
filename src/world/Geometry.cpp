@@ -68,8 +68,8 @@ bool Geometry::checkCollisions(const data::buildings::Building& building) const 
 bool Geometry::checkCollisions(const data::Road& road) const {
   std::vector<data::Position> tiles = road.getTiles();
   const glm::ivec2 a2 = tiles[0].getGlobal();
-  const glm::ivec2 a1 = tiles[tiles.size()-1].getGlobal();
-  
+  const glm::ivec2 a1 = tiles[tiles.size() - 1].getGlobal();
+
   for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
     // With buildings
     for (data::buildings::Building other : chunk->getResidentials()) {

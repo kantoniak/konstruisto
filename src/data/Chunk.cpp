@@ -8,6 +8,12 @@ Chunk::Chunk() : roadGraph(SIDE_LENGTH) {
   residentialSize = 0;
 }
 
+Chunk::Chunk(const Chunk& chunk) : roadGraph(chunk.getRoadGraph()), residential(chunk.residential) {
+  objectId = 0;
+  position = chunk.getPosition();
+  residentialSize = chunk.residential.size();
+}
+
 void Chunk::setObjectId(unsigned int objectId) {
   this->objectId = objectId;
 }

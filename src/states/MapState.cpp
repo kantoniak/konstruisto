@@ -3,7 +3,7 @@
 namespace states {
 
 MapState::MapState(engine::Engine& engine)
-    : GameState(engine), renderer(engine, world), pauseState(engine, world, renderer) {
+    : GameState(engine), renderer(engine, world), saveFileHandler(engine), pauseState(engine, world, renderer) {
   suspended = false;
 };
 
@@ -24,8 +24,14 @@ void MapState::init() {
   world.getCamera().init(initialPerspective, initialCamera);
   world.init();
 
+  city.name = "Warsaw";
+  city.people = 57950;
+  city.money = 445684;
+  world.getMap().setCurrentCity(&city);
+
+  createNewWorld();
+
   geometry.init(engine, world);
-  createRandomWorld();
 
   if (!renderer.init()) {
     engine.stop();
@@ -207,6 +213,21 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   if (key == GLFW_KEY_B && action == GLFW_PRESS) {
     setCurrentAction(MapStateAction::BULDOZE);
   }
+
+  if (key == GLFW_KEY_N && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    this->createNewWorld();
+  }
+
+  if (key == GLFW_KEY_S && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    saveFileHandler.createSave(world);
+  }
+
+  if (key == GLFW_KEY_L && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    world.getMap().cleanup();
+    saveFileHandler.loadSave(world);
+    renderer.markTileDataForUpdate();
+    renderer.markBuildingDataForUpdate();
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int mods) {
@@ -274,14 +295,21 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
+void MapState::createNewWorld() {
+
+  world.getMap().cleanup();
+
+  const glm::ivec2 mapSize = glm::ivec2(1, 1);
+  for (int x = 0; x < mapSize.x; x++) {
+    for (int y = 0; y < mapSize.y; y++) {
+      world.getMap().createChunk(glm::ivec2(x, y));
+    }
+  }
+}
+
 void MapState::createRandomWorld() {
 
-  city.name = "Warsaw";
-  city.people = 57950;
-  city.money = 445684;
-  world.getMap().setCurrentCity(&city);
-
-  const glm::ivec2 mapSize = glm::ivec2(2, 2);
+  /*const glm::ivec2 mapSize = glm::ivec2(2, 2);
   for (int x = 0; x < mapSize.x; x++) {
     for (int y = 0; y < mapSize.y; y++) {
       world.getMap().createChunk(glm::ivec2(x, y));
@@ -339,9 +367,7 @@ void MapState::createRandomWorld() {
         break;
       }
     }
-  }
-
-  world.getCamera().move(glm::vec3(data::Chunk::SIDE_LENGTH, 0, data::Chunk::SIDE_LENGTH));
+  }*/
 }
 
 void MapState::setCurrentAction(MapStateAction action) {

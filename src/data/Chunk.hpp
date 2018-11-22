@@ -20,6 +20,8 @@ public:
   constexpr unsigned static int SIDE_LENGTH = 64;
 
   Chunk();
+  Chunk(const Chunk& chunk);
+
   void setObjectId(unsigned int objectId);
 
   void setPosition(glm::ivec2 position);
@@ -43,6 +45,18 @@ public:
 
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
+
+  template <class Archive> void save(Archive& archive) const {
+    archive(position);
+    archive(roadGraph);
+    archive(residential);
+  }
+
+  template <class Archive> void load(Archive& archive) {
+    archive(position);
+    archive(roadGraph);
+    archive(residential);
+  }
 
 private:
   unsigned int objectId;

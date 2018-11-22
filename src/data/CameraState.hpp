@@ -8,6 +8,12 @@ struct CameraState {
   glm::vec3 lookAt;
   float rotationAroundX, rotationAroundY;
   float distance;
+
+  template <class Archive> void serialize(Archive& archive) {
+    archive(lookAt);
+    archive(rotationAroundX, rotationAroundY);
+    archive(distance);
+  }
 };
 }
 

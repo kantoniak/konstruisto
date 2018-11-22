@@ -39,6 +39,8 @@ ifeq ($(OS), Windows_NT)
 
 	INCLUDES += -I$(EXTDIR)/glm/
 
+	INCLUDES += -I$(EXTDIR)/cereal-1.2.2/include
+
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-windows
 
@@ -49,6 +51,8 @@ else
 	SYSTEM := LINUX
 
 	INCLUDES += -I$(EXTDIR)/glm/
+
+	INCLUDES += -I$(EXTDIR)/cereal-1.2.2/include
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-linux

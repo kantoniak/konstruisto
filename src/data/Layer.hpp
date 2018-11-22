@@ -10,6 +10,7 @@ template <class T> class Layer {
 
 public:
   Layer(unsigned int sideLength);
+  Layer(const Layer& layer);
   const std::vector<T>& getLayerData() const;
 
 protected:

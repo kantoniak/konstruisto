@@ -10,6 +10,7 @@ void Map::cleanup() {
     delete *it;
   }
   chunks.clear();
+  buildingCount = 0;
 }
 
 void Map::createChunk(glm::ivec2 position) {
@@ -18,6 +19,13 @@ void Map::createChunk(glm::ivec2 position) {
   chunk->setPosition(position);
   chunks.push_back(chunk);
   this->setChunkNeighbors(*chunk);
+}
+
+void Map::loadChunk(data::Chunk& chunk) {
+  data::Chunk* ptr = new data::Chunk(chunk);
+  chunks.push_back(ptr);
+  this->setChunkNeighbors(*ptr);
+  buildingCount += ptr->getResidentialSize();
 }
 
 void Map::setChunkNeighbors(data::Chunk& chunk) {
