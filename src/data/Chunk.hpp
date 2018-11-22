@@ -20,7 +20,7 @@ public:
   constexpr unsigned static int SIDE_LENGTH = 64;
 
   Chunk();
-  Chunk(const Chunk & chunk);
+  Chunk(const Chunk& chunk);
 
   void setObjectId(unsigned int objectId);
 
@@ -46,9 +46,16 @@ public:
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
-  template <class Archive> void serialize(Archive& archive) {
+  template <class Archive> void save(Archive& archive) const {
     archive(position);
     archive(roadGraph);
+    archive(residential);
+  }
+
+  template <class Archive> void load(Archive& archive) {
+    archive(position);
+    archive(roadGraph);
+    archive(residential);
   }
 
 private:

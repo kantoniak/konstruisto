@@ -22,7 +22,7 @@ public:
   void cleanup();
 
   void createChunk(glm::ivec2 position);
-  void loadChunk(data::Chunk & chunk);
+  void loadChunk(data::Chunk& chunk);
   void setChunkNeighbors(data::Chunk& chunk);
 
   unsigned int getChunksCount();

@@ -24,12 +24,14 @@ void MapState::init() {
   world.getCamera().init(initialPerspective, initialCamera);
   world.init();
 
-  // Load from file
-  saveFileHandler.loadSave(world);
+  city.name = "Warsaw";
+  city.people = 57950;
+  city.money = 445684;
+  world.getMap().setCurrentCity(&city);
 
-  // Overwrite by randoms
+  createNewWorld();
+
   geometry.init(engine, world);
-  createRandomWorld();
 
   if (!renderer.init()) {
     engine.stop();
@@ -212,12 +214,19 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
     setCurrentAction(MapStateAction::BULDOZE);
   }
 
+  if (key == GLFW_KEY_N && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    this->createNewWorld();
+  }
+
   if (key == GLFW_KEY_S && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
     saveFileHandler.createSave(world);
   }
 
   if (key == GLFW_KEY_L && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    world.getMap().cleanup();
     saveFileHandler.loadSave(world);
+    renderer.markTileDataForUpdate();
+    renderer.markBuildingDataForUpdate();
   }
 }
 
@@ -286,12 +295,19 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
-void MapState::createRandomWorld() {
+void MapState::createNewWorld() {
 
-  city.name = "Warsaw";
-  city.people = 57950;
-  city.money = 445684;
-  world.getMap().setCurrentCity(&city);
+  world.getMap().cleanup();
+
+  const glm::ivec2 mapSize = glm::ivec2(1, 1);
+  for (int x = 0; x < mapSize.x; x++) {
+    for (int y = 0; y < mapSize.y; y++) {
+      world.getMap().createChunk(glm::ivec2(x, y));
+    }
+  }
+}
+
+void MapState::createRandomWorld() {
 
   /*const glm::ivec2 mapSize = glm::ivec2(2, 2);
   for (int x = 0; x < mapSize.x; x++) {

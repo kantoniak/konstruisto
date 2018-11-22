@@ -50,6 +50,7 @@ private:
 
   io::SaveFileHandler saveFileHandler;
   data::City city;
+  void createNewWorld();
   void createRandomWorld();
 
   MapStateAction currentAction;

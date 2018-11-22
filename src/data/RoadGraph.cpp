@@ -6,7 +6,9 @@ RoadGraph::RoadGraph(unsigned int sideLength)
     : Layer(sideLength), neighborN(nullptr), neighborS(nullptr), neighborW(nullptr), neighborE(nullptr) {
 }
 
-RoadGraph::RoadGraph(const RoadGraph & roadGraph) : Layer(roadGraph), neighborN(roadGraph.neighborN), neighborS(roadGraph.neighborS), neighborW(roadGraph.neighborW), neighborE(roadGraph.neighborE) {
+RoadGraph::RoadGraph(const RoadGraph& roadGraph)
+    : Layer(roadGraph), neighborN(roadGraph.neighborN), neighborS(roadGraph.neighborS), neighborW(roadGraph.neighborW),
+      neighborE(roadGraph.neighborE) {
 }
 
 void RoadGraph::setNeighborN(RoadGraph* neighborN) {

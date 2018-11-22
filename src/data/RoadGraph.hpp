@@ -33,7 +33,7 @@ public:
   constexpr static char ROAD_NSWE = 16;
 
   RoadGraph(unsigned int sideLength);
-  RoadGraph(const RoadGraph & roadGraph);
+  RoadGraph(const RoadGraph& roadGraph);
 
   void setNeighborN(RoadGraph* neigborN);
   void setNeighborS(RoadGraph* neigborS);

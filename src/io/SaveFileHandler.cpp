@@ -44,18 +44,21 @@ void SaveFileHandler::loadSave(world::World& world) {
   archive(cameraState);
 
   engine.getLogger().debug("Camera lookAt[%f][%f][%f], rot[%f][%f], dist[%f] ", cameraState.lookAt.x,
-                            cameraState.lookAt.y, cameraState.lookAt.z, cameraState.rotationAroundX,
-                            cameraState.rotationAroundY, cameraState.distance);
+                           cameraState.lookAt.y, cameraState.lookAt.z, cameraState.rotationAroundX,
+                           cameraState.rotationAroundY, cameraState.distance);
   world.getCamera().emplace(cameraState);
 
   unsigned int chunksCount;
   archive(chunksCount);
+  engine.getLogger().debug("Loading %d chunks:", chunksCount);
 
-  for (unsigned int i=0; i<chunksCount; i++) {
+  for (unsigned int i = 0; i < chunksCount; i++) {
     engine.getLogger().debug("Loading chunk %d", i);
     data::Chunk chunk;
     archive(chunk);
     world.getMap().loadChunk(chunk);
   }
+
+  engine.getLogger().debug("World loaded.");
 }
 }
