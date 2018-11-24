@@ -11,7 +11,7 @@
 
 namespace data {
 
-class RoadGraph : public Layer<char> {
+template <unsigned int L> class RoadGraph : public Layer<char, L> {
 
 public:
   constexpr static char NO_ROAD = 0;
@@ -32,7 +32,7 @@ public:
   constexpr static char ROAD_SWE = 1;
   constexpr static char ROAD_NSWE = 16;
 
-  RoadGraph(unsigned int sideLength);
+  RoadGraph();
   RoadGraph(const RoadGraph& roadGraph);
 
   void setNeighborN(RoadGraph* neigborN);
@@ -44,11 +44,11 @@ public:
   void update(const std::vector<data::Position>& tiles);
 
   template <class Archive> void save(Archive& archive) const {
-    archive(layerData);
+    archive(Layer<char, L>::layerData);
   }
 
   template <class Archive> void load(Archive& archive) {
-    archive(layerData);
+    archive(Layer<char, L>::layerData);
   }
 
 private:

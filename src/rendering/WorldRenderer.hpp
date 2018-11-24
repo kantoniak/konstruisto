@@ -65,7 +65,7 @@ protected:
 
   void paintOnTiles(const data::Chunk& chunk, const glm::ivec2& position, std::vector<GLfloat>& tiles);
   void paintLotOnTiles(const data::Lot& lot, const glm::ivec2& position, std::vector<GLfloat>& tiles);
-  void paintRoadsOnTiles(const data::RoadGraph& roads, std::vector<GLfloat>& tiles);
+  void paintRoadsOnTiles(const data::RoadGraph<data::Chunk::SIDE_LENGTH>& roads, std::vector<GLfloat>& tiles);
 
   // Terrain
   GLuint shaderProgram;

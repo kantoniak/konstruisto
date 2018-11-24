@@ -6,15 +6,14 @@
 
 namespace data {
 
-template <class T> class Layer {
+template <class T, unsigned int L> class Layer {
 
 public:
-  Layer(unsigned int sideLength);
+  Layer();
   Layer(const Layer& layer);
   const std::vector<T>& getLayerData() const;
 
 protected:
-  unsigned int sideLength;
   std::vector<T> layerData;
 };
 }

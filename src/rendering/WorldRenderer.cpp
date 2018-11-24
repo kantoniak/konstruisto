@@ -562,73 +562,74 @@ void WorldRenderer::paintLotOnTiles(const data::Lot& lot, const glm::ivec2& posi
   }
 }
 
-void WorldRenderer::paintRoadsOnTiles(const data::RoadGraph& roads, std::vector<GLfloat>& tiles) {
+void WorldRenderer::paintRoadsOnTiles(const data::RoadGraph<data::Chunk::SIDE_LENGTH>& roads,
+                                      std::vector<GLfloat>& tiles) {
 
   for (unsigned int x = 0; x < data::Chunk::SIDE_LENGTH; x++) {
     for (unsigned int y = 0; y < data::Chunk::SIDE_LENGTH; y++) {
       switch (roads.getLayerData()[y * data::Chunk::SIDE_LENGTH + x]) {
 
-      case data::RoadGraph::ROAD_NONE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NONE:
         setTile(tiles, x, y, getTile(0, 3));
         break;
 
-      case data::RoadGraph::ROAD_N:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_N:
         setTile(tiles, x, y, getTile(3, 2));
         break;
 
-      case data::RoadGraph::ROAD_S:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_S:
         setTile(tiles, x, y, getTile(1, 2));
         break;
 
-      case data::RoadGraph::ROAD_W:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_W:
         setTile(tiles, x, y, getTile(2, 2));
         break;
 
-      case data::RoadGraph::ROAD_E:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_E:
         setTile(tiles, x, y, getTile(4, 2));
         break;
 
-      case data::RoadGraph::ROAD_WE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_WE:
         setTile(tiles, x, y, getTile(0, 1));
         break;
 
-      case data::RoadGraph::ROAD_SE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_SE:
         setTile(tiles, x, y, getTile(4, 1));
         break;
 
-      case data::RoadGraph::ROAD_SW:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_SW:
         setTile(tiles, x, y, getTile(3, 1));
         break;
 
-      case data::RoadGraph::ROAD_NE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NE:
         setTile(tiles, x, y, getTile(4, 0));
         break;
 
-      case data::RoadGraph::ROAD_NW:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NW:
         setTile(tiles, x, y, getTile(3, 0));
         break;
 
-      case data::RoadGraph::ROAD_NS:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NS:
         setTile(tiles, x, y, getTile(2, 1));
         break;
 
-      case data::RoadGraph::ROAD_NSW:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NSW:
         setTile(tiles, x, y, getTile(1, 0));
         break;
 
-      case data::RoadGraph::ROAD_NSE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NSE:
         setTile(tiles, x, y, getTile(2, 0));
         break;
 
-      case data::RoadGraph::ROAD_NWE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NWE:
         setTile(tiles, x, y, getTile(0, 0));
         break;
 
-      case data::RoadGraph::ROAD_SWE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_SWE:
         setTile(tiles, x, y, getTile(0, 2));
         break;
 
-      case data::RoadGraph::ROAD_NSWE:
+      case data::RoadGraph<data::Chunk::SIDE_LENGTH>::ROAD_NSWE:
         setTile(tiles, x, y, getTile(1, 1));
         break;
 

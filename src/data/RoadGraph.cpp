@@ -2,52 +2,54 @@
 
 namespace data {
 
-RoadGraph::RoadGraph(unsigned int sideLength)
-    : Layer(sideLength), neighborN(nullptr), neighborS(nullptr), neighborW(nullptr), neighborE(nullptr) {
+template <unsigned int L>
+RoadGraph<L>::RoadGraph()
+    : Layer<char, L>(), neighborN(nullptr), neighborS(nullptr), neighborW(nullptr), neighborE(nullptr) {
 }
 
-RoadGraph::RoadGraph(const RoadGraph& roadGraph)
-    : Layer(roadGraph), neighborN(roadGraph.neighborN), neighborS(roadGraph.neighborS), neighborW(roadGraph.neighborW),
-      neighborE(roadGraph.neighborE) {
+template <unsigned int L>
+RoadGraph<L>::RoadGraph(const RoadGraph& roadGraph)
+    : Layer<char, L>(roadGraph), neighborN(roadGraph.neighborN), neighborS(roadGraph.neighborS),
+      neighborW(roadGraph.neighborW), neighborE(roadGraph.neighborE) {
 }
 
-void RoadGraph::setNeighborN(RoadGraph* neighborN) {
+template <unsigned int L> void RoadGraph<L>::setNeighborN(RoadGraph* neighborN) {
   this->neighborN = neighborN;
 }
 
-void RoadGraph::setNeighborS(RoadGraph* neighborS) {
+template <unsigned int L> void RoadGraph<L>::setNeighborS(RoadGraph* neighborS) {
   this->neighborS = neighborS;
 }
 
-void RoadGraph::setNeighborW(RoadGraph* neighborW) {
+template <unsigned int L> void RoadGraph<L>::setNeighborW(RoadGraph* neighborW) {
   this->neighborW = neighborW;
 }
 
-void RoadGraph::setNeighborE(RoadGraph* neighborE) {
+template <unsigned int L> void RoadGraph<L>::setNeighborE(RoadGraph* neighborE) {
   this->neighborE = neighborE;
 }
 
-void RoadGraph::addRoad(const data::Road road) {
+template <unsigned int L> void RoadGraph<L>::addRoad(const data::Road road) {
   for (auto& tile : road.getTiles()) {
     const unsigned int x = tile.getLocal().x;
     const unsigned int y = tile.getLocal().y;
-    this->layerData[y * sideLength + x] = 1;
+    this->layerData[y * L + x] = 1;
   }
 }
 
-void RoadGraph::update(const std::vector<data::Position>& tiles) {
+template <unsigned int L> void RoadGraph<L>::update(const std::vector<data::Position>& tiles) {
   for (auto& tile : tiles) {
     this->updateIndex(tile.getLocalIndex());
   }
 }
 
-void RoadGraph::update() {
-  for (unsigned int i = 0; i < this->sideLength * this->sideLength; i++) {
+template <unsigned int L> void RoadGraph<L>::update() {
+  for (unsigned int i = 0; i < L * L; i++) {
     this->updateIndex(i);
   }
 }
 
-void RoadGraph::updateIndex(unsigned int i) {
+template <unsigned int L> void RoadGraph<L>::updateIndex(unsigned int i) {
   if (this->layerData[i] == NO_ROAD) {
     return;
   }
@@ -70,47 +72,49 @@ void RoadGraph::updateIndex(unsigned int i) {
   this->layerData[i] = newValue;
 }
 
-bool RoadGraph::noRoadToN(unsigned int i) const {
-  if (i < sideLength) {
+template <unsigned int L> bool RoadGraph<L>::noRoadToN(unsigned int i) const {
+  if (i < L) {
     if (neighborN == nullptr) {
       return true;
     }
-    return neighborN->layerData[sideLength * (sideLength - 1) + i] == NO_ROAD;
+    return neighborN->layerData[L * (L - 1) + i] == NO_ROAD;
   } else {
-    return this->layerData[i - sideLength] == NO_ROAD;
+    return this->layerData[i - L] == NO_ROAD;
   }
 }
 
-bool RoadGraph::noRoadToS(unsigned int i) const {
-  if (i + sideLength >= sideLength * sideLength) {
+template <unsigned int L> bool RoadGraph<L>::noRoadToS(unsigned int i) const {
+  if (i + L >= L * L) {
     if (neighborS == nullptr) {
       return true;
     }
-    return neighborS->layerData[i % sideLength] == NO_ROAD;
+    return neighborS->layerData[i % L] == NO_ROAD;
   } else {
-    return this->layerData[i + sideLength] == NO_ROAD;
+    return this->layerData[i + L] == NO_ROAD;
   }
 }
 
-bool RoadGraph::noRoadToW(unsigned int i) const {
-  if (i % sideLength == 0) {
+template <unsigned int L> bool RoadGraph<L>::noRoadToW(unsigned int i) const {
+  if (i % L == 0) {
     if (neighborW == nullptr) {
       return true;
     }
-    return neighborW->layerData[i + sideLength - 1] == NO_ROAD;
+    return neighborW->layerData[i + L - 1] == NO_ROAD;
   } else {
     return this->layerData[i - 1] == NO_ROAD;
   }
 }
 
-bool RoadGraph::noRoadToE(unsigned int i) const {
-  if (i % sideLength == sideLength - 1) {
+template <unsigned int L> bool RoadGraph<L>::noRoadToE(unsigned int i) const {
+  if (i % L == L - 1) {
     if (neighborE == nullptr) {
       return true;
     }
-    return neighborE->layerData[i - sideLength + 1] == NO_ROAD;
+    return neighborE->layerData[i - L + 1] == NO_ROAD;
   } else {
     return this->layerData[i + 1] == NO_ROAD;
   }
 }
+
+template class RoadGraph<64u>;
 }

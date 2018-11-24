@@ -2,7 +2,7 @@
 
 namespace data {
 
-Chunk::Chunk() : roadGraph(SIDE_LENGTH) {
+Chunk::Chunk() {
   objectId = 0;
   position = glm::ivec2();
   residentialSize = 0;
@@ -62,7 +62,7 @@ void Chunk::updateRoadGraph(const std::vector<data::Position>& tiles) {
   this->roadGraph.update(tiles);
 }
 
-const RoadGraph& Chunk::getRoadGraph() const {
+const RoadGraph<Chunk::SIDE_LENGTH>& Chunk::getRoadGraph() const {
   return this->roadGraph;
 }
 

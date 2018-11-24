@@ -38,7 +38,7 @@ public:
 
   void addRoad(data::Road road);
   void updateRoadGraph(const std::vector<data::Position>& tiles);
-  const RoadGraph& getRoadGraph() const;
+  const RoadGraph<SIDE_LENGTH>& getRoadGraph() const;
 
   void addLot(data::Lot lot);
   lotList getLots() const;
@@ -62,7 +62,7 @@ private:
   unsigned int objectId;
   glm::ivec2 position;
 
-  RoadGraph roadGraph;
+  RoadGraph<SIDE_LENGTH> roadGraph;
 
   std::vector<data::buildings::Building> residential;
   unsigned int residentialSize;
