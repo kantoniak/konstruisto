@@ -6,7 +6,8 @@
 
 namespace data {
 
-template <class T, unsigned int L> class Layer {
+template <class T, unsigned int L>
+class Layer {
 
 public:
   Layer();

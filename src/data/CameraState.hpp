@@ -9,7 +9,8 @@ struct CameraState {
   float rotationAroundX, rotationAroundY;
   float distance;
 
-  template <class Archive> void serialize(Archive& archive) {
+  template <class Archive>
+  void serialize(Archive& archive) {
     archive(lookAt);
     archive(rotationAroundX, rotationAroundY);
     archive(distance);

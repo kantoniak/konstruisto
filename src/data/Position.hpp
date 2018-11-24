@@ -28,7 +28,8 @@ public:
 
 namespace std {
 
-template <> struct hash<data::Position> {
+template <>
+struct hash<data::Position> {
   std::size_t operator()(const data::Position& p) const {
     glm::ivec2 globalPos = p.getGlobal();
     return std::hash<int>()(globalPos.x) ^ std::hash<int>()(globalPos.y);

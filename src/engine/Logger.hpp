@@ -30,7 +30,8 @@ public:
   void error(std::string message);
   void severe(std::string message);
 
-  template <typename... Args> void log(LoggingLevel level, const std::string& message, Args... args) {
+  template <typename... Args>
+  void log(LoggingLevel level, const std::string& message, Args... args) {
     if (level < this->loggingLevel) {
       return;
     }
@@ -47,19 +48,24 @@ public:
   }
 
   // Shortcuts
-  template <typename... Args> void debug(std::string message, Args... args) {
+  template <typename... Args>
+  void debug(std::string message, Args... args) {
     this->log(DEBUG, message, args...);
   };
-  template <typename... Args> void info(std::string message, Args... args) {
+  template <typename... Args>
+  void info(std::string message, Args... args) {
     this->log(INFO, message, args...);
   };
-  template <typename... Args> void warn(std::string message, Args... args) {
+  template <typename... Args>
+  void warn(std::string message, Args... args) {
     this->log(WARN, message, args...);
   };
-  template <typename... Args> void error(std::string message, Args... args) {
+  template <typename... Args>
+  void error(std::string message, Args... args) {
     this->log(ERROR, message, args...);
   };
-  template <typename... Args> void severe(std::string message, Args... args) {
+  template <typename... Args>
+  void severe(std::string message, Args... args) {
     this->log(SEVERE, message, args...);
   };
 

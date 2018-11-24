@@ -46,13 +46,15 @@ public:
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
-  template <class Archive> void save(Archive& archive) const {
+  template <class Archive>
+  void save(Archive& archive) const {
     archive(position);
     archive(roadGraph);
     archive(residential);
   }
 
-  template <class Archive> void load(Archive& archive) {
+  template <class Archive>
+  void load(Archive& archive) {
     archive(position);
     archive(roadGraph);
     archive(residential);

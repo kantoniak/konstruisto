@@ -41,7 +41,8 @@ protected:
 
   GLuint compileShader(GLenum shaderType, std::string filename);
 
-  template <class T> void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) {
+  template <class T>
+  void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) {
     glBufferData(target, v.size() * sizeof(T), &v[0], usage);
   }
 };

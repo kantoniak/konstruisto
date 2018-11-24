@@ -11,7 +11,8 @@
 
 namespace data {
 
-template <unsigned int L> class RoadGraph : public Layer<char, L> {
+template <unsigned int L>
+class RoadGraph : public Layer<char, L> {
 
 public:
   constexpr static char NO_ROAD = 0;
@@ -43,11 +44,13 @@ public:
   void addRoad(const data::Road road);
   void update(const std::vector<data::Position>& tiles);
 
-  template <class Archive> void save(Archive& archive) const {
+  template <class Archive>
+  void save(Archive& archive) const {
     archive(Layer<char, L>::layerData);
   }
 
-  template <class Archive> void load(Archive& archive) {
+  template <class Archive>
+  void load(Archive& archive) {
     archive(Layer<char, L>::layerData);
   }
 

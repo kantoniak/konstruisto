@@ -12,7 +12,8 @@ struct Building {
   unsigned short length;
   unsigned short level;
 
-  template <class Archive> void serialize(Archive& archive) {
+  template <class Archive>
+  void serialize(Archive& archive) {
     archive(x, y);
     archive(width, length, level);
   }
