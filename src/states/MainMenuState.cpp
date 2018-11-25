@@ -33,12 +33,10 @@ void MainMenuState::render() {
   renderer.sendFrame();
 }
 
-void MainMenuState::onKey(int key, int scancode, int action, int mods) {
-  key = scancode = action = mods = 0;
+void MainMenuState::onKey(int, int, int, int) {
 }
 
-void MainMenuState::onMouseButton(int button, int action, int mods) {
-  mods = 0;
+void MainMenuState::onMouseButton(int button, int action, int) {
   if (button != GLFW_MOUSE_BUTTON_LEFT || action != GLFW_RELEASE) {
     return;
   }
@@ -55,16 +53,13 @@ void MainMenuState::onMouseButton(int button, int action, int mods) {
   }
 }
 
-void MainMenuState::onScroll(double xoffset, double yoffset) {
-  xoffset = yoffset = 0;
+void MainMenuState::onScroll(double, double) {
 }
 
-void MainMenuState::onWindowFocusChange(int focused) {
-  focused = 0;
+void MainMenuState::onWindowFocusChange(int) {
 }
 
-void MainMenuState::onWindowResize(int width, int height) {
-  width = height = 0;
+void MainMenuState::onWindowResize(int, int) {
 }
 
 void MainMenuState::renderButton(const char* label, glm::vec2 pos, unsigned short padding) {

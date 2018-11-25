@@ -45,23 +45,19 @@ void MapPauseState::render() {
   renderer.sendFrame();
 }
 
-void MapPauseState::onKey(int key, int scancode, int action, int mods) {
-  scancode = mods = 0;
+void MapPauseState::onKey(int key, int, int action, int) {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     engine.popState();
   }
 }
 
-void MapPauseState::onMouseButton(int button, int action, int mods) {
-  button = action = mods = 0;
+void MapPauseState::onMouseButton(int, int, int) {
 }
 
-void MapPauseState::onScroll(double xoffset, double yoffset) {
-  xoffset = yoffset = 0;
+void MapPauseState::onScroll(double, double) {
 }
 
-void MapPauseState::onWindowFocusChange(int focused) {
-  focused = 0;
+void MapPauseState::onWindowFocusChange(int) {
 }
 
 void MapPauseState::onWindowResize(int width, int height) {
