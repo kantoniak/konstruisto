@@ -26,7 +26,7 @@ namespace rendering {
 class Renderer {
 
 public:
-  Renderer(engine::Engine& engine);
+  explicit Renderer(engine::Engine& engine);
 
   virtual bool init();
   virtual void cleanup();

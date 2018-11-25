@@ -12,7 +12,7 @@ namespace input {
 class LineSelection : public Selection {
 
 public:
-  LineSelection(unsigned short lineWidth);
+  explicit LineSelection(unsigned short lineWidth);
 
   virtual glm::ivec2 getFrom() const;
   virtual glm::ivec2 getTo() const;

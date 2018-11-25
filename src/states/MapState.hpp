@@ -28,7 +28,7 @@ enum MapStateAction { PLACE_BUILDING = 0, PLACE_ZONE = 1, PLACE_ROAD = 2, BULDOZ
 class MapState : public engine::GameState {
 
 public:
-  MapState(engine::Engine& engine);
+  explicit MapState(engine::Engine& engine);
 
   void init();
   void cleanup();

@@ -18,7 +18,7 @@ class SaveFileHandler {
 public:
   const std::string DEFAULT_SAVE_FILE_NAME = "save.dat";
 
-  SaveFileHandler(engine::Engine& engine);
+  explicit SaveFileHandler(engine::Engine& engine);
   void createSave(world::World& world);
   void loadSave(world::World& world);
 

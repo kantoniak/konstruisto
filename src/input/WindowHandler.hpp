@@ -14,7 +14,7 @@ namespace input {
 class WindowHandler {
 
 public:
-  WindowHandler(engine::Engine& engine);
+  explicit WindowHandler(engine::Engine& engine);
 
   void update();
   void cleanup();
