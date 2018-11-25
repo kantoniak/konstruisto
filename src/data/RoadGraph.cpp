@@ -34,7 +34,7 @@ void RoadGraph<L>::setNeighborE(RoadGraph* neighborE) {
 }
 
 template <unsigned int L>
-void RoadGraph<L>::addRoad(const data::Road road) {
+void RoadGraph<L>::addRoad(const data::Road& road) {
   for (auto& tile : road.getTiles()) {
     const unsigned int x = tile.getLocal().x;
     const unsigned int y = tile.getLocal().y;

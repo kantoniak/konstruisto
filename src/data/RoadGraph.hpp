@@ -41,7 +41,7 @@ public:
   void setNeighborW(RoadGraph* neigborW);
   void setNeighborE(RoadGraph* neigborE);
 
-  void addRoad(const data::Road road);
+  void addRoad(const data::Road& road);
   void update(const std::vector<data::Position>& tiles);
 
   template <class Archive>

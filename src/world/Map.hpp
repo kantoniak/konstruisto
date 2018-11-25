@@ -40,7 +40,7 @@ public:
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
 
-  void addRoads(const std::vector<data::Road> roads);
+  void addRoads(const std::vector<data::Road>& roads);
 
   void removeBuilding(data::buildings::Building building);
 

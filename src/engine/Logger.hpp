@@ -21,14 +21,14 @@ public:
   LoggingLevel getLevelByName(char* levelName);
   void setLoggingLevel(LoggingLevel level);
 
-  void log(LoggingLevel level, std::string message);
+  void log(LoggingLevel level, const std::string& message);
 
   // Shortcuts
-  void debug(std::string message);
-  void info(std::string message);
-  void warn(std::string message);
-  void error(std::string message);
-  void severe(std::string message);
+  void debug(const std::string& message);
+  void info(const std::string& message);
+  void warn(const std::string& message);
+  void error(const std::string& message);
+  void severe(const std::string& message);
 
   template <typename... Args>
   void log(LoggingLevel level, const std::string& message, Args... args) {
@@ -49,23 +49,23 @@ public:
 
   // Shortcuts
   template <typename... Args>
-  void debug(std::string message, Args... args) {
+  void debug(const std::string& message, Args... args) {
     this->log(DEBUG, message, args...);
   };
   template <typename... Args>
-  void info(std::string message, Args... args) {
+  void info(const std::string& message, Args... args) {
     this->log(INFO, message, args...);
   };
   template <typename... Args>
-  void warn(std::string message, Args... args) {
+  void warn(const std::string& message, Args... args) {
     this->log(WARN, message, args...);
   };
   template <typename... Args>
-  void error(std::string message, Args... args) {
+  void error(const std::string& message, Args... args) {
     this->log(ERROR, message, args...);
   };
   template <typename... Args>
-  void severe(std::string message, Args... args) {
+  void severe(const std::string& message, Args... args) {
     this->log(SEVERE, message, args...);
   };
 
@@ -74,7 +74,7 @@ private:
   LoggingLevel loggingLevel = LoggingLevel::ANY;
   std::ostream& ostream;
 
-  std::string levelToString(LoggingLevel level);
+  const std::string levelToString(LoggingLevel level);
   std::chrono::milliseconds getTimeDelta();
 };
 }

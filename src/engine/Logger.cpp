@@ -11,7 +11,7 @@ void Logger::setLoggingLevel(LoggingLevel level) {
   this->info(std::string("Logging level set to ") + this->levelToString(level) + std::string("."));
 }
 
-void Logger::log(LoggingLevel level, std::string message) {
+void Logger::log(LoggingLevel level, const std::string& message) {
   if (level < this->loggingLevel) {
     return;
   }
@@ -19,23 +19,23 @@ void Logger::log(LoggingLevel level, std::string message) {
                 << "] [" << this->levelToString(level) << "] " << message << std::endl;
 }
 
-void Logger::debug(std::string message) {
+void Logger::debug(const std::string& message) {
   this->log(DEBUG, message);
 }
 
-void Logger::info(std::string message) {
+void Logger::info(const std::string& message) {
   this->log(INFO, message);
 }
 
-void Logger::warn(std::string message) {
+void Logger::warn(const std::string& message) {
   this->log(WARN, message);
 }
 
-void Logger::error(std::string message) {
+void Logger::error(const std::string& message) {
   this->log(ERROR, message);
 }
 
-void Logger::severe(std::string message) {
+void Logger::severe(const std::string& message) {
   this->log(SEVERE, message);
 }
 
@@ -59,7 +59,7 @@ LoggingLevel Logger::getLevelByName(char* levelName) {
   return ANY;
 }
 
-std::string Logger::levelToString(LoggingLevel level) {
+const std::string Logger::levelToString(LoggingLevel level) {
   switch (level) {
   case ANY:
     return "ANY";

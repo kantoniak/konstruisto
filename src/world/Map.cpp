@@ -122,7 +122,7 @@ data::City& Map::getCurrentCity() {
   return *currentCity;
 }
 
-void Map::addRoads(const std::vector<data::Road> roads) {
+void Map::addRoads(const std::vector<data::Road>& roads) {
   struct KeyFuncs {
     size_t operator()(const glm::ivec2& k) const {
       return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
