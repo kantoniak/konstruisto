@@ -10,7 +10,7 @@ namespace data {
 class Road {
 
 public:
-  explicit Road(const std::vector<Position>& tiles);
+  explicit Road(std::vector<Position> tiles);
   const std::vector<Position> getTiles() const;
 
 private:

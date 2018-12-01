@@ -8,18 +8,7 @@ Selection::Selection() : selecting(false), valid(true) {
   invalidColor = glm::vec4();
 }
 
-Selection& Selection::operator=(const Selection& other) {
-  selecting = other.selecting;
-  valid = other.valid;
-  fromPoint = other.fromPoint;
-  toPoint = other.toPoint;
-
-  startColor = other.startColor;
-  selectionColor = other.selectionColor;
-  invalidColor = other.invalidColor;
-
-  return *this;
-}
+Selection& Selection::operator=(const Selection& other) = default;
 
 void Selection::setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor) {
   this->startColor = startColor;

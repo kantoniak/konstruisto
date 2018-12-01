@@ -17,16 +17,16 @@ class MapPauseState : public engine::GameState {
 public:
   MapPauseState(engine::Engine& engine, world::World& world, rendering::WorldRenderer& worldRenderer);
 
-  void init();
+  void init() override;
 
-  void update(std::chrono::milliseconds delta);
-  void render();
+  void update(std::chrono::milliseconds delta) override;
+  void render() override;
 
-  void onKey(int key, int scancode, int action, int mods);
-  void onMouseButton(int button, int action, int mods);
-  void onScroll(double xoffset, double yoffset);
-  void onWindowFocusChange(int focused);
-  void onWindowResize(int width, int height);
+  void onKey(int key, int scancode, int action, int mods) override;
+  void onMouseButton(int button, int action, int mods) override;
+  void onScroll(double xoffset, double yoffset) override;
+  void onWindowFocusChange(int focused) override;
+  void onWindowResize(int width, int height) override;
 
 private:
   world::World& world;

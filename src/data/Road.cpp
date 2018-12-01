@@ -1,7 +1,9 @@
 #include "Road.hpp"
 
+#include <utility>
+
 namespace data {
-Road::Road(const std::vector<Position>& tiles) : tiles(tiles) {
+Road::Road(std::vector<Position> tiles) : tiles(std::move(tiles)) {
 }
 
 const std::vector<Position> Road::getTiles() const {

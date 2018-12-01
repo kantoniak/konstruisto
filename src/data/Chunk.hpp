@@ -12,9 +12,9 @@
 namespace data {
 
 class Chunk {
-  typedef const std::vector<data::Lot> lotList;
-  typedef const std::vector<data::buildings::Building> residentialList;
-  typedef std::vector<data::buildings::Building>::const_iterator residentialListIter;
+  using lotList = const std::vector<data::Lot>;
+  using residentialList = const std::vector<data::buildings::Building>;
+  using residentialListIter = std::vector<data::buildings::Building>::const_iterator;
 
 public:
   constexpr unsigned static int SIDE_LENGTH = 64;

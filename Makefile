@@ -88,7 +88,7 @@ ifeq ($(OS), Windows_NT)
 		RELEASE_DLLS += libwinpthread-1.dll
 	endif
 
-	CXX=clang++ -target x86_64-w64-pc-windows-gnu
+	CPPFLAGS := -target x86_64-w64-pc-windows-gnu $(CPPFLAGS)
 	OBJ_FILES += $(OBJDIR)/windows.rc.o
 endif
 
@@ -124,6 +124,9 @@ run:
 format-all:
 	clang-format -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
 
+modernize-all:
+	clang-tidy -checks="modernize-*" -fix $(CPP_FILES) $(HPP_FILES) -- $(CPPFLAGS) $(DEFINES)
+
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
 
@@ -142,9 +145,11 @@ release-zip: rebuild $(RELEASE_DLLS)
 
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)
-	@echo -e "\nTargets:"
+	@echo ""
+	@echo "Targets:"
 	@echo "  clean"
 	@echo "  format-all"
+	@echo "  modernize-all"
 	@echo "  build"
 	@echo "  rebuild (clean + build)"
 	@echo "  run"
@@ -152,6 +157,7 @@ help:
 	@echo "  todos"
 	@echo "  release-zip"
 	@echo "  help"
+	@echo ""
 	@echo "Flags:"
 	@echo "  CONFIG=[DEBUG|RELEASE]"
 	@echo "  HIDE_CONSOLE=[TRUE|FALSE] (Windows)"

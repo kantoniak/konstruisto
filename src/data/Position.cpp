@@ -1,8 +1,7 @@
 #include "Position.hpp"
 
 namespace data {
-Position::Position() {
-}
+Position::Position() = default;
 
 Position::Position(glm::ivec2 global) : global(global) {
 }
@@ -45,14 +44,14 @@ glm::ivec2 Position::getChunk() const {
 
 std::vector<Position> Position::getNeighbors() const {
   std::vector<Position> result;
-  result.push_back(Position(global + glm::ivec2(1, -1)));
-  result.push_back(Position(global + glm::ivec2(1, 0)));
-  result.push_back(Position(global + glm::ivec2(1, 1)));
-  result.push_back(Position(global + glm::ivec2(0, -1)));
-  result.push_back(Position(global + glm::ivec2(0, +1)));
-  result.push_back(Position(global + glm::ivec2(-1, -1)));
-  result.push_back(Position(global + glm::ivec2(-1, 0)));
-  result.push_back(Position(global + glm::ivec2(-1, +1)));
+  result.emplace_back(global + glm::ivec2(1, -1));
+  result.emplace_back(global + glm::ivec2(1, 0));
+  result.emplace_back(global + glm::ivec2(1, 1));
+  result.emplace_back(global + glm::ivec2(0, -1));
+  result.emplace_back(global + glm::ivec2(0, +1));
+  result.emplace_back(global + glm::ivec2(-1, -1));
+  result.emplace_back(global + glm::ivec2(-1, 0));
+  result.emplace_back(global + glm::ivec2(-1, +1));
   return result;
 }
 }

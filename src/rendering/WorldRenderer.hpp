@@ -30,12 +30,12 @@ class WorldRenderer : public Renderer {
 public:
   WorldRenderer(engine::Engine& engine, world::World& world);
 
-  virtual bool init();
+  bool init() override;
   bool setupShaders();
   bool setupTextures();
   bool setupTerrain();
   bool setupBuildings();
-  virtual void cleanup();
+  void cleanup() override;
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();

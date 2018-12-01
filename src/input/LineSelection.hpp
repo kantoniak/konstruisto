@@ -14,10 +14,10 @@ class LineSelection : public Selection {
 public:
   explicit LineSelection(unsigned short lineWidth);
 
-  virtual glm::ivec2 getFrom() const;
-  virtual glm::ivec2 getTo() const;
+  glm::ivec2 getFrom() const override;
+  glm::ivec2 getTo() const override;
 
-  virtual const std::vector<data::Position> getSelected() const;
+  const std::vector<data::Position> getSelected() const override;
   const std::vector<LineSelection> divideByChunk() const;
 
 private:

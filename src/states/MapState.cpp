@@ -94,7 +94,7 @@ void MapState::update(std::chrono::milliseconds delta) {
     data::Position to(selection->getTo());
     bool chunkExists = world.getMap().chunkExists(from.getChunk()) && world.getMap().chunkExists(to.getChunk());
 
-    input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
+    auto* s = static_cast<input::LineSelection*>(selection.get());
     bool roadCollides = geometry.checkCollisions(data::Road(s->getSelected()));
 
     if (!chunkExists || roadCollides) {
@@ -126,9 +126,8 @@ void MapState::render() {
   renderer.sendFrame();
 };
 
-void MapState::onKey(int key, int scancode, int action, int mods) {
+void MapState::onKey(int key, int, int action, int mods) {
   // TODO(kantoniak): Refactor MapState::onKey by the end of march. If it's April you can start laughing now :)
-  scancode = 0;
 
   if (key == GLFW_KEY_MINUS && action != GLFW_RELEASE) {
     world.getCamera().zoom(-5);
@@ -230,8 +229,8 @@ void MapState::onKey(int key, int scancode, int action, int mods) {
   }
 }
 
-void MapState::onMouseButton(int button, int action, int mods) {
-  mods = 0;
+void MapState::onMouseButton(int button, int action, int) {
+
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
     selection->start(selection->getFrom());
   } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
@@ -253,11 +252,11 @@ void MapState::onMouseButton(int button, int action, int mods) {
 
     if (MapStateAction::PLACE_ROAD == currentAction && selection->isValid()) {
       // TODO(kantoniak): Collisions with buildings
-      input::LineSelection* s = static_cast<input::LineSelection*>(selection.get());
+      auto* s = static_cast<input::LineSelection*>(selection.get());
       const std::vector<input::LineSelection> selections = s->divideByChunk();
       std::vector<data::Road> roads;
       for (auto& selection : selections) {
-        roads.push_back(data::Road(selection.getSelected()));
+        roads.emplace_back(selection.getSelected());
       }
       world.getMap().addRoads(roads);
       renderer.markTileDataForUpdate();
@@ -280,8 +279,7 @@ void MapState::onMouseButton(int button, int action, int mods) {
   }
 }
 
-void MapState::onScroll(double xoffset, double yoffset) {
-  xoffset = 0;
+void MapState::onScroll(double, double yoffset) {
   world.getCamera().zoom(yoffset * 5);
 }
 

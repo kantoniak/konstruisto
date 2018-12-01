@@ -7,8 +7,8 @@
 namespace engine {
 
 class DebugInfo {
-  typedef std::chrono::steady_clock Clock;
-  typedef std::chrono::time_point<std::chrono::steady_clock> TimePoint;
+  using Clock = std::chrono::steady_clock;
+  using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
 
 public:
   DebugInfo();

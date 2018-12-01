@@ -122,13 +122,13 @@ bool WorldRenderer::setupBuildings() {
   glBindBuffer(GL_ARRAY_BUFFER, buildingsVBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(building), building, GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
 
   glGenBuffers(1, &buildingsInstanceVBO);
   glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
 
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)nullptr);
   glVertexAttribDivisor(1, 1);
 
   glEnableVertexAttribArray(2);
@@ -151,8 +151,8 @@ void WorldRenderer::cleanup() {
   glDeleteBuffers(1, &terrainPositionVBO);
   glDeleteProgram(this->shaderProgram);
 
-  for (auto it = chunks.begin(); it != chunks.end(); it++) {
-    glDeleteBuffers(1, &(it->second));
+  for (auto& chunk : chunks) {
+    glDeleteBuffers(1, &(chunk.second));
   }
 
   glDeleteVertexArrays(1, &buildingsVAO);
@@ -207,7 +207,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   glEnableVertexAttribArray(1);
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     glBindBuffer(GL_ARRAY_BUFFER, chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)nullptr);
     glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 
     glDrawArrays(GL_TRIANGLES, 0, data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3);
@@ -414,9 +414,9 @@ void WorldRenderer::sendBuildingData() {
   constexpr float buildingMargin = 0.2f;
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     for (data::buildings::Building building : chunk->getResidentials()) {
-      buildingPositions.push_back(glm::vec3(building.x + buildingMargin, 0, building.y + buildingMargin));
-      buildingPositions.push_back(
-          glm::vec3(building.width - 2 * buildingMargin, building.level, building.length - 2 * buildingMargin));
+      buildingPositions.emplace_back(building.x + buildingMargin, 0, building.y + buildingMargin);
+      buildingPositions.emplace_back(building.width - 2 * buildingMargin, building.level,
+                                     building.length - 2 * buildingMargin);
     }
   }
   glBindVertexArray(buildingsVAO);

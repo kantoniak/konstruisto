@@ -14,8 +14,8 @@
 namespace world {
 
 class Map {
-  typedef const std::vector<data::Chunk*> chunkList;
-  typedef std::vector<data::Chunk*>::const_iterator chunkListIter;
+  using chunkList = const std::vector<data::Chunk*>;
+  using chunkListIter = std::vector<data::Chunk*>::const_iterator;
 
 public:
   Map();

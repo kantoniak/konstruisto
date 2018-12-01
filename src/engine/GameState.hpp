@@ -11,7 +11,10 @@ class GameState {
 
 public:
   GameState(Engine& engine) : engine(engine){};
-  virtual ~GameState(){};
+  GameState(const GameState&) = delete;
+  GameState& operator=(const GameState&) = delete;
+  virtual ~GameState() = default;
+  ;
   virtual void init(){};
   virtual void cleanup(){};
 
@@ -36,11 +39,7 @@ public:
 
 protected:
   bool suspended;
-
   Engine& engine;
-
-  GameState(const GameState&) = delete;
-  GameState& operator=(const GameState&) = delete;
 };
 }
 

@@ -15,14 +15,14 @@ void Map::cleanup() {
 
 void Map::createChunk(glm::ivec2 position) {
   // TODO(kantoniak): Check if chunk exists already
-  data::Chunk* chunk = new data::Chunk();
+  auto* chunk = new data::Chunk();
   chunk->setPosition(position);
   chunks.push_back(chunk);
   this->setChunkNeighbors(*chunk);
 }
 
 void Map::loadChunk(data::Chunk& chunk) {
-  data::Chunk* ptr = new data::Chunk(chunk);
+  auto* ptr = new data::Chunk(chunk);
   chunks.push_back(ptr);
   this->setChunkNeighbors(*ptr);
   buildingCount += ptr->getResidentialSize();
@@ -71,9 +71,9 @@ Map::chunkList Map::getChunks() {
 }
 
 const data::Chunk& Map::getChunk(glm::ivec2 chunkPosition) const {
-  for (unsigned long it = 0; it < chunks.size(); it++) {
-    if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {
-      return *(chunks[it]);
+  for (auto chunk : chunks) {
+    if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {
+      return *chunk;
     }
   }
   throw std::invalid_argument("Chunk does not exist");
@@ -179,9 +179,9 @@ void Map::removeBuilding(data::buildings::Building building) {
 }
 
 data::Chunk& Map::getNonConstChunk(glm::ivec2 chunkPosition) const {
-  for (unsigned long it = 0; it < chunks.size(); it++) {
-    if (glm::all(glm::equal(chunks[it]->getPosition(), chunkPosition))) {
-      return *(chunks[it]);
+  for (auto chunk : chunks) {
+    if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {
+      return *chunk;
     }
   }
   throw std::invalid_argument("Chunk does not exist");

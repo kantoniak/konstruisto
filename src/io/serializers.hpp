@@ -1,6 +1,7 @@
 #ifndef IO_SERIALIZERS_HPP
 #define IO_SERIALIZERS_HPP
 
+#include <cereal/cereal.hpp>
 #include <glm/glm.hpp>
 
 namespace glm {

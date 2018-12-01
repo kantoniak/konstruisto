@@ -9,8 +9,7 @@ Engine::Engine(settings& gameSettings, Logger& logger)
       ui(nullptr) {
 }
 
-Engine::~Engine() {
-}
+Engine::~Engine() = default;
 
 bool Engine::running() {
   return isRunning;

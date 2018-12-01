@@ -9,7 +9,7 @@ void Timer::init() {
   sinceTurnStart = 0;
   currentSpeed = 3;
 
-  time_t t = time(NULL);
+  time_t t = time(nullptr);
 #ifdef _WIN32
   gmtime_s(&dateToShow, &t);
 #else

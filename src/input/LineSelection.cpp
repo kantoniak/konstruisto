@@ -41,7 +41,7 @@ const std::vector<data::Position> LineSelection::getSelected() const {
   std::vector<data::Position> result;
   for (int i = 0; i < length; i++) {
     const glm::ivec2 toAdd = goesNorth ? glm::ivec2(0, i) : glm::ivec2(i, 0);
-    result.push_back(data::Position(start + toAdd));
+    result.emplace_back(start + toAdd);
   }
 
   return result;

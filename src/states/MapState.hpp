@@ -30,17 +30,17 @@ class MapState : public engine::GameState {
 public:
   explicit MapState(engine::Engine& engine);
 
-  void init();
-  void cleanup();
+  void init() override;
+  void cleanup() override;
 
-  void update(std::chrono::milliseconds delta);
-  void render();
+  void update(std::chrono::milliseconds delta) override;
+  void render() override;
 
-  void onKey(int key, int scancode, int action, int mods);
-  void onMouseButton(int button, int action, int mods);
-  void onScroll(double xoffset, double yoffset);
-  void onWindowFocusChange(int focused);
-  void onWindowResize(int width, int height);
+  void onKey(int key, int scancode, int action, int mods) override;
+  void onMouseButton(int button, int action, int mods) override;
+  void onScroll(double xoffset, double yoffset) override;
+  void onWindowFocusChange(int focused) override;
+  void onWindowResize(int width, int height) override;
 
 private:
   rendering::WorldRenderer renderer;
