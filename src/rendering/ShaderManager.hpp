@@ -1,6 +1,7 @@
 #ifndef RENDERING_SHADERMANAGER_HPP
 #define RENDERING_SHADERMANAGER_HPP
 
+#include <array>
 #include <fstream>
 #include <string>
 #include <vector>

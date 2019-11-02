@@ -54,7 +54,7 @@ You can just run `setup-deps.sh`, it will setup everything for you.
 
 If you want to do everything by hand, here's the list of dependencies:
 
-1. Install `clang-3.9 lldb-3.9`. Export `clang`, `clang++`, `clang-format` to `PATH`.
+1. Install `clang-9 clang-format-9 clang-tidy-9 clang-tools-9`.
 2. Install `libglew-dev` (2.1.0): https://launchpad.net/ubuntu/+source/glew
 3. Install `libglfw3-dev` (3.3.0): https://launchpad.net/ubuntu/+source/glfw3
 4. Download `glm` and extract to `ext/glm-0.9.9.6`

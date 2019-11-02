@@ -16,7 +16,7 @@ public:
   virtual ~Selection() = default;
 
   void setColors(glm::vec4 startColor, glm::vec4 selectionColor, glm::vec4 invalidColor);
-  glm::vec4 getColor() const;
+  [[nodiscard]] glm::vec4 getColor() const;
 
   void start(glm::ivec2 point);
   void from(glm::ivec2 point);
@@ -25,14 +25,14 @@ public:
 
   void markInvalid();
   void markValid();
-  bool isValid() const;
+  [[nodiscard]] bool isValid() const;
 
-  bool isSelecting() const;
+  [[nodiscard]] bool isSelecting() const;
   void reset();
 
-  virtual glm::ivec2 getFrom() const;
-  virtual glm::ivec2 getTo() const;
-  virtual const std::vector<data::Position> getSelected() const;
+  [[nodiscard]] virtual glm::ivec2 getFrom() const;
+  [[nodiscard]] virtual glm::ivec2 getTo() const;
+  [[nodiscard]] virtual const std::vector<data::Position> getSelected() const;
 
 protected:
   bool selecting;

@@ -1,11 +1,10 @@
 #ifndef DATA_BUILDINGS_HPP
 #define DATA_BUILDINGS_HPP
 
-namespace data {
-namespace buildings {
+namespace data::buildings {
 
 struct Building {
-  unsigned int objectId;
+  // unsigned int objectId;
   long x;
   long y;
   unsigned short width;
@@ -18,7 +17,6 @@ struct Building {
     archive(width, length, level);
   }
 };
-}
 }
 
 #endif

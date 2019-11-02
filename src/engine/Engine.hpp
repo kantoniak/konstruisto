@@ -46,12 +46,12 @@ public:
   void tick(std::chrono::time_point<std::chrono::high_resolution_clock> now);
   std::chrono::milliseconds getDeltaSinceStart();
 
-  settings& getSettings() const;
-  Logger& getLogger() const;
+  [[nodiscard]] settings& getSettings() const;
+  [[nodiscard]] Logger& getLogger() const;
   DebugInfo& getDebugInfo();
-  input::WindowHandler& getWindowHandler() const;
-  rendering::Renderer& getRenderer() const;
-  rendering::UI& getUI() const;
+  [[nodiscard]] input::WindowHandler& getWindowHandler() const;
+  [[nodiscard]] rendering::Renderer& getRenderer() const;
+  [[nodiscard]] rendering::UI& getUI() const;
 
 protected:
   settings& gameSettings;

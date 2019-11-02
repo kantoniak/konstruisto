@@ -8,6 +8,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <vector>
 
 namespace engine {
 
@@ -39,9 +40,9 @@ public:
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
     size_t size = 1 + snprintf(nullptr, 0, message.c_str(), args...);
-    std::unique_ptr<char[]> buf(new char[size]);
-    snprintf(buf.get(), size, message.c_str(), args...);
-    const std::string formattedMessage = std::string(buf.get(), buf.get() + size);
+    std::vector<char> buf(size);
+    snprintf(buf.data(), size, message.c_str(), args...);
+    const std::string formattedMessage(buf.begin(), buf.end());
 #pragma clang diagnostic pop
 
     this->log(level, formattedMessage);

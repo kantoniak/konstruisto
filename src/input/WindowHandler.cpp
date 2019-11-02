@@ -61,8 +61,8 @@ bool WindowHandler::createMainWindow() {
   // Windows will use embedded icon, set manually for other systems
   GLFWimage windowIcon;
   windowIcon.pixels =
-      stbi_load("assets/konstruisto-icon-16.png", &windowIcon.width, &windowIcon.height, 0, STBI_rgb_alpha);
-  if (0 == windowIcon.pixels) {
+      stbi_load("assets/konstruisto-icon-16.png", &windowIcon.width, &windowIcon.height, nullptr, STBI_rgb_alpha);
+  if (nullptr == windowIcon.pixels) {
     engine.getLogger().warn("Could not load icon for window: %s", "assets/konstruisto-icon-16.png");
   } else {
     glfwSetWindowIcon(window, 1, &windowIcon);

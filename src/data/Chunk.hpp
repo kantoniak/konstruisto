@@ -25,11 +25,11 @@ public:
   void setObjectId(unsigned int objectId);
 
   void setPosition(glm::ivec2 position);
-  glm::ivec2 getPosition() const;
+  [[nodiscard]] glm::ivec2 getPosition() const;
 
-  residentialList getResidentials() const;
-  residentialListIter getResidentialIterator() const;
-  unsigned int getResidentialSize() const;
+  [[nodiscard]] residentialList getResidentials() const;
+  [[nodiscard]] residentialListIter getResidentialIterator() const;
+  [[nodiscard]] unsigned int getResidentialSize() const;
 
   void setNeighborN(Chunk* neigborN);
   void setNeighborS(Chunk* neigborS);
@@ -38,10 +38,10 @@ public:
 
   void addRoad(data::Road road);
   void updateRoadGraph(const std::vector<data::Position>& tiles);
-  const RoadGraph<SIDE_LENGTH>& getRoadGraph() const;
+  [[nodiscard]] const RoadGraph<SIDE_LENGTH>& getRoadGraph() const;
 
   void addLot(data::Lot lot);
-  lotList getLots() const;
+  [[nodiscard]] lotList getLots() const;
 
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);

@@ -63,7 +63,7 @@ else
 endif
 
 DEFINES +=-D_USE_MATH_DEFINES -DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
-CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm/  --system-header-prefix=nanovg -DGLEW_STATIC
+CPPFLAGS =-std=c++17 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm  --system-header-prefix=nanovg -DGLEW_STATIC
 
 ifeq ($(CONFIG), DEBUG)
 	DEFINES +=-D_DEBUG
@@ -122,10 +122,10 @@ run:
 	@cd $(BINDIR); ./$(PROJECT_NAME)$(EXTENSION)
 
 format-all:
-	clang-format -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
+	clang-format-9 -i -style=file -fallback-style=llvm -sort-includes $(CPP_FILES) $(HPP_FILES)
 
 modernize-all:
-	clang-tidy -checks="modernize-*" -fix $(CPP_FILES) $(HPP_FILES) -- $(CPPFLAGS) $(DEFINES)
+	clang-tidy-9 -checks="modernize-*,-modernize-use-trailing-return-type" -fix $(CPP_FILES) $(HPP_FILES) -- $(CPPFLAGS) $(DEFINES)
 
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''

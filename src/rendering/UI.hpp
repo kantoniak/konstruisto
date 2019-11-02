@@ -30,9 +30,9 @@ public:
   void startFrame();
   void endFrame();
 
-  const NVGcolor getBackgroundColor() const;
-  const NVGcolor getPrimaryTextColor() const;
-  const NVGcolor getAccentColor() const;
+  [[nodiscard]] const NVGcolor getBackgroundColor() const;
+  [[nodiscard]] const NVGcolor getPrimaryTextColor() const;
+  [[nodiscard]] const NVGcolor getAccentColor() const;
 
   void renderLogo(float x, float y);
   void renderIcon(unsigned int icon, float x, float y, const unsigned char size = ICON_SIDE);

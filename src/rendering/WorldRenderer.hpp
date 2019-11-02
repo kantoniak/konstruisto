@@ -60,7 +60,7 @@ protected:
 
   // Tiles
   const int ATLAS_SIDE = 10;
-  unsigned int getTile(int x, int y) const;
+  [[nodiscard]] unsigned int getTile(int x, int y) const;
   void setTile(std::vector<GLfloat>& tiles, int x, int y, unsigned int tile);
 
   void paintOnTiles(const data::Chunk& chunk, const glm::ivec2& position, std::vector<GLfloat>& tiles);

@@ -36,7 +36,7 @@ protected:
   unsigned short sinceTurnStart;
   unsigned short currentSpeed;
 
-  unsigned short getTurnLength() const;
+  [[nodiscard]] unsigned short getTurnLength() const;
 
   tm dateToShow;
 };

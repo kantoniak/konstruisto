@@ -11,7 +11,7 @@ class Road {
 
 public:
   explicit Road(std::vector<Position> tiles);
-  const std::vector<Position> getTiles() const;
+  [[nodiscard]] const std::vector<Position> getTiles() const;
 
 private:
   std::vector<Position> tiles;

@@ -32,7 +32,7 @@ public:
 private:
   // FIXME(kantoniak): MainMenuState::renderButton() should not be there
   static constexpr unsigned short buttonsCount = 2;
-  const char* const buttons[buttonsCount] = {"Start game", "Exit"};
+  const std::array<const char*, buttonsCount> buttons = {"Start game", "Exit"};
   void renderButton(const char* label, glm::vec2 pos, unsigned short padding);
 
   // FIXME(kantoniak): MainMenuState::hitTestButton() is so lame

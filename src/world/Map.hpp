@@ -27,7 +27,7 @@ public:
 
   unsigned int getChunksCount();
   chunkList getChunks();
-  const data::Chunk& getChunk(glm::ivec2 chunkPosition) const;
+  [[nodiscard]] const data::Chunk& getChunk(glm::ivec2 chunkPosition) const;
   bool chunkExists(glm::ivec2 chunkPosition);
   chunkListIter getChunkIterator();
 
@@ -51,7 +51,7 @@ protected:
   // Cached
   unsigned int buildingCount;
 
-  data::Chunk& getNonConstChunk(glm::ivec2 chunkPosition) const;
+  [[nodiscard]] data::Chunk& getNonConstChunk(glm::ivec2 chunkPosition) const;
 };
 }
 

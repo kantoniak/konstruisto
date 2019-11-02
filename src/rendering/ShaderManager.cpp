@@ -32,8 +32,8 @@ GLuint ShaderManager::compileShader(GLenum shaderType, std::string filename, eng
   GLint success;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
   if (!success) {
-    GLchar errorMessage[512];
-    glGetShaderInfoLog(shader, 512, nullptr, errorMessage);
+    std::array<GLchar, 512> errorMessage;
+    glGetShaderInfoLog(shader, errorMessage.max_size(), nullptr, errorMessage.data());
     log.error("Shader compilation failed for \"%s\": %s", filename.c_str(), errorMessage);
     return 0;
   }
@@ -54,8 +54,8 @@ GLuint ShaderManager::linkProgram(GLuint vertexShader, GLuint geomShader, GLuint
   GLint success;
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
   if (!success) {
-    GLchar errorMessage[512];
-    glGetProgramInfoLog(shaderProgram, 512, nullptr, errorMessage);
+    std::array<GLchar, 512> errorMessage;
+    glGetProgramInfoLog(shaderProgram, errorMessage.max_size(), nullptr, errorMessage.data());
     log.error("Shader linking failed: %s", errorMessage);
     return 0;
   }

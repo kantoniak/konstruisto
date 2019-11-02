@@ -63,10 +63,10 @@ private:
   void update();
   void updateIndex(unsigned int i);
 
-  bool noRoadToN(unsigned int i) const;
-  bool noRoadToS(unsigned int i) const;
-  bool noRoadToW(unsigned int i) const;
-  bool noRoadToE(unsigned int i) const;
+  [[nodiscard]] bool noRoadToN(unsigned int i) const;
+  [[nodiscard]] bool noRoadToS(unsigned int i) const;
+  [[nodiscard]] bool noRoadToW(unsigned int i) const;
+  [[nodiscard]] bool noRoadToE(unsigned int i) const;
 };
 }
 
