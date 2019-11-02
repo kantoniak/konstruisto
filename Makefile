@@ -31,15 +31,15 @@ ifeq ($(OS), Windows_NT)
 		LDFLAGS += -Wl,--subsystem,windows
 	endif
 
-	INCLUDES += -I$(EXTDIR)/glfw-3.2.1/include
-	LDFLAGS  += -L$(EXTDIR)/glfw-3.2.1/lib
+	INCLUDES += -I$(EXTDIR)/glfw-3.3.0/include
+	LDFLAGS  += -L$(EXTDIR)/glfw-3.3.0/lib
 
-	INCLUDES += -I$(EXTDIR)/glew-2.0.0/include
-	LDFLAGS  += -L$(EXTDIR)/glew-2.0.0/lib
+	INCLUDES += -I$(EXTDIR)/glew-2.1.0/include
+	LDFLAGS  += -L$(EXTDIR)/glew-2.1.0/lib
 
-	INCLUDES += -I$(EXTDIR)/glm/
+	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
 
-	INCLUDES += -I$(EXTDIR)/cereal-1.2.2/include
+	INCLUDES += -I$(EXTDIR)/cereal-1.3.0/include
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-windows
@@ -50,9 +50,9 @@ ifeq ($(OS), Windows_NT)
 else
 	SYSTEM := LINUX
 
-	INCLUDES += -I$(EXTDIR)/glm/
+	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
 
-	INCLUDES += -I$(EXTDIR)/cereal-1.2.2/include
+	INCLUDES += -I$(EXTDIR)/cereal-1.3.0/include
 
 	INCLUDES += -I$(EXTDIR)/nanovg/src
 	LDFLAGS  += -L$(EXTDIR)/nanovg/build-linux

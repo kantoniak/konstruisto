@@ -16,14 +16,15 @@ mkdir -p "$EXT"
 sudo apt-get install clang clang-format libglew-dev libglfw3-dev premake4 windres
 
 # 3. Download GLM
-wget https://github.com/g-truc/glm/releases/download/0.9.8.4/glm-0.9.8.4.zip --no-check-certificate -O glm-0.9.8.4.zip &&
+wget https://github.com/g-truc/glm/releases/download/0.9.9.6/glm-0.9.9.6.zip --no-check-certificate -O glm-0.9.8.4.zip &&
 unzip glm-0.9.8.4.zip -d "$EXT" &&
+mv "$EXT/glm" "ext/glm-0.9.9.6" &&
 rm glm-0.9.8.4.zip
 
 # 4. Download cereal
-wget https://github.com/USCiLab/cereal/archive/v1.2.2.zip --no-check-certificate -O cereal-1.2.2.zip &&
-unzip cereal-1.2.2.zip -d "$EXT" &&
-rm cereal-1.2.2.zip
+wget https://github.com/USCiLab/cereal/archive/v1.3.0.zip --no-check-certificate -O cereal-1.3.0.zip &&
+unzip cereal-1.3.0.zip -d "$EXT" &&
+rm cereal-1.3.0.zip
 
 # 5. Download stb_image
 mkdir -p "$EXT/stb/stb/" &&
