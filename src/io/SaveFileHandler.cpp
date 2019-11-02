@@ -34,8 +34,9 @@ void SaveFileHandler::loadSave(world::World& world) {
 
   engine.getLogger().info("Loading from %s...", DEFAULT_SAVE_FILE_NAME.c_str());
 
-  auto saveFileStream = std::ifstream(DEFAULT_SAVE_FILE_NAME, std::ios::out | std::ios::binary);
+  auto saveFileStream = std::ifstream(DEFAULT_SAVE_FILE_NAME, std::ios::in | std::ios::binary);
   if (!saveFileStream.good()) {
+    engine.getLogger().error("Could not open file for reading.");
     return;
   }
   cereal::BinaryInputArchive archive(saveFileStream); // Create an output archive
