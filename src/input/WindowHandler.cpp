@@ -37,7 +37,7 @@ bool WindowHandler::createMainWindow() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   std::string windowTitle(PROJECT_NAME);
-#ifdef DEBUG_CONFIG
+#ifdef _DEBUG
   windowTitle += std::string(" ") + BUILD_DESC;
 #endif
 

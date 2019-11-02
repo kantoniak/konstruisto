@@ -66,7 +66,7 @@ DEFINES +=-D_USE_MATH_DEFINES -DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VER
 CPPFLAGS =-std=c++14 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm/  --system-header-prefix=nanovg -DGLEW_STATIC
 
 ifeq ($(CONFIG), DEBUG)
-	DEFINES +=-DDEBUG_CONFIG
+	DEFINES +=-D_DEBUG
 	CPPFLAGS +=-g
 else
 	CPPFLAGS +=-O3

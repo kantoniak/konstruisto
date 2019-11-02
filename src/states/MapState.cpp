@@ -111,14 +111,14 @@ void MapState::render() {
   renderer.prepareFrame();
 
   renderer.renderWorld(*selection);
-#ifdef DEBUG_CONFIG
+#ifdef _DEBUG
   renderer.renderDebug();
 #endif
   engine.getDebugInfo().onRenderWorldEnd();
 
   engine.getUI().startFrame();
   renderer.renderUI();
-#ifdef DEBUG_CONFIG
+#ifdef _DEBUG
   renderer.renderDebugUI();
 #endif
   engine.getUI().endFrame();
