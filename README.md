@@ -37,7 +37,7 @@ If you want to do everything by hand, here's the list of dependencies:
 
 1. Install `clang-9 clang-format-9 clang-tidy-9 clang-tools-9`.
 1. Install `libglew-dev` (2.1.0): https://launchpad.net/ubuntu/+source/glew
-1. Install `libglfw3-dev` (3.3.0): https://launchpad.net/ubuntu/+source/glfw3
+1. Install `libglfw3-dev` (3.3): https://launchpad.net/ubuntu/+source/glfw3
 1. Download `glm` and extract to `ext/glm-0.9.9.6`
     ```
     wget https://github.com/g-truc/glm/releases/download/0.9.9.6/glm-0.9.9.6.zip &&
@@ -73,7 +73,7 @@ In case of MSVC set up shared dependencies and run build from Visual Studio. For
 #### Shared Windows dependencies
 
 1. Install GLEW in `ext/glew-2.1.0`
-1. Install GLFW in `ext/glew-3.3.0`
+1. Install GLFW in `ext/glew-3.3`
 1. Extract `glm` library to `ext/glm-0.9.9.6`
 1. Extract `cereal` library to `ext/cereal-1.3.0`
 1. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
@@ -107,7 +107,7 @@ Contents of this repository is licensed under GNU General Public License, versio
 
 ### Used libraries
 
-* [GLFW 3.3.0](http://www.glfw.org/) under the zlib/libpng license
+* [GLFW 3.3](http://www.glfw.org/) under the zlib/libpng license
 * [GLEW 2.1.0](http://glew.sourceforge.net/) under the Modified BSD License, the Mesa 3-D License (MIT) and the Khronos License (MIT)
 * [GLM 0.9.9.6](http://glm.g-truc.net/0.9.9.6/index.html) under the MIT License
 * [Cereal 1.3.0](http://uscilab.github.io/cereal/) under BSD license

@@ -31,8 +31,8 @@ ifeq ($(OS), Windows_NT)
 		LDFLAGS += -Wl,--subsystem,windows
 	endif
 
-	INCLUDES += -I$(EXTDIR)/glfw-3.3.0/include
-	LDFLAGS  += -L$(EXTDIR)/glfw-3.3.0/lib
+	INCLUDES += -I$(EXTDIR)/glfw-3.3/include
+	LDFLAGS  += -L$(EXTDIR)/glfw-3.3/lib
 
 	INCLUDES += -I$(EXTDIR)/glew-2.1.0/include
 	LDFLAGS  += -L$(EXTDIR)/glew-2.1.0/lib

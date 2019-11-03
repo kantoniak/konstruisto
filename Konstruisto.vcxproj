@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -116,7 +116,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -137,12 +137,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3.0\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -156,12 +156,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3.0\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
