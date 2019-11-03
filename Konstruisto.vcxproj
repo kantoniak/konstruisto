@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{F65700EB-3C4B-4515-B259-C5125BD573DA}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Konstruisto</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs-generated-defines.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs-generated-defines.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs-generated-defines.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs-generated-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-copy-dlls.ps1"</Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-generate-defines.ps1"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-copy-dlls.ps1"</Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-generate-defines.ps1"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3.0\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-copy-dlls.ps1"</Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-generate-defines.ps1"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.2.2\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3.0\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3.0\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-copy-dlls.ps1"</Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(SolutionDir)scripts\vs-generate-defines.ps1"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\data\Chunk.cpp" />
+    <ClCompile Include="src\data\Direction.cpp" />
+    <ClCompile Include="src\data\Layer.cpp" />
+    <ClCompile Include="src\data\Position.cpp" />
+    <ClCompile Include="src\data\Road.cpp" />
+    <ClCompile Include="src\data\RoadGraph.cpp" />
+    <ClCompile Include="src\engine\DebugInfo.cpp" />
+    <ClCompile Include="src\engine\Engine.cpp" />
+    <ClCompile Include="src\engine\Logger.cpp" />
+    <ClCompile Include="src\input\LineSelection.cpp" />
+    <ClCompile Include="src\input\Selection.cpp" />
+    <ClCompile Include="src\input\WindowHandler.cpp" />
+    <ClCompile Include="src\io\SaveFileHandler.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\rendering\Renderer.cpp" />
+    <ClCompile Include="src\rendering\ShaderManager.cpp" />
+    <ClCompile Include="src\rendering\UI.cpp" />
+    <ClCompile Include="src\rendering\WorldRenderer.cpp" />
+    <ClCompile Include="src\states\MainMenuState.cpp" />
+    <ClCompile Include="src\states\MapPauseState.cpp" />
+    <ClCompile Include="src\states\MapState.cpp" />
+    <ClCompile Include="src\world\Camera.cpp" />
+    <ClCompile Include="src\world\Geometry.cpp" />
+    <ClCompile Include="src\world\Map.cpp" />
+    <ClCompile Include="src\world\Timer.cpp" />
+    <ClCompile Include="src\world\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\data\buildings.hpp" />
+    <ClInclude Include="src\data\CameraState.hpp" />
+    <ClInclude Include="src\data\Chunk.hpp" />
+    <ClInclude Include="src\data\City.hpp" />
+    <ClInclude Include="src\data\Direction.hpp" />
+    <ClInclude Include="src\data\Layer.hpp" />
+    <ClInclude Include="src\data\Lot.hpp" />
+    <ClInclude Include="src\data\Position.hpp" />
+    <ClInclude Include="src\data\Road.hpp" />
+    <ClInclude Include="src\data\RoadGraph.hpp" />
+    <ClInclude Include="src\engine\DebugInfo.hpp" />
+    <ClInclude Include="src\engine\Engine.hpp" />
+    <ClInclude Include="src\engine\GameState.hpp" />
+    <ClInclude Include="src\engine\Logger.hpp" />
+    <ClInclude Include="src\input\callbacks.hpp" />
+    <ClInclude Include="src\input\LineSelection.hpp" />
+    <ClInclude Include="src\input\Selection.hpp" />
+    <ClInclude Include="src\input\settings.hpp" />
+    <ClInclude Include="src\input\WindowHandler.hpp" />
+    <ClInclude Include="src\io\SaveFileHandler.hpp" />
+    <ClInclude Include="src\io\serializers.hpp" />
+    <ClInclude Include="src\rendering\Renderer.hpp" />
+    <ClInclude Include="src\rendering\settings.hpp" />
+    <ClInclude Include="src\rendering\ShaderManager.hpp" />
+    <ClInclude Include="src\rendering\UI.hpp" />
+    <ClInclude Include="src\rendering\WorldRenderer.hpp" />
+    <ClInclude Include="src\settings.hpp" />
+    <ClInclude Include="src\states\MainMenuState.hpp" />
+    <ClInclude Include="src\states\MapPauseState.hpp" />
+    <ClInclude Include="src\states\MapState.hpp" />
+    <ClInclude Include="src\world\Camera.hpp" />
+    <ClInclude Include="src\world\Geometry.hpp" />
+    <ClInclude Include="src\world\Map.hpp" />
+    <ClInclude Include="src\world\settings.hpp" />
+    <ClInclude Include="src\world\Timer.hpp" />
+    <ClInclude Include="src\world\World.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\windows.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vs-generated-defines.props" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

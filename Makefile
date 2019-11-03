@@ -24,7 +24,7 @@ CXX=clang++
 RM_R=rm -rf
 
 ifeq ($(OS), Windows_NT)
-	SYSTEM := WINDOWS
+	SYSTEM := WINDOWS-GNU
 	EXTENSION := .exe
 
 	ifeq ($(HIDE_CONSOLE), TRUE)

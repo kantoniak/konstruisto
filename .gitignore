@@ -13,6 +13,7 @@ ext/*
 # Visual Studio & VS Code
 .vs/*
 .vscode/*
+*.vcxproj.user
 
 # Vim
 # swap
