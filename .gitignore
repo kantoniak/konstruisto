@@ -11,6 +11,7 @@ ext/*
 !ext/setup-deps.sh
 
 # Visual Studio & VS Code
+vs-generated-defines.props
 .vs/*
 .vscode/*
 *.vcxproj.user
