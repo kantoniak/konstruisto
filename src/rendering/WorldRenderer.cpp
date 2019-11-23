@@ -29,8 +29,8 @@ bool WorldRenderer::init() {
 bool WorldRenderer::setupShaders() {
   // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
 
-  GLuint vertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.vs");
-  GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.fs");
+  GLuint vertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.glsl.vert");
+  GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.glsl.frag");
   this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
   transformLoc = glGetUniformLocation(shaderProgram, "transform");
   renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
@@ -42,15 +42,15 @@ bool WorldRenderer::setupShaders() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  GLuint buildingsVertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/buildings.vs");
-  GLuint buildingsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings.gs");
-  GLuint buildingsFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings.fs");
+  GLuint buildingsVertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/buildings.glsl.vert");
+  GLuint buildingsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings.glsl.geom");
+  GLuint buildingsFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings.glsl.frag");
   this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
                                                             buildingsFragmentShader, engine.getLogger());
   buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
 
-  GLuint buildingNormalsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings_normals.gs");
-  GLuint buildingsNormalFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings_normals.fs");
+  GLuint buildingNormalsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings_normals.glsl.geom");
+  GLuint buildingsNormalFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings_normals.glsl.frag");
   this->buildingNormalsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingNormalsGeomShader,
                                                                   buildingsNormalFragmentShader, engine.getLogger());
   buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
