@@ -19,6 +19,7 @@
 #include "../settings.hpp"
 #include "../world/World.hpp"
 #include "Renderer.hpp"
+#include "Shader.hpp"
 #include "ShaderManager.hpp"
 #include "UI.hpp"
 #include "stb_image.h"

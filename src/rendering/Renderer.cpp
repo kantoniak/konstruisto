@@ -27,7 +27,7 @@ void Renderer::sendFrame() {
   glfwSwapBuffers(&engine.getWindowHandler().getWindow());
 }
 
-GLuint Renderer::compileShader(GLenum shaderType, std::string filename) {
-  return ShaderManager::compileShader(shaderType, filename, engine.getLogger());
+std::optional<Shader> Renderer::compileShader(Shader::ShaderType shader_type, std::string filename) const {
+  return ShaderManager::compileShader(shader_type, filename, engine.getLogger());
 }
 }

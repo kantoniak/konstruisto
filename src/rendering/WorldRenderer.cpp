@@ -29,37 +29,91 @@ bool WorldRenderer::init() {
 bool WorldRenderer::setupShaders() {
   // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
 
-  GLuint vertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/terrain.glsl.vert");
-  GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/terrain.glsl.frag");
-  this->shaderProgram = ShaderManager::linkProgram(vertexShader, 0, fragmentShader, engine.getLogger());
-  transformLoc = glGetUniformLocation(shaderProgram, "transform");
-  renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
-  selectionLoc = glGetUniformLocation(shaderProgram, "selection");
-  selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
-  groundTextureLoc = glGetUniformLocation(shaderProgram, "groundTexture");
-  roadTextureLoc = glGetUniformLocation(shaderProgram, "roadTexture");
+  {
+    std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/terrain.glsl.vert");
+    if (!vert_shader.has_value()) {
+      return false;
+    }
 
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
+    std::optional<Shader> frag_shader = compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/terrain.glsl.frag");
+    if (!frag_shader.has_value()) {
+      vert_shader.value().delete_shader();
+      return false;
+    }
 
-  GLuint buildingsVertexShader = compileShader(GL_VERTEX_SHADER, "assets/shaders/buildings.glsl.vert");
-  GLuint buildingsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings.glsl.geom");
-  GLuint buildingsFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings.glsl.frag");
-  this->buildingsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingsGeomShader,
-                                                            buildingsFragmentShader, engine.getLogger());
-  buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+    const std::array terrain_shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
+    this->shaderProgram = ShaderManager::linkProgram(terrain_shaders, engine.getLogger());
+    transformLoc = glGetUniformLocation(shaderProgram, "transform");
+    renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
+    selectionLoc = glGetUniformLocation(shaderProgram, "selection");
+    selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
+    groundTextureLoc = glGetUniformLocation(shaderProgram, "groundTexture");
+    roadTextureLoc = glGetUniformLocation(shaderProgram, "roadTexture");
 
-  GLuint buildingNormalsGeomShader = compileShader(GL_GEOMETRY_SHADER, "assets/shaders/buildings_normals.glsl.geom");
-  GLuint buildingsNormalFragmentShader = compileShader(GL_FRAGMENT_SHADER, "assets/shaders/buildings_normals.glsl.frag");
-  this->buildingNormalsShaderProgram = ShaderManager::linkProgram(buildingsVertexShader, buildingNormalsGeomShader,
-                                                                  buildingsNormalFragmentShader, engine.getLogger());
-  buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
+    for (auto shader : terrain_shaders) {
+      shader.delete_shader();
+    }
 
-  glDeleteShader(buildingsVertexShader);
-  glDeleteShader(buildingsGeomShader);
-  glDeleteShader(buildingsVertexShader);
-  glDeleteShader(buildingNormalsGeomShader);
-  glDeleteShader(buildingsNormalFragmentShader);
+    // TODO(kantoniak): Handle program linking fail
+  }
+
+  std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/buildings.glsl.vert");
+  if (!vert_shader.has_value()) {
+    return false;
+  }
+
+  {
+    std::optional<Shader> frag_shader = compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/buildings.glsl.frag");
+    if (!frag_shader.has_value()) {
+      vert_shader.value().delete_shader();
+      return false;
+    }
+
+    std::optional<Shader> geom_shader = compileShader(Shader::GEOMETRY_SHADER, "assets/shaders/buildings.glsl.geom");
+    if (!geom_shader.has_value()) {
+      vert_shader.value().delete_shader();
+      frag_shader.value().delete_shader();
+      return false;
+    }
+
+    const std::array building_shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
+                                         std::move(frag_shader.value())};
+    this->buildingsShaderProgram = ShaderManager::linkProgram(building_shaders, engine.getLogger());
+    buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+
+    geom_shader.value().delete_shader();
+    frag_shader.value().delete_shader();
+
+    // TODO(kantoniak): Handle program linking fail
+  }
+
+  {
+    std::optional<Shader> frag_shader =
+        compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/buildings_normals.glsl.frag");
+    if (!frag_shader.has_value()) {
+      vert_shader.value().delete_shader();
+      return false;
+    }
+
+    std::optional<Shader> geom_shader =
+        compileShader(Shader::GEOMETRY_SHADER, "assets/shaders/buildings_normals.glsl.geom");
+    if (!geom_shader.has_value()) {
+      vert_shader.value().delete_shader();
+      frag_shader.value().delete_shader();
+      return false;
+    }
+
+    const std::array building_normals_shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
+                                                 std::move(frag_shader.value())};
+    this->buildingNormalsShaderProgram = ShaderManager::linkProgram(building_normals_shaders, engine.getLogger());
+    buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
+
+    for (auto shader : building_normals_shaders) {
+      shader.delete_shader();
+    }
+
+    // TODO(kantoniak): Handle program linking fail
+  }
 
   return true;
 }

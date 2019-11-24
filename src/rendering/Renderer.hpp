@@ -2,6 +2,7 @@
 #define RENDERING_RENDERER_HPP
 
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -17,6 +18,7 @@
 #include "../input/WindowHandler.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
+#include "Shader.hpp"
 #include "ShaderManager.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
@@ -39,7 +41,7 @@ protected:
 
   glm::vec3 clearColor;
 
-  GLuint compileShader(GLenum shaderType, std::string filename);
+  [[nodiscard]] std::optional<Shader> compileShader(Shader::ShaderType shader_type, std::string filename) const;
 
   template <class T>
   void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) {

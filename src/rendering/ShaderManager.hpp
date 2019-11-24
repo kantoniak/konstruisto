@@ -3,23 +3,24 @@
 
 #include <array>
 #include <fstream>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include <GL/glew.h>
 
 #include "../engine/Logger.hpp"
+#include "Shader.hpp"
 
 namespace rendering {
 
 class ShaderManager {
 
 public:
-  static GLuint compileShader(GLenum shaderType, std::string filename, engine::Logger& log);
-  static GLuint linkProgram(GLuint vertexShader, GLuint geomShader, GLuint fragmentShader, engine::Logger& log);
+  static std::optional<Shader> compileShader(Shader::ShaderType shaderType, std::string filename, engine::Logger& log);
 
-protected:
-  static std::string shaderTypeToString(GLenum shaderType);
+  template <size_t n>
+  static GLuint linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log);
 };
 }
 
