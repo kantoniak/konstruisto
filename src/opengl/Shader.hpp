@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include <GL/glew.h>
+#include <glad/gl.h>
 
 #include "../engine/Logger.hpp"
 

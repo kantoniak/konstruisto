@@ -5,7 +5,6 @@ $currentDir = Resolve-Path .
 $extDir = Join-Path (Resolve-Path .) "ext\"
 $webClient = New-Object System.Net.WebClient
 
-$glewVersion = "2.1.0"
 $glfwVersion = "3.3"
 $glmVersion = "0.9.9.6"
 $cerealVersion = "1.3.0"
@@ -19,22 +18,7 @@ New-Item -ErrorAction Ignore -ItemType directory -Path $extDir | Out-Null
 
 # Step counter
 $step = 0
-$totalSteps = 9
-
-$step++
-# Set up GLEW
-$glewTargetPath = Join-Path $extDir "glew-$glewVersion.zip"
-if (!(Test-Path $glewTargetPath)) {
-    Write-Output "[$step/$totalSteps] Downloading GLEW..."
-    $glewUrl = "https://github.com/nigels-com/glew/releases/download/glew-" + $glewVersion + "/glew-" + $glewVersion + "-win32.zip"
-    $webClient.DownloadFile($glewUrl, $glewTargetPath)
-}
-
-$glewFinalDir = Join-Path $extDir "glew-$glewVersion"
-if (!(Test-Path $glewFinalDir)) {
-    Write-Output "[$step/$totalSteps] Unzipping GLEW..."
-    Expand-Archive $glewTargetPath -DestinationPath $extDir
-}
+$totalSteps = 8
 
 $step++
 # Set up GLFW

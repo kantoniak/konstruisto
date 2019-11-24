@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include <GL/glew.h>
+#include <glad/gl.h>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 

@@ -48,14 +48,39 @@ bool WindowHandler::createMainWindow() {
     viewportSize = glm::vec2(engine.getSettings().input.windowWidth, engine.getSettings().input.windowHeight);
     window = glfwCreateWindow(viewportSize.x, viewportSize.y, windowTitle.c_str(), nullptr, nullptr);
   }
-  glViewport(0, 0, viewportSize.x, viewportSize.y);
 
   if (!window) {
     engine.getLogger().severe("Window creation failed.");
     glfwTerminate();
     return false;
   }
+
   glfwSetWindowUserPointer(window, this);
+  glfwMakeContextCurrent(window);
+  glfwSwapInterval(1);
+  engine.getLogger().debug("Window created.");
+
+  // GLAD
+  if (!gladLoadGL(glfwGetProcAddress)) {
+    engine.getLogger().severe("GLAD init failed.");
+    glfwTerminate();
+    return false;
+  }
+
+  if (!GLAD_GL_VERSION_4_3) {
+    engine.getLogger().severe("OpenGL 4.3 not loaded.");
+    glfwTerminate();
+    return false;
+  }
+
+  engine.getLogger().debug("GLAD initiated.");
+  engine.getLogger().debug("OpenGL version: %s", glGetString(GL_VERSION));
+
+  if (GLAD_GL_EXT_texture_filter_anisotropic) {
+    engine.getLogger().debug("OpenGL: EXT_texture_filter_anisotropic support enabled.");
+  }
+
+  glViewport(0, 0, viewportSize.x, viewportSize.y);
 
 #ifndef _WIN32
   // Windows will use embedded icon, set manually for other systems
@@ -69,24 +94,6 @@ bool WindowHandler::createMainWindow() {
     stbi_image_free(windowIcon.pixels);
   }
 #endif
-
-  glfwMakeContextCurrent(window);
-  glfwSwapInterval(1);
-  engine.getLogger().debug("Window created.");
-
-  // GLEW
-  glewExperimental = GL_TRUE;
-  GLint glewInitResult = glewInit();
-  if (glewInitResult != GLEW_OK) {
-    engine.getLogger().severe("GLEW init failed with error #%d: %s", glewInitResult,
-                              glewGetErrorString(glewInitResult));
-    glfwTerminate();
-    return false;
-  }
-  glGetError();
-  engine.getLogger().debug("GLEW initiated.");
-
-  engine.getLogger().info("OpenGL version: %s", glGetString(GL_VERSION));
 
   // Callbacks
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);

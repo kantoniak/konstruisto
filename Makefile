@@ -18,6 +18,7 @@ SRCDIR := src
 OBJDIR := obj
 BINDIR := bin
 EXTDIR := ext
+GLADDIR := $(EXTDIR)/glad
 
 CC=clang
 CXX=clang++
@@ -34,8 +35,7 @@ ifeq ($(OS), Windows_NT)
 	INCLUDES += -I$(EXTDIR)/glfw-3.3/include
 	LDFLAGS  += -L$(EXTDIR)/glfw-3.3/lib
 
-	INCLUDES += -I$(EXTDIR)/glew-2.1.0/include
-	LDFLAGS  += -L$(EXTDIR)/glew-2.1.0/lib
+	INCLUDES += -I$(GLADDIR)/include
 
 	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
 
@@ -46,9 +46,11 @@ ifeq ($(OS), Windows_NT)
 
 	INCLUDES += -I$(EXTDIR)/stb/
 
-	LIBS := -lglfw3 -lglew32 -lopengl32 -lglu32 -lgdi32 -lnanovg
+	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32 -lnanovg
 else
 	SYSTEM := LINUX
+
+	INCLUDES += -I$(GLADDIR)/include
 
 	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
 
@@ -59,11 +61,11 @@ else
 
 	INCLUDES += -I$(EXTDIR)/stb/
 
-	LIBS := -lglfw -lGLEW -lGL -lGLU -lnanovg
+	LIBS := -lglfw -ldl -lGL -lGLU -lnanovg
 endif
 
 DEFINES +=-D_USE_MATH_DEFINES -DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
-CPPFLAGS =-std=c++17 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm  --system-header-prefix=nanovg -DGLEW_STATIC
+CPPFLAGS =-std=c++17 -Wall -Wextra -Werror -Wformat-nonliteral -Winit-self -Wno-nonportable-include-path --system-header-prefix=glm  --system-header-prefix=nanovg
 
 ifeq ($(CONFIG), DEBUG)
 	DEFINES +=-D_DEBUG
@@ -78,7 +80,7 @@ CPPFLAGS += $(INCLUDES)
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 HPP_FILES := $(call rwildcard,$(SRCDIR),*.hpp)
 CPP_FILES := $(call rwildcard,$(SRCDIR),*.cpp)
-OBJ_FILES := $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
+OBJ_FILES := $(OBJDIR)/gl.o $(addprefix $(OBJDIR)/,$(subst src/, , $(subst .cpp,.o,$(CPP_FILES))))
 RELEASE_ZIP_NAME := $(PROJECT_NAME) $(BUILD_DESC) $(SYSTEM)
 
 ifeq ($(OS), Windows_NT)
@@ -108,6 +110,11 @@ $(BINDIR)/$(PROJECT_NAME)$(EXTENSION): $(OBJ_FILES)
 	@mkdir -p $(BINDIR)
 	@echo "[LINK] $(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)"
 	@$(CXX) $(CPPFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(OBJDIR)/gl.o: $(GLADDIR)/src/gl.c
+	@mkdir -p $(@D)
+	@echo "[COMPILE] $< $@"
+	@$(CC) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp	
 	@mkdir -p $(@D)

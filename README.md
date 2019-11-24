@@ -50,7 +50,6 @@ You can use `scripts/setup-deps.ps1` to set up the dependencies.
 
 1. You will need `make`, `clang`, `clang++`, `clang-format` in `PATH`.
 1. You will need `windres` in `PATH` from `mingw-w64`
-1. Install GLEW in `ext/glew-2.1.0`
 1. Install GLFW in `ext/glew-3.3`
 1. Extract `glm` library to `ext/glm-0.9.9.6`
 1. Extract `cereal` library to `ext/cereal-1.3.0`
@@ -80,9 +79,9 @@ Contents of this repository is licensed under GNU General Public License, versio
 
 ### Used libraries
 
+* [GLAD](https://github.com/Dav1dde/glad)-generated OpenGL loading code, public domain
 * [GLFW 3.3](http://www.glfw.org/) under the zlib/libpng license
-* [GLEW 2.1.0](http://glew.sourceforge.net/) under the Modified BSD License, the Mesa 3-D License (MIT) and the Khronos License (MIT)
 * [GLM 0.9.9.6](http://glm.g-truc.net/0.9.9.6/index.html) under the MIT License
 * [Cereal 1.3.0](http://uscilab.github.io/cereal/) under BSD license
 * [NanoVG](https://github.com/memononen/nanovg) under the zlib/libpng license
-* [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h), a public license image loading library
+* [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h), a public domain image loading library

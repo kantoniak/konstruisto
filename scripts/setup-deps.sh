@@ -13,7 +13,7 @@ echo "Dependencies directory: $EXT"
 mkdir -p "$EXT"
 
 # 2. Install packages
-sudo apt-get install clang-9 clang-format-9 clang-tidy-9 clang-tools-9 libglew-dev libglfw3-dev mingw32-binutils
+sudo apt-get install clang-9 clang-format-9 clang-tidy-9 clang-tools-9 libglfw3-dev mingw32-binutils
 
 # 3. Download GLM
 wget https://github.com/g-truc/glm/releases/download/0.9.9.6/glm-0.9.9.6.zip --no-check-certificate -O glm-0.9.8.4.zip &&
