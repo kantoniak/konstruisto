@@ -21,14 +21,18 @@ public:
     FRAGMENT_SHADER = GL_FRAGMENT_SHADER
   };
 
-  Shader(uint32_t id, ShaderType type);
+  static Shader create(ShaderType type) noexcept;
 
   [[nodiscard]] uint32_t get_id() const;
   [[nodiscard]] ShaderType get_type() const;
 
+  bool compile(const std::string& source);
+  [[nodiscard]] const std::vector<char> get_info_log();
+
   void delete_shader();
 
 protected:
+  Shader(uint32_t id, ShaderType type);
   const uint32_t id;
   const ShaderType type;
 };

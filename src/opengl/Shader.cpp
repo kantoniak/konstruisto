@@ -2,6 +2,10 @@
 
 namespace opengl {
 
+Shader Shader::create(ShaderType type) noexcept {
+  return Shader(glCreateShader(type), type);
+}
+
 Shader::Shader(uint32_t id, Shader::ShaderType type) : id(id), type(type) {
 }
 
@@ -11,6 +15,25 @@ uint32_t Shader::get_id() const {
 
 Shader::ShaderType Shader::get_type() const {
   return type;
+}
+
+bool Shader::compile(const std::string& source_string) {
+  const char* source = source_string.c_str();
+  glShaderSource(this->id, 1, &source, nullptr);
+  glCompileShader(this->id);
+
+  int32_t success;
+  glGetShaderiv(this->id, GL_COMPILE_STATUS, &success);
+  return success;
+}
+
+const std::vector<char> Shader::get_info_log() {
+  int32_t message_length;
+  glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &message_length);
+
+  std::vector<char> message(message_length);
+  glGetShaderInfoLog(this->id, message_length, nullptr, message.data());
+  return message;
 }
 
 void Shader::delete_shader() {
