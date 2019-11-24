@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "../opengl/debug.hpp"
 #include "callbacks.hpp"
 
 namespace input {
@@ -35,6 +36,11 @@ bool WindowHandler::createMainWindow() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef _DEBUG
+  // Add OpenGL debugging
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
   std::string windowTitle(PROJECT_NAME);
 #ifdef _DEBUG
@@ -95,6 +101,27 @@ bool WindowHandler::createMainWindow() {
   }
 #endif
 
+#ifdef _DEBUG
+
+  // OpenGL debugging
+  int32_t opengl_context_flags;
+  glGetIntegerv(GL_CONTEXT_FLAGS, &opengl_context_flags);
+  if (opengl_context_flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(callbacks::onOpenGLDebugOutput, this);
+
+    // Enable high and medium severity messages only
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_HIGH, 0, nullptr, GL_TRUE);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_TRUE);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_LOW, 0, nullptr, GL_FALSE);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+  } else {
+    engine.getLogger().warn("OpenGL: GL_CONTEXT_FLAG_DEBUG_BIT disabled");
+  }
+
+#endif
+
   // Callbacks
   glfwSetWindowSizeCallback(window, callbacks::onWindowResize);
   glfwSetCursorPosCallback(window, callbacks::onMouseMove);
@@ -125,6 +152,17 @@ glm::vec2 WindowHandler::getMousePosition() {
 
 glm::vec2 WindowHandler::getMousePositionNormalized() {
   return (mousePosition / viewportSize * 2.f) - glm::vec2(1, 1);
+}
+
+void WindowHandler::onOpenGLDebugOutput(uint32_t source, uint32_t type, uint32_t id, uint32_t severity,
+                                        const char* message) {
+  using namespace opengl;
+  std::string to_print = "OpenGL: Debug message #" + std::to_string(id) + " (";
+  to_print += "source: " + gl_debug_source_to_string(source) + ", ";
+  to_print += "type: " + gl_debug_type_to_string(type) + ", ";
+  to_print += "severity: " + gl_debug_severity_to_string(severity) + "): ";
+  to_print += message;
+  engine.getLogger().debug(to_print);
 }
 
 void WindowHandler::onKey(int key, int scancode, int action, int mods) {

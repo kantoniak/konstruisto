@@ -176,6 +176,9 @@
     <ClInclude Include="src\io\serializers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\opengl\debug.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\opengl\Shader.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>

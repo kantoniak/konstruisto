@@ -5,6 +5,13 @@
 
 namespace callbacks {
 
+// OpenGL debugging
+void APIENTRY onOpenGLDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity,
+                                  [[maybe_unused]] GLsizei length, const GLchar* message, const void* user_param) {
+  auto* window_handler = (input::WindowHandler*)user_param;
+  window_handler->onOpenGLDebugOutput(source, type, id, severity, message);
+}
+
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
   auto* windowHandler = (input::WindowHandler*)glfwGetWindowUserPointer(window);
   windowHandler->onKey(key, scancode, action, mods);

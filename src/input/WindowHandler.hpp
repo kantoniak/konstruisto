@@ -1,8 +1,12 @@
 #ifndef INPUT_WINDOWHANDLER_HPP
 #define INPUT_WINDOWHANDLER_HPP
 
+// Enforce correct load order
+// clang-format off
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+// clang-format on
+
 #include <glm/glm.hpp>
 #include <stb/stb_image.h>
 
@@ -26,6 +30,9 @@ public:
 
   glm::vec2 getMousePosition();
   glm::vec2 getMousePositionNormalized();
+
+  // OpenGL callback
+  void onOpenGLDebugOutput(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, const char* message);
 
   // Event callbacks
   void onKey(int key, int scancode, int action, int mods);
