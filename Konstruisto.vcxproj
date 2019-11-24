@@ -188,10 +188,10 @@
     <ClCompile Include="src\input\WindowHandler.cpp" />
     <ClCompile Include="src\io\SaveFileHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\opengl\Shader.cpp" />
+    <ClCompile Include="src\opengl\ShaderProgram.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
-    <ClCompile Include="src\rendering\Shader.cpp" />
     <ClCompile Include="src\rendering\ShaderManager.cpp" />
-    <ClCompile Include="src\rendering\ShaderProgram.cpp" />
     <ClCompile Include="src\rendering\UI.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
@@ -225,11 +225,11 @@
     <ClInclude Include="src\input\WindowHandler.hpp" />
     <ClInclude Include="src\io\SaveFileHandler.hpp" />
     <ClInclude Include="src\io\serializers.hpp" />
+    <ClInclude Include="src\opengl\Shader.hpp" />
+    <ClInclude Include="src\opengl\ShaderProgram.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
     <ClInclude Include="src\rendering\settings.hpp" />
-    <ClCompile Include="src\rendering\Shader.hpp" />
-    <ClCompile Include="src\rendering\ShaderManager.hpp" />
-    <ClCompile Include="src\rendering\ShaderProgram.hpp" />
+    <ClInclude Include="src\rendering\ShaderManager.hpp" />
     <ClInclude Include="src\rendering\UI.hpp" />
     <ClInclude Include="src\rendering\WorldRenderer.hpp" />
     <ClInclude Include="src\settings.hpp" />

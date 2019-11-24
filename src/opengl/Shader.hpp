@@ -1,17 +1,13 @@
-#ifndef RENDERING_SHADER_HPP
-#define RENDERING_SHADER_HPP
+#ifndef OPENGL_SHADER_HPP
+#define OPENGL_SHADER_HPP
 
-#include <array>
 #include <cstdint>
-#include <fstream>
-#include <string>
-#include <vector>
 
 #include <GL/glew.h>
 
 #include "../engine/Logger.hpp"
 
-namespace rendering {
+namespace opengl {
 
 class Shader {
 

@@ -1,10 +1,7 @@
-#ifndef RENDERING_SHADERPROGRAM_HPP
-#define RENDERING_SHADERPROGRAM_HPP
+#ifndef OPENGL_SHADERPROGRAM_HPP
+#define OPENGL_SHADERPROGRAM_HPP
 
-#include <array>
 #include <cstdint>
-#include <fstream>
-#include <string>
 #include <vector>
 
 #include <GL/glew.h>
@@ -12,7 +9,7 @@
 #include "../engine/Logger.hpp"
 #include "Shader.hpp"
 
-namespace rendering {
+namespace opengl {
 
 class ShaderProgram {
 

@@ -1,6 +1,6 @@
 #include "ShaderProgram.hpp"
 
-namespace rendering {
+namespace opengl {
 
 ShaderProgram::ShaderProgram() noexcept : ShaderProgram(0) {
 }

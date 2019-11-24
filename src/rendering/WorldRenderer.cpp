@@ -27,6 +27,7 @@ bool WorldRenderer::init() {
 }
 
 bool WorldRenderer::setupShaders() {
+  using namespace opengl;
 
   // Terrain shader program
   {

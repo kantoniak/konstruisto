@@ -1,6 +1,6 @@
 #include "Shader.hpp"
 
-namespace rendering {
+namespace opengl {
 
 Shader::Shader(uint32_t id, Shader::ShaderType type) : id(id), type(type) {
 }

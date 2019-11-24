@@ -16,12 +16,12 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../opengl/Shader.hpp"
+#include "../opengl/ShaderProgram.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
 #include "Renderer.hpp"
-#include "Shader.hpp"
 #include "ShaderManager.hpp"
-#include "ShaderProgram.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
 
@@ -71,7 +71,7 @@ protected:
   void paintRoadsOnTiles(const data::RoadGraph<data::Chunk::SIDE_LENGTH>& roads, std::vector<GLfloat>& tiles);
 
   // Terrain
-  ShaderProgram terrain_shader_prog;
+  opengl::ShaderProgram terrain_shader_prog;
   GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
       roadTextureLoc;
   GLuint VBO, VAO, terrainPositionVBO;
@@ -81,7 +81,7 @@ protected:
   // Buildings
   GLuint buildingsVAO, buildingsVBO;
   GLuint buildingsInstanceVBO;
-  ShaderProgram building_shader_prog;
+  opengl::ShaderProgram building_shader_prog;
   GLuint buildingsTransformLoc;
   const unsigned int buildingsCount = 100;
   const unsigned int sideSize = 20;
@@ -89,7 +89,7 @@ protected:
 
   // Buildings - normals
   GLuint buildingNormalsTransformLoc;
-  ShaderProgram building_normals_shader_prog;
+  opengl::ShaderProgram building_normals_shader_prog;
 
   // Left menu
   int leftMenuActiveIcon = -1;

@@ -16,14 +16,16 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../opengl/Shader.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
-#include "Shader.hpp"
 #include "ShaderManager.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
 
 namespace rendering {
+
+using namespace opengl;
 
 class Renderer {
 

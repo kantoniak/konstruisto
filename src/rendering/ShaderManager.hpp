@@ -10,10 +10,12 @@
 #include <GL/glew.h>
 
 #include "../engine/Logger.hpp"
-#include "Shader.hpp"
-#include "ShaderProgram.hpp"
+#include "../opengl/Shader.hpp"
+#include "../opengl/ShaderProgram.hpp"
 
 namespace rendering {
+
+using namespace opengl;
 
 class ShaderManager {
 
