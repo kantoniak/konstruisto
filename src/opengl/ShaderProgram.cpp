@@ -32,6 +32,10 @@ const std::vector<char> ShaderProgram::get_info_log() {
   return message;
 }
 
+[[nodiscard]] int32_t ShaderProgram::get_uniform_loc(const char* name) {
+  return glGetUniformLocation(this->id, name);
+}
+
 void ShaderProgram::use() {
   glUseProgram(this->id);
 }

@@ -72,7 +72,7 @@ protected:
 
   // Terrain
   opengl::ShaderProgram terrain_shader_prog;
-  GLuint transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
+  int32_t transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
       roadTextureLoc;
   GLuint VBO, VAO, terrainPositionVBO;
   GLuint gridTexture, roadTexture;
@@ -82,13 +82,13 @@ protected:
   GLuint buildingsVAO, buildingsVBO;
   GLuint buildingsInstanceVBO;
   opengl::ShaderProgram building_shader_prog;
-  GLuint buildingsTransformLoc;
+  int32_t buildingsTransformLoc;
   const unsigned int buildingsCount = 100;
   const unsigned int sideSize = 20;
   const unsigned int maxHeight = 6;
 
   // Buildings - normals
-  GLuint buildingNormalsTransformLoc;
+  int32_t buildingNormalsTransformLoc;
   opengl::ShaderProgram building_normals_shader_prog;
 
   // Left menu

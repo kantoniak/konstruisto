@@ -23,6 +23,8 @@ public:
   bool link();
   [[nodiscard]] const std::vector<char> get_info_log();
 
+  [[nodiscard]] int32_t get_uniform_loc(const char* name);
+
   void use();
   void delete_program();
 

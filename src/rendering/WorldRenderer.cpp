@@ -52,12 +52,12 @@ bool WorldRenderer::setupShaders() {
     }
     this->terrain_shader_prog = shader_program.value();
 
-    transformLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "transform");
-    renderGridLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "renderGrid");
-    selectionLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "selection");
-    selectionColorLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "selectionColor");
-    groundTextureLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "groundTexture");
-    roadTextureLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "roadTexture");
+    transformLoc = terrain_shader_prog.get_uniform_loc("transform");
+    renderGridLoc = terrain_shader_prog.get_uniform_loc("renderGrid");
+    selectionLoc = terrain_shader_prog.get_uniform_loc("selection");
+    selectionColorLoc = terrain_shader_prog.get_uniform_loc("selectionColor");
+    groundTextureLoc = terrain_shader_prog.get_uniform_loc("groundTexture");
+    roadTextureLoc = terrain_shader_prog.get_uniform_loc("roadTexture");
 
     for (auto shader : shaders) {
       shader.delete_shader();
@@ -99,7 +99,7 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_shader_prog = shader_program.value();
-    buildingsTransformLoc = glGetUniformLocation(building_shader_prog.get_id(), "transform");
+    buildingsTransformLoc = building_shader_prog.get_uniform_loc("transform");
 
     geom_shader.value().delete_shader();
     frag_shader.value().delete_shader();
@@ -135,7 +135,7 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_normals_shader_prog = shader_program.value();
-    buildingNormalsTransformLoc = glGetUniformLocation(building_normals_shader_prog.get_id(), "transform");
+    buildingNormalsTransformLoc = building_normals_shader_prog.get_uniform_loc("transform");
 
     for (auto shader : shaders) {
       shader.delete_shader();
