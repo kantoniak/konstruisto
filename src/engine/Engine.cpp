@@ -127,12 +127,13 @@ rendering::UI& Engine::getUI() const {
 }
 
 void Engine::update(std::chrono::milliseconds delta) {
-  if (!states.empty() && !states.back()->isSuspended())
+  if (isRunning && !states.empty() && !states.back()->isSuspended()) {
     states.back()->update(delta);
+  }
 }
 
 void Engine::render() {
-  if (!states.empty())
+  if (isRunning && !states.empty())
     states.back()->render();
 }
 }
