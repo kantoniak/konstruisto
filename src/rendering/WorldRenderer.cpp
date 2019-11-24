@@ -27,8 +27,8 @@ bool WorldRenderer::init() {
 }
 
 bool WorldRenderer::setupShaders() {
-  // TODO(kantoniak): Handle loader/compiler/linker failure when initializing shaders
 
+  // Terrain shader program
   {
     std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/terrain.glsl.vert");
     if (!vert_shader.has_value()) {
@@ -41,56 +41,75 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
 
-    const std::array terrain_shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
-    this->shaderProgram = ShaderManager::linkProgram(terrain_shaders, engine.getLogger());
-    transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    renderGridLoc = glGetUniformLocation(shaderProgram, "renderGrid");
-    selectionLoc = glGetUniformLocation(shaderProgram, "selection");
-    selectionColorLoc = glGetUniformLocation(shaderProgram, "selectionColor");
-    groundTextureLoc = glGetUniformLocation(shaderProgram, "groundTexture");
-    roadTextureLoc = glGetUniformLocation(shaderProgram, "roadTexture");
+    const std::array shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
+    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    if (!shader_program.has_value()) {
+      for (auto shader : shaders) {
+        shader.delete_shader();
+      }
+      return false;
+    }
+    this->terrain_shader_prog = shader_program.value();
 
-    for (auto shader : terrain_shaders) {
+    transformLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "transform");
+    renderGridLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "renderGrid");
+    selectionLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "selection");
+    selectionColorLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "selectionColor");
+    groundTextureLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "groundTexture");
+    roadTextureLoc = glGetUniformLocation(terrain_shader_prog.get_id(), "roadTexture");
+
+    for (auto shader : shaders) {
       shader.delete_shader();
     }
-
-    // TODO(kantoniak): Handle program linking fail
   }
 
+  // Buildings/normals vertex shader
   std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/buildings.glsl.vert");
   if (!vert_shader.has_value()) {
+    this->cleanup_shaders();
     return false;
   }
 
+  // Buildings shader program
   {
     std::optional<Shader> frag_shader = compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/buildings.glsl.frag");
     if (!frag_shader.has_value()) {
+      this->cleanup_shaders();
       vert_shader.value().delete_shader();
       return false;
     }
 
     std::optional<Shader> geom_shader = compileShader(Shader::GEOMETRY_SHADER, "assets/shaders/buildings.glsl.geom");
     if (!geom_shader.has_value()) {
+      this->cleanup_shaders();
       vert_shader.value().delete_shader();
       frag_shader.value().delete_shader();
       return false;
     }
 
-    const std::array building_shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
-                                         std::move(frag_shader.value())};
-    this->buildingsShaderProgram = ShaderManager::linkProgram(building_shaders, engine.getLogger());
-    buildingsTransformLoc = glGetUniformLocation(buildingsShaderProgram, "transform");
+    const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
+                                std::move(frag_shader.value())};
+    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    if (!shader_program.has_value()) {
+      this->cleanup_shaders();
+      for (auto shader : shaders) {
+        shader.delete_shader();
+      }
+      return false;
+    }
+    this->building_shader_prog = shader_program.value();
+    buildingsTransformLoc = glGetUniformLocation(building_shader_prog.get_id(), "transform");
 
     geom_shader.value().delete_shader();
     frag_shader.value().delete_shader();
-
-    // TODO(kantoniak): Handle program linking fail
   }
 
+  // Building normals shader program
   {
     std::optional<Shader> frag_shader =
         compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/buildings_normals.glsl.frag");
     if (!frag_shader.has_value()) {
+      this->cleanup_shaders();
       vert_shader.value().delete_shader();
       return false;
     }
@@ -98,21 +117,28 @@ bool WorldRenderer::setupShaders() {
     std::optional<Shader> geom_shader =
         compileShader(Shader::GEOMETRY_SHADER, "assets/shaders/buildings_normals.glsl.geom");
     if (!geom_shader.has_value()) {
+      this->cleanup_shaders();
       vert_shader.value().delete_shader();
       frag_shader.value().delete_shader();
       return false;
     }
 
-    const std::array building_normals_shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
-                                                 std::move(frag_shader.value())};
-    this->buildingNormalsShaderProgram = ShaderManager::linkProgram(building_normals_shaders, engine.getLogger());
-    buildingNormalsTransformLoc = glGetUniformLocation(buildingNormalsShaderProgram, "transform");
+    const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
+                                std::move(frag_shader.value())};
+    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    if (!shader_program.has_value()) {
+      this->cleanup_shaders();
+      for (auto shader : shaders) {
+        shader.delete_shader();
+      }
+      return false;
+    }
+    this->building_normals_shader_prog = shader_program.value();
+    buildingNormalsTransformLoc = glGetUniformLocation(building_normals_shader_prog.get_id(), "transform");
 
-    for (auto shader : building_normals_shaders) {
+    for (auto shader : shaders) {
       shader.delete_shader();
     }
-
-    // TODO(kantoniak): Handle program linking fail
   }
 
   return true;
@@ -203,7 +229,6 @@ void WorldRenderer::cleanup() {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &terrainPositionVBO);
-  glDeleteProgram(this->shaderProgram);
 
   for (auto& chunk : chunks) {
     glDeleteBuffers(1, &(chunk.second));
@@ -212,11 +237,15 @@ void WorldRenderer::cleanup() {
   glDeleteVertexArrays(1, &buildingsVAO);
   glDeleteBuffers(1, &buildingsVBO);
   glDeleteBuffers(1, &buildingsInstanceVBO);
-  glDeleteProgram(this->buildingsShaderProgram);
 
-  glDeleteProgram(this->buildingNormalsShaderProgram);
-
+  this->cleanup_shaders();
   Renderer::cleanup();
+}
+
+void WorldRenderer::cleanup_shaders() {
+  this->terrain_shader_prog.delete_program();
+  this->building_shader_prog.delete_program();
+  this->building_normals_shader_prog.delete_program();
 }
 
 void WorldRenderer::markBuildingDataForUpdate() {
@@ -241,7 +270,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     resendTileData = false;
   }
 
-  glUseProgram(shaderProgram);
+  terrain_shader_prog.use();
   glBindVertexArray(VAO);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, gridTexture);
@@ -276,7 +305,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   }
 
   if (world.getMap().getBuildingCount() > 0) {
-    glUseProgram(buildingsShaderProgram);
+    building_shader_prog.use();
     glBindVertexArray(buildingsVAO);
 
     glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
@@ -291,7 +320,7 @@ void WorldRenderer::renderDebug() {
   if (engine.getSettings().rendering.renderNormals) {
     const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
-    glUseProgram(buildingNormalsShaderProgram);
+    building_normals_shader_prog.use();
     glBindVertexArray(buildingsVAO);
 
     glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));

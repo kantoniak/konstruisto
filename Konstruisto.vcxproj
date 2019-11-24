@@ -174,7 +174,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\rendering\Shader.cpp" />
     <ClCompile Include="src\data\Chunk.cpp" />
     <ClCompile Include="src\data\Direction.cpp" />
     <ClCompile Include="src\data\Layer.cpp" />
@@ -190,7 +189,9 @@
     <ClCompile Include="src\io\SaveFileHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
+    <ClCompile Include="src\rendering\Shader.cpp" />
     <ClCompile Include="src\rendering\ShaderManager.cpp" />
+    <ClCompile Include="src\rendering\ShaderProgram.cpp" />
     <ClCompile Include="src\rendering\UI.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
@@ -203,7 +204,6 @@
     <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\rendering\Shader.hpp" />
     <ClInclude Include="src\data\buildings.hpp" />
     <ClInclude Include="src\data\CameraState.hpp" />
     <ClInclude Include="src\data\Chunk.hpp" />
@@ -227,7 +227,9 @@
     <ClInclude Include="src\io\serializers.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
     <ClInclude Include="src\rendering\settings.hpp" />
-    <ClInclude Include="src\rendering\ShaderManager.hpp" />
+    <ClCompile Include="src\rendering\Shader.hpp" />
+    <ClCompile Include="src\rendering\ShaderManager.hpp" />
+    <ClCompile Include="src\rendering\ShaderProgram.hpp" />
     <ClInclude Include="src\rendering\UI.hpp" />
     <ClInclude Include="src\rendering\WorldRenderer.hpp" />
     <ClInclude Include="src\settings.hpp" />

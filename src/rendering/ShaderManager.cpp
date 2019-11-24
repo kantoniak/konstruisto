@@ -33,33 +33,37 @@ std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_typ
 }
 
 template <size_t n>
-GLuint ShaderManager::linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log) {
-  const GLuint shader_program = glCreateProgram();
+std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log) {
+  ShaderProgram program(glCreateProgram());
+
+  if (program.get_id() == 0) {
+    log.error("Shader program creating failed.");
+    return std::nullopt;
+  }
 
   for (auto shader : shaders) {
-    glAttachShader(shader_program, shader.get_id());
+    program.attach(shader);
   }
 
-  // TODO(kantoniak): Add support for glDebugMessageCallback.
-  glLinkProgram(shader_program);
-
-  GLint success;
-  glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-  if (!success) {
-    std::array<GLchar, 512> error_message;
-    glGetProgramInfoLog(shader_program, error_message.max_size(), nullptr, error_message.data());
-    log.error("Shader linking failed: %s", error_message);
-    glDeleteProgram(shader_program);
-    return 0;
+  if (!program.link()) {
+    log.error("Shader program linking failed: %s", program.get_info_log().data());
+    program.delete_program();
+    return std::nullopt;
   }
 
-  return shader_program;
+  log.debug("Compiled shader program.");
+  return program;
 }
 
 // As of OpenGL 4.6 there can be up to 5 shaders in use.
-template GLuint ShaderManager::linkProgram(const std::array<Shader, 1>& shaders, engine::Logger& log);
-template GLuint ShaderManager::linkProgram(const std::array<Shader, 2>& shaders, engine::Logger& log);
-template GLuint ShaderManager::linkProgram(const std::array<Shader, 3>& shaders, engine::Logger& log);
-template GLuint ShaderManager::linkProgram(const std::array<Shader, 4>& shaders, engine::Logger& log);
-template GLuint ShaderManager::linkProgram(const std::array<Shader, 5>& shaders, engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 1>& shaders,
+                                                                 engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 2>& shaders,
+                                                                 engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 3>& shaders,
+                                                                 engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 4>& shaders,
+                                                                 engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 5>& shaders,
+                                                                 engine::Logger& log);
 }
