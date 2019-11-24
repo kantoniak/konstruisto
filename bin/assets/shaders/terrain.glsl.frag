@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 uniform sampler2D groundTexture;
 uniform sampler2DArray roadTexture;
