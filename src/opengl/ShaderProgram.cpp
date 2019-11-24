@@ -2,6 +2,10 @@
 
 namespace opengl {
 
+ShaderProgram ShaderProgram::create() noexcept {
+  return ShaderProgram(glCreateProgram());
+}
+
 ShaderProgram::ShaderProgram() noexcept : ShaderProgram(0) {
 }
 

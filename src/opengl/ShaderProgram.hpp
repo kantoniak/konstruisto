@@ -14,8 +14,8 @@ namespace opengl {
 class ShaderProgram {
 
 public:
+  static ShaderProgram create() noexcept;
   ShaderProgram() noexcept;
-  ShaderProgram(uint32_t id) noexcept;
 
   [[nodiscard]] uint32_t get_id() const noexcept;
 
@@ -29,6 +29,8 @@ public:
   void delete_program();
 
 protected:
+  ShaderProgram(uint32_t id) noexcept;
+
   uint32_t id;
 };
 
