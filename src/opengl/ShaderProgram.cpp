@@ -40,6 +40,15 @@ const std::vector<char> ShaderProgram::get_info_log() {
   return glGetUniformLocation(this->id, name);
 }
 
+[[nodiscard]] uint32_t ShaderProgram::get_uniform_block_index(const char* name) {
+  return glGetUniformBlockIndex(this->id, name);
+}
+
+void ShaderProgram::bind_uniform_block(const char* name, uint32_t binding_point) {
+  uint32_t uniform_block_index = get_uniform_block_index(name);
+  glUniformBlockBinding(this->id, uniform_block_index, binding_point);
+}
+
 void ShaderProgram::use() {
   glUseProgram(this->id);
 }

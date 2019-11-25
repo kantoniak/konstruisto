@@ -24,7 +24,9 @@ public:
   [[nodiscard]] const std::vector<char> get_info_log();
 
   [[nodiscard]] int32_t get_uniform_loc(const char* name);
+  [[nodiscard]] uint32_t get_uniform_block_index(const char* name);
 
+  void bind_uniform_block(const char* name, uint32_t binding_point);
   void use();
   void delete_program();
 
