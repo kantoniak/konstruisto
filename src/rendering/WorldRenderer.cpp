@@ -201,14 +201,14 @@ bool WorldRenderer::setupBuildings() {
   glGenVertexArrays(1, &buildingsVAO);
   glBindVertexArray(buildingsVAO);
 
-  glGenBuffers(1, &buildingsVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, buildingsVBO);
+  building_mesh_vbo.generate();
+  building_mesh_vbo.bind();
   glBufferData(GL_ARRAY_BUFFER, sizeof(building), building.data(), GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
 
-  glGenBuffers(1, &buildingsInstanceVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
+  building_positions_vbo.generate();
+  building_positions_vbo.bind();
 
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)nullptr);
@@ -230,16 +230,14 @@ void WorldRenderer::cleanup() {
   glUseProgram(0);
 
   glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &terrainPositionVBO);
 
   for (auto& chunk : chunks) {
-    glDeleteBuffers(1, &(chunk.second));
+    chunk.second.delete_buffer();
   }
 
   glDeleteVertexArrays(1, &buildingsVAO);
-  glDeleteBuffers(1, &buildingsVBO);
-  glDeleteBuffers(1, &buildingsInstanceVBO);
+  building_mesh_vbo.delete_buffer();
+  building_positions_vbo.delete_buffer();
 
   this->cleanup_shaders();
   Renderer::cleanup();
@@ -292,7 +290,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   for (data::Chunk* chunk : world.getMap().getChunks()) {
-    glBindBuffer(GL_ARRAY_BUFFER, chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)]);
+    glBindBuffer(GL_ARRAY_BUFFER, chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)].get_id());
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)nullptr);
     glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 
@@ -506,7 +504,7 @@ void WorldRenderer::sendBuildingData() {
     }
   }
   glBindVertexArray(buildingsVAO);
-  glBindBuffer(GL_ARRAY_BUFFER, buildingsInstanceVBO);
+  building_positions_vbo.bind();
   glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -526,7 +524,6 @@ void WorldRenderer::sendTileData() {
   std::vector<GLfloat> tiles;
   tiles.resize(verticesCount);
 
-  GLuint chunkVBO = 0;
   std::vector<GLfloat> toBuffer;
   toBuffer.resize(verticesCount * (3 + 1));
 
@@ -558,12 +555,11 @@ void WorldRenderer::sendTileData() {
     // Send buffer
     auto key = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
     if (chunks.find(key) == chunks.end()) {
-      glGenBuffers(1, &chunkVBO);
-      chunks[key] = chunkVBO;
-    } else {
-      chunkVBO = chunks[key];
+      opengl::ArrayBuffer vbo;
+      vbo.generate();
+      chunks.emplace(key, vbo);
     }
-    glBindBuffer(GL_ARRAY_BUFFER, chunkVBO);
+    chunks[key].bind();
     glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
   }
 

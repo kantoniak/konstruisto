@@ -189,6 +189,8 @@
     <ClCompile Include="src\input\WindowHandler.cpp" />
     <ClCompile Include="src\io\SaveFileHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\opengl\ArrayBuffer.cpp" />
+    <ClCompile Include="src\opengl\Buffer.cpp" />
     <ClCompile Include="src\opengl\Shader.cpp" />
     <ClCompile Include="src\opengl\ShaderProgram.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
@@ -228,6 +230,8 @@
     <ClInclude Include="src\input\WindowHandler.hpp" />
     <ClInclude Include="src\io\SaveFileHandler.hpp" />
     <ClInclude Include="src\io\serializers.hpp" />
+    <ClInclude Include="src\opengl\ArrayBuffer.hpp" />
+    <ClInclude Include="src\opengl\Buffer.hpp" />
     <ClInclude Include="src\opengl\debug.hpp" />
     <ClInclude Include="src\opengl\Shader.hpp" />
     <ClInclude Include="src\opengl\ShaderProgram.hpp" />

@@ -16,6 +16,7 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../opengl/ArrayBuffer.hpp"
 #include "../opengl/Shader.hpp"
 #include "../opengl/ShaderProgram.hpp"
 #include "../settings.hpp"
@@ -74,13 +75,14 @@ protected:
   opengl::ShaderProgram terrain_shader_prog;
   int32_t transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
       roadTextureLoc;
-  GLuint VBO, VAO, terrainPositionVBO;
+  GLuint VAO;
   GLuint gridTexture, roadTexture;
-  std::map<std::pair<int, int>, GLuint> chunks; // chunk -> VBO (roadTile)
+  std::map<std::pair<int, int>, opengl::ArrayBuffer> chunks; // chunk -> VBO (roadTile)
 
   // Buildings
-  GLuint buildingsVAO, buildingsVBO;
-  GLuint buildingsInstanceVBO;
+  opengl::ArrayBuffer building_mesh_vbo;
+  GLuint buildingsVAO;
+  opengl::ArrayBuffer building_positions_vbo;
   opengl::ShaderProgram building_shader_prog;
   int32_t buildingsTransformLoc;
   const unsigned int buildingsCount = 100;
