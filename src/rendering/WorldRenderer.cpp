@@ -52,12 +52,12 @@ bool WorldRenderer::setupShaders() {
     }
     this->terrain_shader_prog = shader_program.value();
 
-    transformLoc = terrain_shader_prog.get_uniform_loc("transform");
-    renderGridLoc = terrain_shader_prog.get_uniform_loc("renderGrid");
-    selectionLoc = terrain_shader_prog.get_uniform_loc("selection");
-    selectionColorLoc = terrain_shader_prog.get_uniform_loc("selectionColor");
-    groundTextureLoc = terrain_shader_prog.get_uniform_loc("groundTexture");
-    roadTextureLoc = terrain_shader_prog.get_uniform_loc("roadTexture");
+    transform_loc = terrain_shader_prog.get_uniform_loc("transform");
+    render_grid_loc = terrain_shader_prog.get_uniform_loc("renderGrid");
+    selection_loc = terrain_shader_prog.get_uniform_loc("selection");
+    selection_color_loc = terrain_shader_prog.get_uniform_loc("selectionColor");
+    ground_texture_loc = terrain_shader_prog.get_uniform_loc("groundTexture");
+    road_texture_loc = terrain_shader_prog.get_uniform_loc("roadTexture");
 
     for (auto shader : shaders) {
       shader.delete_shader();
@@ -99,7 +99,7 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_shader_prog = shader_program.value();
-    buildingsTransformLoc = building_shader_prog.get_uniform_loc("transform");
+    buildings_transform_loc = building_shader_prog.get_uniform_loc("transform");
 
     geom_shader.value().delete_shader();
     frag_shader.value().delete_shader();
@@ -135,7 +135,7 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_normals_shader_prog = shader_program.value();
-    buildingNormalsTransformLoc = building_normals_shader_prog.get_uniform_loc("transform");
+    building_normals_transform_loc = building_normals_shader_prog.get_uniform_loc("transform");
 
     for (auto shader : shaders) {
       shader.delete_shader();
@@ -151,8 +151,8 @@ bool WorldRenderer::setupTextures() {
     unsigned char* pixels = stbi_load("assets/textures/grid.png", &width, &height, nullptr, STBI_rgb_alpha);
 
     // Texture of the ground
-    glGenTextures(1, &gridTexture);
-    glBindTexture(GL_TEXTURE_2D, gridTexture);
+    glGenTextures(1, &grid_texture);
+    glBindTexture(GL_TEXTURE_2D, grid_texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -171,8 +171,8 @@ bool WorldRenderer::setupTextures() {
 
     // Texture of the ground
     // TODO(kantoniak): Better system for atlas sizing
-    glGenTextures(1, &roadTexture);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
+    glGenTextures(1, &road_texture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, road_texture);
     glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 320, 320, 1);
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 320, 320, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -218,11 +218,10 @@ bool WorldRenderer::setupBuildings() {
   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
   glVertexAttribDivisor(2, 1);
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  buildings_vao.unbind();
+  ArrayBuffer::unbind();
+  VertexArray::unbind();
 
   markBuildingDataForUpdate();
-
   return true;
 }
 
@@ -230,7 +229,7 @@ void WorldRenderer::cleanup() {
   glUseProgram(0);
   terrain_vao.delete_vertex_array();
 
-  for (auto& chunk : chunks) {
+  for (auto& chunk : chunk_to_vbo) {
     chunk.second.delete_buffer();
   }
 
@@ -273,23 +272,24 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   terrain_shader_prog.use();
   terrain_vao.bind();
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, gridTexture);
+  glBindTexture(GL_TEXTURE_2D, grid_texture);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D_ARRAY, roadTexture);
-  glUniform1i(groundTextureLoc, 0);
-  glUniform1i(roadTextureLoc, 1);
+  glBindTexture(GL_TEXTURE_2D_ARRAY, road_texture);
+  glUniform1i(ground_texture_loc, 0);
+  glUniform1i(road_texture_loc, 1);
 
-  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(vp));
-  glUniform1i(renderGridLoc, engine.getSettings().world.showGrid);
-  glUniform4i(selectionLoc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
+  glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
+  glUniform1i(render_grid_loc, engine.getSettings().world.showGrid);
+  glUniform4i(selection_loc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
               selection.getTo().y + 1);
-  glUniform4f(selectionColorLoc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
+  glUniform4f(selection_color_loc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
               engine.getSettings().rendering.renderSelection ? selection.getColor().w : 0);
 
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   for (data::Chunk* chunk : world.getMap().getChunks()) {
-    glBindBuffer(GL_ARRAY_BUFFER, chunks[std::make_pair(chunk->getPosition().x, chunk->getPosition().y)].get_id());
+    const auto chunk_pos = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
+    chunk_to_vbo[chunk_pos].bind();
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)nullptr);
     glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 
@@ -308,11 +308,11 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     building_shader_prog.use();
     buildings_vao.bind();
 
-    glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+    glUniformMatrix4fv(buildings_transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
   }
 
-  glBindVertexArray(0);
+  VertexArray::unbind();
   glFlush();
 }
 
@@ -323,10 +323,10 @@ void WorldRenderer::renderDebug() {
     building_normals_shader_prog.use();
     buildings_vao.bind();
 
-    glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
+    glUniformMatrix4fv(buildings_transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
 
-    glBindVertexArray(0);
+    VertexArray::unbind();
     glFlush();
   }
 }
@@ -506,8 +506,8 @@ void WorldRenderer::sendBuildingData() {
   buildings_vao.bind();
   building_positions_vbo.bind();
   glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  ArrayBuffer::unbind();
+  VertexArray::unbind();
 }
 
 void WorldRenderer::sendTileData() {
@@ -554,17 +554,17 @@ void WorldRenderer::sendTileData() {
 
     // Send buffer
     auto key = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
-    if (chunks.find(key) == chunks.end()) {
+    if (chunk_to_vbo.find(key) == chunk_to_vbo.end()) {
       opengl::ArrayBuffer vbo;
       vbo.generate();
-      chunks.emplace(key, vbo);
+      chunk_to_vbo.emplace(key, vbo);
     }
-    chunks[key].bind();
+    chunk_to_vbo[key].bind();
     glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
   }
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  ArrayBuffer::unbind();
+  VertexArray::unbind();
 }
 
 unsigned int WorldRenderer::getTile(int x, int y) const {

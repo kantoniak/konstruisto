@@ -8,9 +8,10 @@ namespace opengl {
 class ArrayBuffer : public Buffer {
 
 public:
+  static void unbind() noexcept;
+
   ArrayBuffer() noexcept;
 };
-
 }
 
 #endif

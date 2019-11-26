@@ -12,11 +12,12 @@ namespace opengl {
 class UniformBuffer : public Buffer {
 
 public:
+  static void unbind() noexcept;
+
   UniformBuffer() noexcept;
 
-  void bind_to_binding_point(uint32_t binding_point);
+  void bind_to_binding_point(uint32_t binding_point) const noexcept;
 };
-
 }
 
 #endif

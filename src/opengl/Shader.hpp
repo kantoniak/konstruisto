@@ -23,13 +23,13 @@ public:
 
   static Shader create(ShaderType type) noexcept;
 
-  [[nodiscard]] uint32_t get_id() const;
-  [[nodiscard]] ShaderType get_type() const;
+  [[nodiscard]] uint32_t get_id() const noexcept;
+  [[nodiscard]] ShaderType get_type() const noexcept;
 
-  bool compile(const std::string& source);
-  [[nodiscard]] const std::vector<char> get_info_log();
+  [[nodiscard]] bool compile(const std::string& source) const noexcept;
+  [[nodiscard]] const std::vector<char> get_info_log() const noexcept;
 
-  void delete_shader();
+  void delete_shader() const noexcept;
 
 protected:
   Shader(uint32_t id, ShaderType type);
@@ -37,7 +37,7 @@ protected:
   const ShaderType type;
 };
 
-std::string to_string(const Shader::ShaderType& type);
+std::string to_string(const Shader::ShaderType& type) noexcept;
 }
 
 #endif

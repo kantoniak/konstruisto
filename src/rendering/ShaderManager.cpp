@@ -30,7 +30,8 @@ std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_typ
 
 template <size_t n>
 std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log) {
-  ShaderProgram program = ShaderProgram::create();
+  ShaderProgram program;
+  program.generate();
 
   if (program.get_id() == 0) {
     log.error("Shader program creating failed.");

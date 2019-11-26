@@ -14,28 +14,27 @@ namespace opengl {
 class ShaderProgram {
 
 public:
-  static ShaderProgram create() noexcept;
+  static void unbind() noexcept;
+
   ShaderProgram() noexcept;
 
   [[nodiscard]] uint32_t get_id() const noexcept;
 
-  void attach(const Shader& shader);
-  bool link();
-  [[nodiscard]] const std::vector<char> get_info_log();
+  void generate() noexcept;
+  void attach(const Shader& shader) const noexcept;
+  [[nodiscard]] bool link() const noexcept;
 
-  [[nodiscard]] int32_t get_uniform_loc(const char* name);
-  [[nodiscard]] uint32_t get_uniform_block_index(const char* name);
+  [[nodiscard]] const std::vector<char> get_info_log() const noexcept;
+  [[nodiscard]] int32_t get_uniform_loc(const char* name) const noexcept;
+  [[nodiscard]] uint32_t get_uniform_block_index(const char* name) const noexcept;
 
-  void bind_uniform_block(const char* name, uint32_t binding_point);
-  void use();
-  void delete_program();
+  void bind_uniform_block(const char* name, uint32_t binding_point) const noexcept;
+  void use() const noexcept;
+  void delete_program() const noexcept;
 
 protected:
-  ShaderProgram(uint32_t id) noexcept;
-
   uint32_t id;
 };
-
 }
 
 #endif

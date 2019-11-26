@@ -17,7 +17,7 @@ Shader::ShaderType Shader::get_type() const {
   return type;
 }
 
-bool Shader::compile(const std::string& source_string) {
+bool Shader::compile(const std::string& source_string) const noexcept {
   const char* source = source_string.c_str();
   glShaderSource(this->id, 1, &source, nullptr);
   glCompileShader(this->id);
@@ -27,7 +27,7 @@ bool Shader::compile(const std::string& source_string) {
   return success;
 }
 
-const std::vector<char> Shader::get_info_log() {
+const std::vector<char> Shader::get_info_log() const noexcept {
   int32_t message_length;
   glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &message_length);
 
@@ -36,11 +36,11 @@ const std::vector<char> Shader::get_info_log() {
   return message;
 }
 
-void Shader::delete_shader() {
+void Shader::delete_shader() const noexcept {
   glDeleteShader(this->id);
 }
 
-std::string to_string(const Shader::ShaderType& type) {
+std::string to_string(const Shader::ShaderType& type) noexcept {
   switch (type) {
   case Shader::ShaderType::COMPUTE_SHADER:
     return "GL_COMPUTE_SHADER";
@@ -58,5 +58,4 @@ std::string to_string(const Shader::ShaderType& type) {
     return "UNKNOWN SHADER TYPE";
   }
 }
-
 }

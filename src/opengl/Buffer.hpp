@@ -30,21 +30,23 @@ public:
 
   Buffer() = delete;
 
-  [[nodiscard]] uint32_t get_id() const;
-  [[nodiscard]] BufferType get_type() const;
+  [[nodiscard]] uint32_t get_id() const noexcept;
+  [[nodiscard]] BufferType get_type() const noexcept;
 
-  void generate();
-  void bind();
-  void unbind();
-  void delete_buffer();
+  void generate() noexcept;
+  void bind() const noexcept;
+  void delete_buffer() const noexcept;
 
 protected:
   uint32_t id;
   const BufferType type;
+
+  static void unbind(const BufferType type) noexcept;
+
   Buffer(BufferType type) noexcept;
 };
 
-std::string to_string(const Buffer::BufferType& type);
+std::string to_string(const Buffer::BufferType& type) noexcept;
 }
 
 #endif

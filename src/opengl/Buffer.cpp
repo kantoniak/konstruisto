@@ -5,31 +5,31 @@ namespace opengl {
 Buffer::Buffer(Buffer::BufferType type) noexcept : type(type) {
 }
 
-uint32_t Buffer::get_id() const {
+uint32_t Buffer::get_id() const noexcept {
   return id;
 }
 
-Buffer::BufferType Buffer::get_type() const {
+Buffer::BufferType Buffer::get_type() const noexcept {
   return type;
 }
 
-void Buffer::generate() {
+void Buffer::generate() noexcept {
   glGenBuffers(1, &(this->id));
 }
 
-void Buffer::bind() {
+void Buffer::bind() const noexcept {
   glBindBuffer(this->type, this->id);
 }
 
-void Buffer::unbind() {
-  glBindBuffer(this->type, 0);
-}
-
-void Buffer::delete_buffer() {
+void Buffer::delete_buffer() const noexcept {
   glDeleteBuffers(1, &(this->id));
 }
 
-std::string to_string(const Buffer::BufferType& type) {
+void Buffer::unbind(const BufferType type) noexcept {
+  glBindBuffer(type, 0);
+}
+
+std::string to_string(const Buffer::BufferType& type) noexcept {
   switch (type) {
   case Buffer::BufferType::ARRAY_BUFFER:
     return "ARRAY_BUFFER";

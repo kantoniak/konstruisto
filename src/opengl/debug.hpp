@@ -7,7 +7,7 @@
 
 namespace opengl {
 
-const std::string gl_debug_source_to_string(const uint32_t source) {
+const std::string gl_debug_source_to_string(const uint32_t source) noexcept {
   switch (source) {
   case GL_DEBUG_SOURCE_API:
     return "API";
@@ -26,7 +26,7 @@ const std::string gl_debug_source_to_string(const uint32_t source) {
   }
 }
 
-const std::string gl_debug_type_to_string(const uint32_t type) {
+const std::string gl_debug_type_to_string(const uint32_t type) noexcept {
   switch (type) {
   case GL_DEBUG_TYPE_ERROR:
     return "Error";
@@ -51,7 +51,7 @@ const std::string gl_debug_type_to_string(const uint32_t type) {
   }
 }
 
-const std::string gl_debug_severity_to_string(const uint32_t severity) {
+const std::string gl_debug_severity_to_string(const uint32_t severity) noexcept {
   switch (severity) {
   case GL_DEBUG_SEVERITY_HIGH:
     return "High";

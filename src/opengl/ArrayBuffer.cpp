@@ -2,7 +2,10 @@
 
 namespace opengl {
 
-ArrayBuffer::ArrayBuffer() noexcept : Buffer(BufferType::ARRAY_BUFFER) {
+void ArrayBuffer::unbind() noexcept {
+  Buffer::unbind(BufferType::ARRAY_BUFFER);
 }
 
+ArrayBuffer::ArrayBuffer() noexcept : Buffer(BufferType::ARRAY_BUFFER) {
+}
 }

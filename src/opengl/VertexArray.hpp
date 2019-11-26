@@ -12,14 +12,15 @@ namespace opengl {
 class VertexArray {
 
 public:
+  static void unbind() noexcept;
+
   VertexArray() noexcept;
 
-  [[nodiscard]] uint32_t get_id() const;
+  [[nodiscard]] uint32_t get_id() const noexcept;
 
-  void generate();
-  void bind();
-  void unbind();
-  void delete_vertex_array();
+  void generate() noexcept;
+  void bind() const noexcept;
+  void delete_vertex_array() const noexcept;
 
 protected:
   uint32_t id;

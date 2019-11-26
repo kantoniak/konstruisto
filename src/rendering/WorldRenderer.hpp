@@ -74,25 +74,31 @@ protected:
 
   // Terrain
   opengl::ShaderProgram terrain_shader_prog;
-  int32_t transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
-      roadTextureLoc;
+  int32_t transform_loc;
+  int32_t terrain_position_loc;
+  int32_t render_grid_loc;
+  int32_t selection_loc;
+  int32_t selection_color_loc;
+  int32_t ground_texture_loc;
+  int32_t road_texture_loc;
   opengl::VertexArray terrain_vao;
-  GLuint gridTexture, roadTexture;
-  std::map<std::pair<int, int>, opengl::ArrayBuffer> chunks; // chunk -> VBO (roadTile)
+  uint32_t grid_texture;
+  uint32_t road_texture;
+  std::map<std::pair<int, int>, opengl::ArrayBuffer> chunk_to_vbo;
 
   // Buildings
+  opengl::ShaderProgram building_shader_prog;
+  int32_t buildings_transform_loc;
   opengl::VertexArray buildings_vao;
   opengl::ArrayBuffer building_mesh_vbo;
   opengl::ArrayBuffer building_positions_vbo;
-  opengl::ShaderProgram building_shader_prog;
-  int32_t buildingsTransformLoc;
   const unsigned int buildingsCount = 100;
   const unsigned int sideSize = 20;
   const unsigned int maxHeight = 6;
 
   // Buildings - normals
-  int32_t buildingNormalsTransformLoc;
   opengl::ShaderProgram building_normals_shader_prog;
+  int32_t building_normals_transform_loc;
 
   // Left menu
   int leftMenuActiveIcon = -1;
