@@ -19,6 +19,7 @@
 #include "../opengl/ArrayBuffer.hpp"
 #include "../opengl/Shader.hpp"
 #include "../opengl/ShaderProgram.hpp"
+#include "../opengl/VertexArray.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
 #include "Renderer.hpp"
@@ -75,13 +76,13 @@ protected:
   opengl::ShaderProgram terrain_shader_prog;
   int32_t transformLoc, terrainPositionLoc, renderGridLoc, selectionLoc, selectionColorLoc, groundTextureLoc,
       roadTextureLoc;
-  GLuint VAO;
+  opengl::VertexArray terrain_vao;
   GLuint gridTexture, roadTexture;
   std::map<std::pair<int, int>, opengl::ArrayBuffer> chunks; // chunk -> VBO (roadTile)
 
   // Buildings
+  opengl::VertexArray buildings_vao;
   opengl::ArrayBuffer building_mesh_vbo;
-  GLuint buildingsVAO;
   opengl::ArrayBuffer building_positions_vbo;
   opengl::ShaderProgram building_shader_prog;
   int32_t buildingsTransformLoc;

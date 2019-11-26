@@ -186,7 +186,7 @@ bool WorldRenderer::setupTextures() {
 }
 
 bool WorldRenderer::setupTerrain() {
-  glGenVertexArrays(1, &VAO);
+  terrain_vao.generate();
   markTileDataForUpdate();
   return true;
 }
@@ -198,8 +198,8 @@ bool WorldRenderer::setupBuildings() {
       0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Reset
       1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
-  glGenVertexArrays(1, &buildingsVAO);
-  glBindVertexArray(buildingsVAO);
+  buildings_vao.generate();
+  buildings_vao.bind();
 
   building_mesh_vbo.generate();
   building_mesh_vbo.bind();
@@ -219,7 +219,7 @@ bool WorldRenderer::setupBuildings() {
   glVertexAttribDivisor(2, 1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  buildings_vao.unbind();
 
   markBuildingDataForUpdate();
 
@@ -228,14 +228,13 @@ bool WorldRenderer::setupBuildings() {
 
 void WorldRenderer::cleanup() {
   glUseProgram(0);
-
-  glDeleteVertexArrays(1, &VAO);
+  terrain_vao.delete_vertex_array();
 
   for (auto& chunk : chunks) {
     chunk.second.delete_buffer();
   }
 
-  glDeleteVertexArrays(1, &buildingsVAO);
+  buildings_vao.delete_vertex_array();
   building_mesh_vbo.delete_buffer();
   building_positions_vbo.delete_buffer();
 
@@ -272,7 +271,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   }
 
   terrain_shader_prog.use();
-  glBindVertexArray(VAO);
+  terrain_vao.bind();
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, gridTexture);
   glActiveTexture(GL_TEXTURE1);
@@ -307,7 +306,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
 
   if (world.getMap().getBuildingCount() > 0) {
     building_shader_prog.use();
-    glBindVertexArray(buildingsVAO);
+    buildings_vao.bind();
 
     glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
@@ -322,7 +321,7 @@ void WorldRenderer::renderDebug() {
     const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
 
     building_normals_shader_prog.use();
-    glBindVertexArray(buildingsVAO);
+    buildings_vao.bind();
 
     glUniformMatrix4fv(buildingsTransformLoc, 1, GL_FALSE, glm::value_ptr(vp));
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
@@ -503,7 +502,8 @@ void WorldRenderer::sendBuildingData() {
                                      building.length - 2 * buildingMargin);
     }
   }
-  glBindVertexArray(buildingsVAO);
+
+  buildings_vao.bind();
   building_positions_vbo.bind();
   glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -511,7 +511,7 @@ void WorldRenderer::sendBuildingData() {
 }
 
 void WorldRenderer::sendTileData() {
-  glBindVertexArray(VAO);
+  terrain_vao.bind();
 
   constexpr unsigned long verticesCount = data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3;
   const std::vector<glm::vec3> fieldBase{glm::vec3(1, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 1),
