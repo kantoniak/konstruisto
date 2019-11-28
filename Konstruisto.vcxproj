@@ -194,6 +194,7 @@
     <ClCompile Include="src\opengl\Shader.cpp" />
     <ClCompile Include="src\opengl\ShaderProgram.cpp" />
     <ClCompile Include="src\opengl\Type.cpp" />
+    <ClCompile Include="src\opengl\Uniform.cpp" />
     <ClCompile Include="src\opengl\UniformBuffer.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="src\opengl\Shader.hpp" />
     <ClInclude Include="src\opengl\ShaderProgram.hpp" />
     <ClInclude Include="src\opengl\Type.hpp" />
+    <ClInclude Include="src\opengl\Uniform.hpp" />
     <ClInclude Include="src\opengl\UniformBuffer.hpp" />
     <ClInclude Include="src\opengl\VertexArray.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
