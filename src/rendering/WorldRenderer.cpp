@@ -52,13 +52,6 @@ bool WorldRenderer::setupShaders() {
     }
     this->terrain_shader_prog = shader_program.value();
 
-    transform_loc = terrain_shader_prog.get_uniform_loc("transform");
-    render_grid_loc = terrain_shader_prog.get_uniform_loc("renderGrid");
-    selection_loc = terrain_shader_prog.get_uniform_loc("selection");
-    selection_color_loc = terrain_shader_prog.get_uniform_loc("selectionColor");
-    ground_texture_loc = terrain_shader_prog.get_uniform_loc("groundTexture");
-    road_texture_loc = terrain_shader_prog.get_uniform_loc("roadTexture");
-
     for (auto shader : shaders) {
       shader.delete_shader();
     }
@@ -99,7 +92,6 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_shader_prog = shader_program.value();
-    buildings_transform_loc = building_shader_prog.get_uniform_loc("transform");
 
     geom_shader.value().delete_shader();
     frag_shader.value().delete_shader();
@@ -135,7 +127,6 @@ bool WorldRenderer::setupShaders() {
       return false;
     }
     this->building_normals_shader_prog = shader_program.value();
-    building_normals_transform_loc = building_normals_shader_prog.get_uniform_loc("transform");
 
     for (auto shader : shaders) {
       shader.delete_shader();
@@ -275,15 +266,21 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   glBindTexture(GL_TEXTURE_2D, grid_texture);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D_ARRAY, road_texture);
-  glUniform1i(ground_texture_loc, 0);
-  glUniform1i(road_texture_loc, 1);
+  terrain_shader_prog.submit("groundTexture", 0);
+  terrain_shader_prog.submit("roadTexture", 1);
 
-  glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
-  glUniform1i(render_grid_loc, engine.getSettings().world.showGrid);
-  glUniform4i(selection_loc, selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
-              selection.getTo().y + 1);
-  glUniform4f(selection_color_loc, selection.getColor().x, selection.getColor().y, selection.getColor().z,
-              engine.getSettings().rendering.renderSelection ? selection.getColor().w : 0);
+  glm::ivec4 selection_coords(selection.getFrom().x, selection.getFrom().y, selection.getTo().x + 1,
+                              selection.getTo().y + 1);
+
+  glm::vec4 selection_color = selection.getColor();
+  if (!engine.getSettings().rendering.renderSelection) {
+    selection_color.w = 0;
+  }
+
+  terrain_shader_prog.submit("transform", vp);
+  terrain_shader_prog.submit("renderGrid", engine.getSettings().world.showGrid);
+  terrain_shader_prog.submit("selection", selection_coords);
+  terrain_shader_prog.submit("selectionColor", selection_color);
 
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
@@ -307,8 +304,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   if (world.getMap().getBuildingCount() > 0) {
     building_shader_prog.use();
     buildings_vao.bind();
-
-    glUniformMatrix4fv(buildings_transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
+    building_shader_prog.submit("transform", vp);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
   }
 
@@ -323,7 +319,7 @@ void WorldRenderer::renderDebug() {
     building_normals_shader_prog.use();
     buildings_vao.bind();
 
-    glUniformMatrix4fv(buildings_transform_loc, 1, GL_FALSE, glm::value_ptr(vp));
+    building_normals_shader_prog.submit("transform", vp);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
 
     VertexArray::unbind();

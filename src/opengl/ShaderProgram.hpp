@@ -1,6 +1,7 @@
 #ifndef OPENGL_SHADERPROGRAM_HPP
 #define OPENGL_SHADERPROGRAM_HPP
 
+#include <array>
 #include <cstdint>
 #include <unordered_map>
 #include <vector>

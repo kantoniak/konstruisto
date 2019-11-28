@@ -74,13 +74,6 @@ protected:
 
   // Terrain
   opengl::ShaderProgram terrain_shader_prog;
-  int32_t transform_loc;
-  int32_t terrain_position_loc;
-  int32_t render_grid_loc;
-  int32_t selection_loc;
-  int32_t selection_color_loc;
-  int32_t ground_texture_loc;
-  int32_t road_texture_loc;
   opengl::VertexArray terrain_vao;
   uint32_t grid_texture;
   uint32_t road_texture;
@@ -88,7 +81,6 @@ protected:
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;
-  int32_t buildings_transform_loc;
   opengl::VertexArray buildings_vao;
   opengl::ArrayBuffer building_mesh_vbo;
   opengl::ArrayBuffer building_positions_vbo;
@@ -98,7 +90,6 @@ protected:
 
   // Buildings - normals
   opengl::ShaderProgram building_normals_shader_prog;
-  int32_t building_normals_transform_loc;
 
   // Left menu
   int leftMenuActiveIcon = -1;
