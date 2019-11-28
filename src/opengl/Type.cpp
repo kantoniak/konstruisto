@@ -1,0 +1,111 @@
+#include "Type.hpp"
+
+namespace opengl {
+
+std::string to_string(const Type& type) noexcept {
+  switch (type) {
+  case BOOL:
+    return "GL_BOOL";
+  case BOOL_VEC2:
+    return "GL_BOOL_VEC2";
+  case BOOL_VEC3:
+    return "GL_BOOL_VEC3";
+  case BOOL_VEC4:
+    return "GL_BOOL_VEC4";
+  case BYTE:
+    return "GL_BYTE";
+  case DOUBLE:
+    return "GL_DOUBLE";
+  case DOUBLE_MAT2:
+    return "GL_DOUBLE_MAT2";
+  case DOUBLE_MAT2x3:
+    return "GL_DOUBLE_MAT2x3";
+  case DOUBLE_MAT2x4:
+    return "GL_DOUBLE_MAT2x4";
+  case DOUBLE_MAT3:
+    return "GL_DOUBLE_MAT3";
+  case DOUBLE_MAT3x2:
+    return "GL_DOUBLE_MAT3x2";
+  case DOUBLE_MAT3x4:
+    return "GL_DOUBLE_MAT3x4";
+  case DOUBLE_MAT4:
+    return "GL_DOUBLE_MAT4";
+  case DOUBLE_MAT4x2:
+    return "GL_DOUBLE_MAT4x2";
+  case DOUBLE_MAT4x3:
+    return "GL_DOUBLE_MAT4x3";
+  case DOUBLE_VEC2:
+    return "GL_DOUBLE_VEC2";
+  case DOUBLE_VEC3:
+    return "GL_DOUBLE_VEC3";
+  case DOUBLE_VEC4:
+    return "GL_DOUBLE_VEC4";
+  case FIXED:
+    return "GL_FIXED";
+  case FLOAT:
+    return "GL_FLOAT";
+  case FLOAT_MAT2:
+    return "GL_FLOAT_MAT2";
+  case FLOAT_MAT2x3:
+    return "GL_FLOAT_MAT2x3";
+  case FLOAT_MAT2x4:
+    return "GL_FLOAT_MAT2x4";
+  case FLOAT_MAT3:
+    return "GL_FLOAT_MAT3";
+  case FLOAT_MAT3x2:
+    return "GL_FLOAT_MAT3x2";
+  case FLOAT_MAT3x4:
+    return "GL_FLOAT_MAT3x4";
+  case FLOAT_MAT4:
+    return "GL_FLOAT_MAT4";
+  case FLOAT_MAT4x2:
+    return "GL_FLOAT_MAT4x2";
+  case FLOAT_MAT4x3:
+    return "GL_FLOAT_MAT4x3";
+  case FLOAT_VEC2:
+    return "GL_FLOAT_VEC2";
+  case FLOAT_VEC3:
+    return "GL_FLOAT_VEC3";
+  case FLOAT_VEC4:
+    return "GL_FLOAT_VEC4";
+  case HALF_FLOAT:
+    return "GL_HALF_FLOAT";
+  case INT:
+    return "GL_INT";
+  case INT_VEC2:
+    return "GL_INT_VEC2";
+  case INT_VEC3:
+    return "GL_INT_VEC3";
+  case INT_VEC4:
+    return "GL_INT_VEC4";
+  case SAMPLER_1D:
+    return "GL_SAMPLER_1D";
+  case SAMPLER_1D_ARRAY:
+    return "GL_SAMPLER_1D_ARRAY";
+  case SAMPLER_2D:
+    return "GL_SAMPLER_2D";
+  case SAMPLER_2D_ARRAY:
+    return "GL_SAMPLER_2D_ARRAY";
+  case SAMPLER_3D:
+    return "GL_SAMPLER_3D";
+  case SHORT:
+    return "GL_SHORT";
+  case UNSIGNED_BYTE:
+    return "GL_UNSIGNED_BYTE";
+  case UNSIGNED_INT:
+    return "GL_UNSIGNED_INT";
+  case UNSIGNED_INT_VEC2:
+    return "GL_UNSIGNED_INT_VEC2";
+  case UNSIGNED_INT_VEC3:
+    return "GL_UNSIGNED_INT_VEC3";
+  case UNSIGNED_INT_VEC4:
+    return "GL_UNSIGNED_INT_VEC4";
+  case UNSIGNED_SHORT:
+    return "GL_UNSIGNED_SHORT";
+  default:
+    std::stringstream stream;
+    stream << "Unknown (0x" << std::hex << type << ")";
+    return stream.str();
+  }
+}
+}
