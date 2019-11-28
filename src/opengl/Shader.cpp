@@ -9,11 +9,11 @@ Shader Shader::create(ShaderType type) noexcept {
 Shader::Shader(uint32_t id, Shader::ShaderType type) : id(id), type(type) {
 }
 
-uint32_t Shader::get_id() const {
+uint32_t Shader::get_id() const noexcept {
   return id;
 }
 
-Shader::ShaderType Shader::get_type() const {
+Shader::ShaderType Shader::get_type() const noexcept {
   return type;
 }
 
