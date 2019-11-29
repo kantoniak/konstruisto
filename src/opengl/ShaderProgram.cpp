@@ -47,10 +47,6 @@ const std::vector<char> ShaderProgram::get_info_log() const noexcept {
   return uniforms.at(name);
 }
 
-[[nodiscard]] int32_t ShaderProgram::get_uniform_loc(const char* name) const noexcept {
-  return glGetUniformLocation(this->id, name);
-}
-
 [[nodiscard]] uint32_t ShaderProgram::get_uniform_block_index(const char* name) const noexcept {
   return glGetUniformBlockIndex(this->id, name);
 }
