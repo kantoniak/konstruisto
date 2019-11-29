@@ -75,6 +75,7 @@ protected:
   // Terrain
   opengl::ShaderProgram terrain_shader_prog;
   opengl::VertexArray terrain_vao;
+  bool terrain_vao_pointers_setup = false;
   uint32_t grid_texture;
   uint32_t road_texture;
   std::map<std::pair<int, int>, opengl::ArrayBuffer> chunk_to_vbo;

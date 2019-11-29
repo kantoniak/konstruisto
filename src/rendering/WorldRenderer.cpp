@@ -192,12 +192,15 @@ bool WorldRenderer::setupBuildings() {
   buildings_vao.generate();
   buildings_vao.bind();
 
+  // Vertex buffer
   building_mesh_vbo.generate();
   building_mesh_vbo.bind();
   glBufferData(GL_ARRAY_BUFFER, sizeof(building), building.data(), GL_STATIC_DRAW);
+
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
 
+  // Position+size buffer
   building_positions_vbo.generate();
   building_positions_vbo.bind();
 
@@ -207,7 +210,7 @@ bool WorldRenderer::setupBuildings() {
 
   glEnableVertexAttribArray(2);
   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-  glVertexAttribDivisor(2, 1);
+  glVertexAttribDivisor(2, 1);  
 
   ArrayBuffer::unbind();
   VertexArray::unbind();
@@ -282,18 +285,11 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   terrain_shader_prog.submit("selection", selection_coords);
   terrain_shader_prog.submit("selectionColor", selection_color);
 
-  glEnableVertexAttribArray(0);
-  glEnableVertexAttribArray(1);
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     const auto chunk_pos = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
     chunk_to_vbo[chunk_pos].bind();
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)nullptr);
-    glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-
     glDrawArrays(GL_TRIANGLES, 0, data::Chunk::SIDE_LENGTH * data::Chunk::SIDE_LENGTH * 2 * 3);
   }
-  glDisableVertexAttribArray(1);
-  glDisableVertexAttribArray(0);
 
   // Buildings
   if (resendBuildingData) {
@@ -557,6 +553,17 @@ void WorldRenderer::sendTileData() {
     }
     chunk_to_vbo[key].bind();
     glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
+  }
+
+  // Lazy VAO setup because there was no bound buffer before
+  if (!terrain_vao_pointers_setup) {
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)nullptr);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+    terrain_vao_pointers_setup = true;
   }
 
   ArrayBuffer::unbind();
