@@ -44,9 +44,7 @@ void SaveFileHandler::loadSave(world::World& world) {
   data::CameraState cameraState;
   archive(cameraState);
 
-  engine.getLogger().debug("Camera lookAt[%f][%f][%f], rot[%f][%f], dist[%f] ", cameraState.lookAt.x,
-                           cameraState.lookAt.y, cameraState.lookAt.z, cameraState.rotationAroundX,
-                           cameraState.rotationAroundY, cameraState.distance);
+  engine.getLogger().debug(to_string(cameraState));
   world.getCamera().emplace(cameraState);
 
   unsigned int chunksCount;

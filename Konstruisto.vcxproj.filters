@@ -21,6 +21,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\data\CameraState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\data\Chunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

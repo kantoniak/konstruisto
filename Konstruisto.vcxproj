@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ext\glad\src\gl.c" />
+    <ClCompile Include="src\data\CameraState.cpp" />
     <ClCompile Include="src\data\Chunk.cpp" />
     <ClCompile Include="src\data\Direction.cpp" />
     <ClCompile Include="src\data\Layer.cpp" />
