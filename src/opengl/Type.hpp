@@ -1,12 +1,15 @@
 #ifndef OPENGL_TYPE_HPP
 #define OPENGL_TYPE_HPP
 
+#include <cassert>
 #include <sstream>
 #include <string>
 
 #include <glad/gl.h>
 
 namespace opengl {
+
+// TODO(kantoniak): Make a class with implicit convertion to int32_t
 
 enum Type {
   BOOL = GL_BOOL,
@@ -59,6 +62,8 @@ enum Type {
   UNSIGNED_INT_VEC4 = GL_UNSIGNED_INT_VEC4,
   UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
 };
+
+uint32_t get_size(const Type& type) noexcept;
 
 std::string to_string(const Type& type) noexcept;
 }
