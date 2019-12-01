@@ -10,7 +10,7 @@ WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world) : Rend
 bool WorldRenderer::init() {
   Renderer::init();
 
-  if (!setupShaders() || !setupTextures()) {
+  if (!setupShaders() || !setup_ubos() || !setupTextures()) {
     return false;
   }
 
@@ -43,7 +43,7 @@ bool WorldRenderer::setupShaders() {
     }
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
     if (!shader_program.has_value()) {
       for (auto shader : shaders) {
         shader.delete_shader();
@@ -83,7 +83,7 @@ bool WorldRenderer::setupShaders() {
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
                                 std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
     if (!shader_program.has_value()) {
       this->cleanup_shaders();
       for (auto shader : shaders) {
@@ -118,7 +118,7 @@ bool WorldRenderer::setupShaders() {
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
                                 std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = ShaderManager::linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
     if (!shader_program.has_value()) {
       this->cleanup_shaders();
       for (auto shader : shaders) {
@@ -133,6 +133,13 @@ bool WorldRenderer::setupShaders() {
     }
   }
 
+  return true;
+}
+
+bool WorldRenderer::setup_ubos() {
+  camera_ubo.generate();
+  camera_ubo.bind_to_binding_point(
+      1); // TODO(kantoniak): Read index from ShaderManager.get_uniform_block.get_binding_point
   return true;
 }
 
@@ -210,7 +217,7 @@ bool WorldRenderer::setupBuildings() {
 
   glEnableVertexAttribArray(2);
   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-  glVertexAttribDivisor(2, 1);  
+  glVertexAttribDivisor(2, 1);
 
   ArrayBuffer::unbind();
   VertexArray::unbind();
@@ -231,8 +238,14 @@ void WorldRenderer::cleanup() {
   building_mesh_vbo.delete_buffer();
   building_positions_vbo.delete_buffer();
 
-  this->cleanup_shaders();
+  cleanup_ubos();
+  cleanup_shaders();
   Renderer::cleanup();
+}
+
+void WorldRenderer::cleanup_ubos() {
+  UniformBuffer::unbind();
+  camera_ubo.delete_buffer();
 }
 
 void WorldRenderer::cleanup_shaders() {
@@ -255,7 +268,16 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
 
+  // UBO
+  const opengl::UniformBlock camera_ub = shader_manager.get_uniform_block("Camera");
+  std::vector<uint8_t> camera_buffer_data(camera_ub.get_size(), 0);
+
   const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
+  camera_ub.get_uniform("Camera.vp").memcpy(camera_buffer_data, vp);
+
+  camera_ubo.bind();
+  glBufferDataVector(GL_UNIFORM_BUFFER, camera_buffer_data, GL_DYNAMIC_DRAW);
+  UniformBuffer::unbind();
 
   // Terrain
   if (resendTileData) {
@@ -280,7 +302,6 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     selection_color.w = 0;
   }
 
-  terrain_shader_prog.submit("transform", vp);
   terrain_shader_prog.submit("renderGrid", engine.getSettings().world.showGrid);
   terrain_shader_prog.submit("selection", selection_coords);
   terrain_shader_prog.submit("selectionColor", selection_color);
@@ -300,7 +321,6 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   if (world.getMap().getBuildingCount() > 0) {
     building_shader_prog.use();
     buildings_vao.bind();
-    building_shader_prog.submit("transform", vp);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
   }
 
@@ -310,16 +330,10 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
 
 void WorldRenderer::renderDebug() {
   if (engine.getSettings().rendering.renderNormals) {
-    const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
-
     building_normals_shader_prog.use();
     buildings_vao.bind();
-
-    building_normals_shader_prog.submit("transform", vp);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
-
     VertexArray::unbind();
-    glFlush();
   }
 }
 

@@ -27,7 +27,7 @@ void Renderer::sendFrame() {
   glfwSwapBuffers(&engine.getWindowHandler().getWindow());
 }
 
-std::optional<Shader> Renderer::compileShader(Shader::ShaderType shader_type, std::string filename) const {
-  return ShaderManager::compileShader(shader_type, filename, engine.getLogger());
+std::optional<Shader> Renderer::compileShader(Shader::ShaderType shader_type, std::string filename) {
+  return shader_manager.compileShader(shader_type, filename, engine.getLogger());
 }
 }

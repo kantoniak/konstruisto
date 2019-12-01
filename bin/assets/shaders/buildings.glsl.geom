@@ -3,7 +3,9 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-uniform mat4 transform;
+layout (std140) uniform Camera {
+	mat4 vp;
+} camera;
 
 out vec3 lighting;
 
@@ -24,7 +26,7 @@ void main() {
 
     lighting = (ambientStrength + diffuseStrength * calcLambertian(lightDir, gl_in[0].gl_Position, gl_in[1].gl_Position, gl_in[2].gl_Position)) * lightColor;
     for (int i=0; i<3; i++) {
-        gl_Position = transform * gl_in[i].gl_Position;
+        gl_Position = camera.vp * gl_in[i].gl_Position;
         EmitVertex();
     }
     EndPrimitive();

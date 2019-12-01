@@ -18,12 +18,13 @@
 #include "../input/WindowHandler.hpp"
 #include "../opengl/ArrayBuffer.hpp"
 #include "../opengl/Shader.hpp"
+#include "../opengl/ShaderManager.hpp"
 #include "../opengl/ShaderProgram.hpp"
+#include "../opengl/UniformBuffer.hpp"
 #include "../opengl/VertexArray.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
 #include "Renderer.hpp"
-#include "ShaderManager.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
 
@@ -36,10 +37,12 @@ public:
 
   bool init() override;
   bool setupShaders();
+  bool setup_ubos();
   bool setupTextures();
   bool setupTerrain();
   bool setupBuildings();
   void cleanup() override;
+  void cleanup_ubos();
   void cleanup_shaders();
 
   void markBuildingDataForUpdate();
@@ -62,6 +65,9 @@ protected:
 
   bool resendTileData = false;
   void sendTileData();
+
+  // Shared
+  opengl::UniformBuffer camera_ubo;
 
   // Tiles
   const int ATLAS_SIDE = 10;

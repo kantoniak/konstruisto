@@ -8,7 +8,6 @@
 
 #include <glad/gl.h>
 
-#include "../engine/Logger.hpp"
 #include "Shader.hpp"
 #include "Type.hpp"
 #include "Uniform.hpp"
@@ -32,9 +31,7 @@ public:
   [[nodiscard]] const std::vector<char> get_info_log() const noexcept;
 
   [[nodiscard]] const Uniform& get_uniform(const std::string& name) const noexcept;
-  [[nodiscard]] uint32_t get_uniform_block_index(const char* name) const noexcept;
 
-  void bind_uniform_block(const char* name, uint32_t binding_point) const noexcept;
   void use() const noexcept;
   void delete_program() const noexcept;
 

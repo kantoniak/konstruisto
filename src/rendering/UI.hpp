@@ -13,8 +13,8 @@
 #include "../engine/Engine.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
+#include "../opengl/ShaderManager.hpp"
 #include "../world/World.hpp"
-#include "ShaderManager.hpp"
 
 namespace rendering {
 

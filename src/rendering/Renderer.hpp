@@ -17,9 +17,9 @@
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../opengl/Shader.hpp"
+#include "../opengl/ShaderManager.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
-#include "ShaderManager.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
 
@@ -40,10 +40,11 @@ public:
 
 protected:
   engine::Engine& engine;
+  opengl::ShaderManager shader_manager;
 
   glm::vec3 clearColor;
 
-  [[nodiscard]] std::optional<Shader> compileShader(Shader::ShaderType shader_type, std::string filename) const;
+  [[nodiscard]] std::optional<Shader> compileShader(Shader::ShaderType shader_type, std::string filename);
 
   template <class T>
   void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) {

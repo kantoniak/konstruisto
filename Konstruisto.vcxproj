@@ -194,6 +194,7 @@
     <ClCompile Include="src\opengl\BlockUniform.cpp" />
     <ClCompile Include="src\opengl\Buffer.cpp" />
     <ClCompile Include="src\opengl\Shader.cpp" />
+    <ClCompile Include="src\opengl\ShaderManager.cpp" />
     <ClCompile Include="src\opengl\ShaderProgram.cpp" />
     <ClCompile Include="src\opengl\Type.cpp" />
     <ClCompile Include="src\opengl\Uniform.cpp" />
@@ -201,7 +202,6 @@
     <ClCompile Include="src\opengl\UniformBuffer.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
-    <ClCompile Include="src\rendering\ShaderManager.cpp" />
     <ClCompile Include="src\rendering\UI.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
@@ -242,6 +242,7 @@
     <ClInclude Include="src\opengl\Buffer.hpp" />
     <ClInclude Include="src\opengl\debug.hpp" />
     <ClInclude Include="src\opengl\Shader.hpp" />
+    <ClInclude Include="src\opengl\ShaderManager.hpp" />
     <ClInclude Include="src\opengl\ShaderProgram.hpp" />
     <ClInclude Include="src\opengl\Type.hpp" />
     <ClInclude Include="src\opengl\Uniform.hpp" />
@@ -250,7 +251,6 @@
     <ClInclude Include="src\opengl\VertexArray.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
     <ClInclude Include="src\rendering\settings.hpp" />
-    <ClInclude Include="src\rendering\ShaderManager.hpp" />
     <ClInclude Include="src\rendering\UI.hpp" />
     <ClInclude Include="src\rendering\WorldRenderer.hpp" />
     <ClInclude Include="src\settings.hpp" />

@@ -165,6 +165,8 @@ void MapState::onKey(int key, int, int action, int mods) {
 
   if (key == GLFW_KEY_N && action == GLFW_PRESS) {
     engine.getSettings().rendering.renderNormals = !engine.getSettings().rendering.renderNormals;
+    engine.getLogger().debug(std::string("Normals view: %s"),
+                             (engine.getSettings().rendering.renderNormals ? "on" : "off"));
   }
 
   if (key == GLFW_KEY_M && action == GLFW_PRESS) {

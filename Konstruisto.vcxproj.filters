@@ -123,7 +123,7 @@
     <ClCompile Include="src\opengl\UniformBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\ShaderManager.cpp">
+    <ClCompile Include="src\opengl\ShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\opengl\BlockUniform.cpp">
@@ -272,7 +272,7 @@
     <ClInclude Include="src\opengl\UniformBlock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\ShaderManager.hpp">
+    <ClInclude Include="src\opengl\ShaderManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\BlockUniform.hpp">

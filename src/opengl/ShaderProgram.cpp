@@ -47,15 +47,6 @@ const std::vector<char> ShaderProgram::get_info_log() const noexcept {
   return uniforms.at(name);
 }
 
-[[nodiscard]] uint32_t ShaderProgram::get_uniform_block_index(const char* name) const noexcept {
-  return glGetUniformBlockIndex(this->id, name);
-}
-
-void ShaderProgram::bind_uniform_block(const char* name, uint32_t binding_point) const noexcept {
-  uint32_t uniform_block_index = get_uniform_block_index(name);
-  glUniformBlockBinding(this->id, uniform_block_index, binding_point);
-}
-
 void ShaderProgram::use() const noexcept {
   glUseProgram(id);
   bound_id = id;
@@ -70,7 +61,7 @@ void ShaderProgram::read_uniforms() noexcept {
   glGetProgramInterfaceiv(id, GL_UNIFORM, GL_ACTIVE_RESOURCES, &uniform_count);
 
   const unsigned int to_read_size = 5;
-  std::array<uint32_t, to_read_size> to_read = {GL_BLOCK_INDEX, GL_TYPE, GL_NAME_LENGTH, GL_LOCATION, GL_OFFSET};
+  const std::array<uint32_t, to_read_size> to_read = {GL_BLOCK_INDEX, GL_TYPE, GL_NAME_LENGTH, GL_LOCATION, GL_OFFSET};
   for (int uniform = 0; uniform < uniform_count; uniform++) {
     // Fetch data
     std::array<int32_t, to_read_size> values;
