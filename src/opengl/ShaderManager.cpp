@@ -99,7 +99,7 @@ void ShaderManager::read_uniform_blocks(const ShaderProgram& shader_program) noe
         uniform_block = uniform_blocks.find(block_name);
         if (uniform_block == uniform_blocks.end()) {
           uniform_block =
-              uniform_blocks.emplace(block_name, UniformBlock(name, uniform_buffer_next_binding_block++)).first;
+              uniform_blocks.emplace(block_name, UniformBlock(block_name, uniform_buffer_next_binding_block++)).first;
         }
 
         // Bind program on first variable
