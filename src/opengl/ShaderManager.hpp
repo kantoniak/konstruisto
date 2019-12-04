@@ -19,14 +19,19 @@ class ShaderManager {
   using uniform_blocks_iterator = std::unordered_map<std::string, UniformBlock>::iterator;
 
 public:
-  std::optional<Shader> compileShader(Shader::ShaderType shaderType, std::string filename, engine::Logger& log);
+  ShaderManager() = delete;
+  ShaderManager(engine::Logger& log) noexcept;
+
+  std::optional<Shader> compileShader(Shader::ShaderType shaderType, std::string filename);
 
   template <size_t n>
-  std::optional<ShaderProgram> linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log);
+  std::optional<ShaderProgram> linkProgram(const std::array<Shader, n>& shaders);
 
   const UniformBlock& get_uniform_block(std::string name) const noexcept;
 
 protected:
+  engine::Logger& log;
+
   uint32_t uniform_buffer_next_binding_block = 1; // Start from 1 because NanoVG uses 0
 
   std::unordered_map<std::string, UniformBlock> uniform_blocks;

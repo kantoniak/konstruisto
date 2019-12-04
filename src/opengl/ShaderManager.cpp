@@ -2,8 +2,10 @@
 
 namespace opengl {
 
-std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_type, std::string filename,
-                                                   engine::Logger& log) {
+ShaderManager::ShaderManager(engine::Logger& log) noexcept : log(log) {
+}
+
+std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_type, std::string filename) {
   Shader shader = Shader::create(shader_type);
 
   if (shader.get_id() == 0) {
@@ -29,7 +31,7 @@ std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_typ
 }
 
 template <size_t n>
-std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, n>& shaders, engine::Logger& log) {
+std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, n>& shaders) {
   ShaderProgram program;
   program.generate();
 
@@ -115,14 +117,9 @@ inline std::string ShaderManager::get_uniform_block_name(const std::string& unif
 }
 
 // As of OpenGL 4.6 there can be up to 5 shaders in use.
-template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 1>& shaders,
-                                                                 engine::Logger& log);
-template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 2>& shaders,
-                                                                 engine::Logger& log);
-template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 3>& shaders,
-                                                                 engine::Logger& log);
-template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 4>& shaders,
-                                                                 engine::Logger& log);
-template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 5>& shaders,
-                                                                 engine::Logger& log);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 1>& shaders);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 2>& shaders);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 3>& shaders);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 4>& shaders);
+template std::optional<ShaderProgram> ShaderManager::linkProgram(const std::array<Shader, 5>& shaders);
 }

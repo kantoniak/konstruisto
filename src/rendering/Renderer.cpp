@@ -3,7 +3,7 @@
 #include "../data/Chunk.hpp"
 
 namespace rendering {
-Renderer::Renderer(engine::Engine& engine) : engine(engine) {
+Renderer::Renderer(engine::Engine& engine) : engine(engine), shader_manager(engine.getLogger()) {
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
@@ -28,6 +28,6 @@ void Renderer::sendFrame() {
 }
 
 std::optional<Shader> Renderer::compileShader(Shader::ShaderType shader_type, std::string filename) {
-  return shader_manager.compileShader(shader_type, filename, engine.getLogger());
+  return shader_manager.compileShader(shader_type, filename);
 }
 }

@@ -3,7 +3,8 @@
 #include "../data/Chunk.hpp"
 
 namespace rendering {
-WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world) : Renderer(engine), world(world), model_manager(/* rewrite_indices */ false) {
+WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world)
+    : Renderer(engine), world(world), model_manager(/* rewrite_indices */ false), renderer(engine) {
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
@@ -47,7 +48,7 @@ bool WorldRenderer::setupShaders() {
     }
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders);
     if (!shader_program.has_value()) {
       for (auto shader : shaders) {
         shader.delete_shader();
@@ -87,7 +88,7 @@ bool WorldRenderer::setupShaders() {
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
                                 std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders);
     if (!shader_program.has_value()) {
       this->cleanup_shaders();
       for (auto shader : shaders) {
@@ -122,7 +123,7 @@ bool WorldRenderer::setupShaders() {
 
     const std::array shaders = {std::move(vert_shader.value()), std::move(geom_shader.value()),
                                 std::move(frag_shader.value())};
-    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
+    std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders);
     if (!shader_program.has_value()) {
       this->cleanup_shaders();
       for (auto shader : shaders) {
