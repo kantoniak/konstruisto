@@ -202,6 +202,11 @@
     <ClCompile Include="src\opengl\UniformBlock.cpp" />
     <ClCompile Include="src\opengl\UniformBuffer.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
+    <ClCompile Include="src\rendering\Material.cpp" />
+    <ClCompile Include="src\rendering\Mesh.cpp" />
+    <ClCompile Include="src\rendering\Model.cpp" />
+    <ClCompile Include="src\rendering\ModelManager.cpp" />
+    <ClCompile Include="src\rendering\Object.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
     <ClCompile Include="src\rendering\UI.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
@@ -251,6 +256,11 @@
     <ClInclude Include="src\opengl\UniformBlock.hpp" />
     <ClInclude Include="src\opengl\UniformBuffer.hpp" />
     <ClInclude Include="src\opengl\VertexArray.hpp" />
+    <ClInclude Include="src\rendering\Material.hpp" />
+    <ClInclude Include="src\rendering\Mesh.hpp" />
+    <ClInclude Include="src\rendering\Model.hpp" />
+    <ClInclude Include="src\rendering\ModelManager.hpp" />
+    <ClInclude Include="src\rendering\Object.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
     <ClInclude Include="src\rendering\settings.hpp" />
     <ClInclude Include="src\rendering\UI.hpp" />
