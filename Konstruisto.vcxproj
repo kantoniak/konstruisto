@@ -193,6 +193,7 @@
     <ClCompile Include="src\opengl\ArrayBuffer.cpp" />
     <ClCompile Include="src\opengl\BlockUniform.cpp" />
     <ClCompile Include="src\opengl\Buffer.cpp" />
+    <ClCompile Include="src\opengl\ElementArrayBuffer.cpp" />
     <ClCompile Include="src\opengl\Shader.cpp" />
     <ClCompile Include="src\opengl\ShaderManager.cpp" />
     <ClCompile Include="src\opengl\ShaderProgram.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="src\opengl\BlockUniform.hpp" />
     <ClInclude Include="src\opengl\Buffer.hpp" />
     <ClInclude Include="src\opengl\debug.hpp" />
+    <ClInclude Include="src\opengl\ElementArrayBuffer.hpp" />
     <ClInclude Include="src\opengl\Shader.hpp" />
     <ClInclude Include="src\opengl\ShaderManager.hpp" />
     <ClInclude Include="src\opengl\ShaderProgram.hpp" />
