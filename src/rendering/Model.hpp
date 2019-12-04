@@ -14,8 +14,8 @@ public:
   Model() = delete;
   Model(std::string name) noexcept;
 
-  std::string get_name() const noexcept;
-  const std::vector<Mesh>& get_meshes() const noexcept;
+  [[nodiscard]] std::string get_name() const noexcept;
+  [[nodiscard]] const std::vector<Mesh>& get_meshes() const noexcept;
 
   void add_mesh(const Mesh) noexcept;
 

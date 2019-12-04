@@ -16,8 +16,8 @@ public:
   Material(std::string name, unsigned int index, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,
            float shininess) noexcept;
 
-  std::string get_name() const noexcept;
-  unsigned int get_index() const noexcept;
+  [[nodiscard]] std::string get_name() const noexcept;
+  [[nodiscard]] unsigned int get_index() const noexcept;
   void set_in(const opengl::ShaderProgram& shader) const noexcept;
 
 protected:

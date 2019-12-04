@@ -16,8 +16,8 @@ public:
   Object() = delete;
   Object(const Model& model, glm::mat4 transform) noexcept;
 
-  const Model& get_model() const noexcept;
-  const glm::mat4& get_transform() const noexcept;
+  [[nodiscard]] const Model& get_model() const noexcept;
+  [[nodiscard]] const glm::mat4& get_transform() const noexcept;
 
 protected:
   const Model& model;
