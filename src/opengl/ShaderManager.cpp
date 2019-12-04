@@ -1,7 +1,5 @@
 #include "ShaderManager.hpp"
 
-#include <iostream>
-
 namespace opengl {
 
 std::optional<Shader> ShaderManager::compileShader(Shader::ShaderType shader_type, std::string filename,
