@@ -32,6 +32,9 @@ public:
   template <typename T>
   void memcpy(std::vector<uint8_t>& destination, const T& data) const noexcept;
 
+  template <glm::length_t L, typename T, glm::qualifier Q>
+  void memcpy(std::vector<uint8_t>& destination, const glm::vec<L, T, Q>& data) const noexcept;
+
   template <glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
   void memcpy(std::vector<uint8_t>& destination, const glm::mat<C, R, T, Q>& data) const noexcept;
 

@@ -27,6 +27,11 @@ void BlockUniform::memcpy(std::vector<uint8_t>& destination, const T& data) cons
   std::memcpy(&destination[offset], &data, sizeof(T));
 }
 
+template <glm::length_t L, typename T, glm::qualifier Q>
+void BlockUniform::memcpy(std::vector<uint8_t>& destination, const glm::vec<L, T, Q>& data) const noexcept {
+  std::memcpy(&destination[offset], glm::value_ptr(data), L * sizeof(T));
+}
+
 template <glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
 void BlockUniform::memcpy(std::vector<uint8_t>& destination, const glm::mat<C, R, T, Q>& data) const noexcept {
   std::memcpy(&destination[offset], glm::value_ptr(data), C * R * sizeof(T));
@@ -46,6 +51,10 @@ std::string to_string(const BlockUniform& uniform) noexcept {
 // unsigned int
 template void BlockUniform::memcpy<unsigned int>(std::vector<uint8_t>& destination, const unsigned int& data) const
     noexcept;
+
+// glm::vec3
+template void BlockUniform::memcpy(std::vector<uint8_t>& destination,
+                                   const glm::vec<3, glm::f32, glm::packed_highp>& data) const noexcept;
 
 // glm::mat4
 template void BlockUniform::memcpy<4, 4, glm::f32, glm::packed_highp>(
