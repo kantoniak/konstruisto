@@ -208,6 +208,7 @@
     <ClCompile Include="src\rendering\ModelManager.cpp" />
     <ClCompile Include="src\rendering\Object.cpp" />
     <ClCompile Include="src\rendering\Renderer.cpp" />
+    <ClCompile Include="src\rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\rendering\UI.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="src\rendering\ModelManager.hpp" />
     <ClInclude Include="src\rendering\Object.hpp" />
     <ClInclude Include="src\rendering\Renderer.hpp" />
+    <ClInclude Include="src\rendering\SceneRenderer.hpp" />
     <ClInclude Include="src\rendering\settings.hpp" />
     <ClInclude Include="src\rendering\UI.hpp" />
     <ClInclude Include="src\rendering\WorldRenderer.hpp" />

@@ -19,7 +19,7 @@ bool WorldRenderer::init() {
     return false;
   }
 
-  if (!setup_trees()) {
+  if (!renderer.set_up(shader_manager) || !set_up_models()) {
     return false;
   }
 
@@ -231,32 +231,7 @@ bool WorldRenderer::setupBuildings() {
   return true;
 }
 
-bool WorldRenderer::setup_trees() {
-  std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/trees.glsl.vert");
-  if (!vert_shader.has_value()) {
-    return false;
-  }
-
-  std::optional<Shader> frag_shader = compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/trees.glsl.frag");
-  if (!frag_shader.has_value()) {
-    vert_shader.value().delete_shader();
-    return false;
-  }
-
-  const std::array shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
-  std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
-  if (!shader_program.has_value()) {
-    for (auto shader : shaders) {
-      shader.delete_shader();
-    }
-    return false;
-  }
-  this->trees_shader_prog = shader_program.value();
-
-  for (auto shader : shaders) {
-    shader.delete_shader();
-  }
-
+bool WorldRenderer::set_up_models() {
   // Materials
   Material& red_plastic = model_manager.register_material("red_plastic", glm::vec3(0.0, 0.0, 0.0),
                                                           glm::vec3(0.5, 0.0, 0.0), glm::vec3(0.7, 0.6, 0.6), 0.25f);
@@ -287,32 +262,7 @@ bool WorldRenderer::setup_trees() {
   test_object =
       std::make_unique<Object>(model_manager.get_model("test_model"), glm::scale(glm::mat4(1), glm::vec3(5, 5, 5)));
 
-  // VAO
-  trees_vao.generate();
-  trees_vao.bind();
-
-  // Vertex buffer
-  trees_vbo.generate();
-  trees_vbo.bind();
-  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_vertices(), GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
-
-  // Normal buffer
-  trees_normals_vbo.generate();
-  trees_normals_vbo.bind();
-  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_normals(), GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
-
-  // Element array buffer
-  trees_ebo.generate();
-  trees_ebo.bind();
-  glBufferDataVector(GL_ELEMENT_ARRAY_BUFFER, model_manager.get_indices(), GL_STATIC_DRAW);
-
-  VertexArray::unbind();
+  renderer.submit_static_models(model_manager);
   return true;
 }
 
@@ -328,21 +278,10 @@ void WorldRenderer::cleanup() {
   building_mesh_vbo.delete_buffer();
   building_positions_vbo.delete_buffer();
 
-  cleanup_trees();
+  renderer.clean_up();
   cleanup_ubos();
   cleanup_shaders();
   Renderer::cleanup();
-}
-
-void WorldRenderer::cleanup_trees() {
-  ElementArrayBuffer::unbind();
-  ArrayBuffer::unbind();
-  VertexArray::unbind();
-
-  trees_ebo.delete_buffer();
-  trees_vbo.delete_buffer();
-  trees_normals_vbo.delete_buffer();
-  trees_vao.delete_vertex_array();
 }
 
 void WorldRenderer::cleanup_ubos() {
@@ -430,25 +369,10 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
   }
 
-  // Trees
-  trees_vao.bind();
-  trees_shader_prog.use();
-
-  glm::vec3 light_pos = glm::vec3(3) * sin(engine.getDeltaSinceStart().count() / 2000.f);
-  trees_shader_prog.submit("light_pos", light_pos);
-
-  glPointSize(5);
-  trees_vbo.bind();
-
+  // Scene renderer
   Object& object = *(test_object.get());
-  trees_shader_prog.submit("model", object.get_transform());
-  for (auto const mesh : object.get_model().get_meshes()) {
-    mesh.get_material().set_in(trees_shader_prog);
-    glDrawElementsBaseVertex(GL_TRIANGLES, mesh.get_vertex_count(), GL_UNSIGNED_INT,
-                             (GLvoid*)(mesh.get_ebo_offset() * sizeof(uint32_t)), mesh.get_vbo_offset());
-  }
+  renderer.render({object});
 
-  VertexArray::unbind();
   glFlush();
 }
 

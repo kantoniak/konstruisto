@@ -15,10 +15,6 @@ uniform mat4 model;
 
 void main() {
   v_position = vec3(model * vec4(in_position, 1.0));
-  //v_position = in_position;
   v_normal = mat3(transpose(inverse(model))) * in_normal;
-  //v_normal = in_normal;
   gl_Position = camera.vp * model * vec4(in_position, 1.0);
-  //gl_Position = camera.vp * vec4(in_position, 1.0);
-  //gl_Position = vec4(in_position, 1);
 }

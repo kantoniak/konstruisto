@@ -29,6 +29,7 @@
 #include "ModelManager.hpp"
 #include "Object.hpp"
 #include "Renderer.hpp"
+#include "SceneRenderer.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
 
@@ -45,12 +46,10 @@ public:
   bool setupTextures();
   bool setupTerrain();
   bool setupBuildings();
-  bool setup_trees();
 
   void cleanup() override;
   void cleanup_ubos();
   void cleanup_shaders();
-  void cleanup_trees();
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();
@@ -95,14 +94,9 @@ protected:
 
   // Renderer
   ModelManager model_manager;
+  SceneRenderer renderer;
   std::unique_ptr<Object> test_object;
-
-  // Trees
-  opengl::ShaderProgram trees_shader_prog;
-  opengl::VertexArray trees_vao;
-  opengl::ArrayBuffer trees_vbo;
-  opengl::ArrayBuffer trees_normals_vbo;
-  opengl::ElementArrayBuffer trees_ebo;
+  bool set_up_models();
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;
