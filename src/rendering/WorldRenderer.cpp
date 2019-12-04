@@ -274,6 +274,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
 
   const glm::mat4 vp = world.getCamera().getViewProjectionMatrix();
   camera_ub.get_uniform("Camera.vp").memcpy(camera_buffer_data, vp);
+  camera_ub.get_uniform("Camera.position").memcpy(camera_buffer_data, world.getCamera().getPosition());
 
   camera_ubo.bind();
   glBufferDataVector(GL_UNIFORM_BUFFER, camera_buffer_data, GL_DYNAMIC_DRAW);

@@ -4,6 +4,7 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
 layout (std140) uniform Camera {
+  vec3 position;
 	mat4 vp;
 } camera;
 
