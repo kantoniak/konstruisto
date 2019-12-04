@@ -4,6 +4,7 @@ layout (location = 0) in vec3 vertex;
 layout (location = 1) in float tile;
 
 layout (std140) uniform Camera {
+  vec3 position;
 	mat4 vp;
 } camera;
 

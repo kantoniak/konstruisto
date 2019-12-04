@@ -3,7 +3,7 @@
 #include "../data/Chunk.hpp"
 
 namespace rendering {
-WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world) : Renderer(engine), world(world) {
+WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world) : Renderer(engine), world(world), model_manager(/* rewrite_indices */ false) {
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
@@ -15,6 +15,10 @@ bool WorldRenderer::init() {
   }
 
   if (!setupTerrain() || !setupBuildings()) {
+    return false;
+  }
+
+  if (!setup_trees()) {
     return false;
   }
 
@@ -226,6 +230,91 @@ bool WorldRenderer::setupBuildings() {
   return true;
 }
 
+bool WorldRenderer::setup_trees() {
+  std::optional<Shader> vert_shader = compileShader(Shader::VERTEX_SHADER, "assets/shaders/trees.glsl.vert");
+  if (!vert_shader.has_value()) {
+    return false;
+  }
+
+  std::optional<Shader> frag_shader = compileShader(Shader::FRAGMENT_SHADER, "assets/shaders/trees.glsl.frag");
+  if (!frag_shader.has_value()) {
+    vert_shader.value().delete_shader();
+    return false;
+  }
+
+  const std::array shaders = {std::move(vert_shader.value()), std::move(frag_shader.value())};
+  std::optional<ShaderProgram> shader_program = shader_manager.linkProgram(shaders, engine.getLogger());
+  if (!shader_program.has_value()) {
+    for (auto shader : shaders) {
+      shader.delete_shader();
+    }
+    return false;
+  }
+  this->trees_shader_prog = shader_program.value();
+
+  for (auto shader : shaders) {
+    shader.delete_shader();
+  }
+
+  // Materials
+  Material& red_plastic = model_manager.register_material("red_plastic", glm::vec3(0.0, 0.0, 0.0),
+                                                          glm::vec3(0.5, 0.0, 0.0), glm::vec3(0.7, 0.6, 0.6), 0.25f);
+  Material& gold =
+      model_manager.register_material("gold", glm::vec3(0.24725, 0.1995, 0.0745), glm::vec3(0.75164, 0.60648, 0.22648),
+                                      glm::vec3(0.628281, 0.555802, 0.366065), 0.4);
+  Material& pearl =
+      model_manager.register_material("pearl", glm::vec3(0.25, 0.20725, 0.20725), glm::vec3(1, 0.829, 0.829),
+                                      glm::vec3(0.296648, 0.296648, 0.296648), 0.088);
+  Material& chrome = model_manager.register_material("chrome", glm::vec3(0.25, 0.25, 0.25), glm::vec3(0.4, 0.4, 0.4),
+                                                     glm::vec3(0.774597, 0.774597, 0.774597), 0.6);
+
+  // Test model
+  Model& test_model = model_manager.register_model("test_model");
+  test_model.add_mesh(model_manager.create_mesh(pearl, {0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0},
+                                                {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1}, {0, 1, 2, 1, 3, 2}));
+  test_model.add_mesh(
+      model_manager.create_mesh(red_plastic, {0, 0, 0, 0, 0, 1, 1, 0, 0}, {0, 1, 0, 0, 1, 0, 0, 1, 0}, {0, 1, 2}));
+  test_model.add_mesh(
+      model_manager.create_mesh(chrome, {0, 0, 0, 0, 1, 0, 0, 0, 1}, {1, 0, 0, 1, 0, 0, 1, 0, 0}, {0, 1, 2}));
+  test_model.add_mesh(
+      model_manager.create_mesh(red_plastic, {0, 0, 0, 1, 0, 0, 0, 1, 0}, {0, 0, -1, 0, 0, -1, 0, 0, -1}, {0, 2, 1}));
+  test_model.add_mesh(
+      model_manager.create_mesh(gold, {0, 0, 0, 0, 0, 1, 1, 0, 0}, {0, -1, 0, 0, -1, 0, 0, -1, 0}, {0, 2, 1}));
+  test_model.add_mesh(
+      model_manager.create_mesh(pearl, {0, 0, 0, 0, 1, 0, 0, 0, 1}, {-1, 0, 0, -1, 0, 0, -1, 0, 0}, {0, 2, 1}));
+
+  test_object =
+      std::make_unique<Object>(model_manager.get_model("test_model"), glm::scale(glm::mat4(1), glm::vec3(5, 5, 5)));
+
+  // VAO
+  trees_vao.generate();
+  trees_vao.bind();
+
+  // Vertex buffer
+  trees_vbo.generate();
+  trees_vbo.bind();
+  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_vertices(), GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
+
+  // Normal buffer
+  trees_normals_vbo.generate();
+  trees_normals_vbo.bind();
+  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_normals(), GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
+
+  // Element array buffer
+  trees_ebo.generate();
+  trees_ebo.bind();
+  glBufferDataVector(GL_ELEMENT_ARRAY_BUFFER, model_manager.get_indices(), GL_STATIC_DRAW);
+
+  VertexArray::unbind();
+  return true;
+}
+
 void WorldRenderer::cleanup() {
   glUseProgram(0);
   terrain_vao.delete_vertex_array();
@@ -238,9 +327,21 @@ void WorldRenderer::cleanup() {
   building_mesh_vbo.delete_buffer();
   building_positions_vbo.delete_buffer();
 
+  cleanup_trees();
   cleanup_ubos();
   cleanup_shaders();
   Renderer::cleanup();
+}
+
+void WorldRenderer::cleanup_trees() {
+  ElementArrayBuffer::unbind();
+  ArrayBuffer::unbind();
+  VertexArray::unbind();
+
+  trees_ebo.delete_buffer();
+  trees_vbo.delete_buffer();
+  trees_normals_vbo.delete_buffer();
+  trees_vao.delete_vertex_array();
 }
 
 void WorldRenderer::cleanup_ubos() {
@@ -267,6 +368,9 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
+
+  glFrontFace(GL_CCW);
+  glCullFace(GL_BACK);
 
   // UBO
   const opengl::UniformBlock camera_ub = shader_manager.get_uniform_block("Camera");
@@ -323,6 +427,24 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     building_shader_prog.use();
     buildings_vao.bind();
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+  }
+
+  // Trees
+  trees_vao.bind();
+  trees_shader_prog.use();
+
+  glm::vec3 light_pos = glm::vec3(3) * sin(engine.getDeltaSinceStart().count() / 2000.f);
+  trees_shader_prog.submit("light_pos", light_pos);
+
+  glPointSize(5);
+  trees_vbo.bind();
+
+  Object& object = *(test_object.get());
+  trees_shader_prog.submit("model", object.get_transform());
+  for (auto const mesh : object.get_model().get_meshes()) {
+    mesh.get_material().set_in(trees_shader_prog);
+    glDrawElementsBaseVertex(GL_TRIANGLES, mesh.get_vertex_count(), GL_UNSIGNED_INT,
+                             (GLvoid*)(mesh.get_ebo_offset() * sizeof(uint32_t)), mesh.get_vbo_offset());
   }
 
   VertexArray::unbind();

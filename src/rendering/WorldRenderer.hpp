@@ -17,6 +17,7 @@
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../opengl/ArrayBuffer.hpp"
+#include "../opengl/ElementArrayBuffer.hpp"
 #include "../opengl/Shader.hpp"
 #include "../opengl/ShaderManager.hpp"
 #include "../opengl/ShaderProgram.hpp"
@@ -24,6 +25,9 @@
 #include "../opengl/VertexArray.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
+#include "Material.hpp"
+#include "ModelManager.hpp"
+#include "Object.hpp"
 #include "Renderer.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
@@ -41,9 +45,12 @@ public:
   bool setupTextures();
   bool setupTerrain();
   bool setupBuildings();
+  bool setup_trees();
+
   void cleanup() override;
   void cleanup_ubos();
   void cleanup_shaders();
+  void cleanup_trees();
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();
@@ -85,6 +92,17 @@ protected:
   uint32_t grid_texture;
   uint32_t road_texture;
   std::map<std::pair<int, int>, opengl::ArrayBuffer> chunk_to_vbo;
+
+  // Renderer
+  ModelManager model_manager;
+  std::unique_ptr<Object> test_object;
+
+  // Trees
+  opengl::ShaderProgram trees_shader_prog;
+  opengl::VertexArray trees_vao;
+  opengl::ArrayBuffer trees_vbo;
+  opengl::ArrayBuffer trees_normals_vbo;
+  opengl::ElementArrayBuffer trees_ebo;
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;
