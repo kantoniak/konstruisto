@@ -2,7 +2,7 @@
 
 namespace rendering {
 ModelManager::ModelManager(bool rewrite_indices) noexcept
-    : next_material_index(0), vertices_size(0), indices_size(0), rewrite_indices(rewrite_indices) {
+    : rewrite_indices(rewrite_indices), next_material_index(0), vertices_size(0), indices_size(0) {
 }
 
 Material& ModelManager::register_material(std::string name, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,

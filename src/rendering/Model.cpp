@@ -1,7 +1,9 @@
 #include "Model.hpp"
 
+#include <utility>
+
 namespace rendering {
-Model::Model(std::string name) noexcept : name(name) {
+Model::Model(std::string name) noexcept : name(std::move(name)) {
 }
 
 std::string Model::get_name() const noexcept {

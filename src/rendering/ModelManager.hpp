@@ -1,6 +1,7 @@
 #ifndef RENDERING_MODELMANAGER_HPP
 #define RENDERING_MODELMANAGER_HPP
 
+#include <algorithm>
 #include <cassert>
 #include <string>
 #include <unordered_map>

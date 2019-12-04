@@ -1,9 +1,12 @@
 #include "Material.hpp"
 
+#include <utility>
+
 namespace rendering {
 Material::Material(std::string name, unsigned int index, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,
                    float shininess) noexcept
-    : name(name), index(index), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {
+    : name(std::move(name)), index(index), ambient(ambient), diffuse(diffuse), specular(specular),
+      shininess(shininess) {
 }
 
 std::string Material::get_name() const noexcept {
