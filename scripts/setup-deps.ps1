@@ -9,6 +9,7 @@ $glfwVersion = "3.3"
 $glmVersion = "0.9.9.6"
 $cerealVersion = "1.3.0"
 $premakeVersion = "5.0.0-alpha14"
+$assimpVersion = "5.0.0"
 
 Write-Output "Setting up Konstruisto dependencies for MSVC..."
 Write-Output "Dependencies directory: $extDir"
@@ -18,7 +19,7 @@ New-Item -ErrorAction Ignore -ItemType directory -Path $extDir | Out-Null
 
 # Step counter
 $step = 0
-$totalSteps = 8
+$totalSteps = 10
 
 $step++
 # Set up GLFW
@@ -129,9 +130,45 @@ if (!(Test-Path $nanoVgBuildDir) -And !(Test-Path $nanoVgFinalBuildDir)) {
     }
 }
 
-$nanoVgSolution = Join-Path $nanoVgFinalBuildDir "nanovg.sln"
-$todoMessage = "TODO: Open solution " + $nanoVgSolution + " in Visual Studio and build project nanovg for Release/x64."
+$step++
+# Get Assimp
+$assimpTargetPath = Join-Path $extDir "assimp-$assimpVersion.zip"
+if (!(Test-Path $assimpTargetPath)) {
+    Write-Output "[$step/$totalSteps] Downloading assimp..."
+    $assimpUrl = "https://github.com/assimp/assimp/archive/v$assimpVersion.zip"
+    $webClient.DownloadFile($assimpUrl, $assimpTargetPath)
+}
+
+$assimpFinalDir = Join-Path $extDir "assimp-$assimpVersion"
+if (!(Test-Path $assimpFinalDir)) {
+    Write-Output "[$step/$totalSteps] Unzipping assimp..."
+    Expand-Archive $assimpTargetPath -DestinationPath $extDir
+}
 
 $step++
-Write-Host "[$step/$totalSteps] Success."
-Write-Host $todoMessage
+# Build Assimp
+$assimpBuildDir = Join-Path $assimpFinalDir "build-msvc"
+if (!(Test-Path $assimpBuildDir)) {
+    Write-Output "[$step/$totalSteps] Building assimp in $assimpBuildDir..."
+    New-Item -ErrorAction Ignore -ItemType directory -Path $assimpBuildDir | Out-Null
+    
+    # Build here
+    try {
+        Write-Output "[$step/$totalSteps] Moving to $assimpBuildDir."
+        Set-Location $assimpBuildDir
+        
+        Write-Output "[$step/$totalSteps] Generating VS2019 solution..."
+        & "cmake" "$assimpFinalDir"
+    } finally {
+        Set-Location $currentDir
+    }
+}
+
+$step++
+Write-Host "[$step/$totalSteps] Success. Remember to run the builds:"
+
+$nanoVgSolution = Join-Path $nanoVgFinalBuildDir "nanovg.sln"
+Write-Host "[$step/$totalSteps] TODO: Open solution $nanoVgSolution in Visual Studio and build project nanovg for Release/x64."
+
+$nanoVgSolution = Join-Path $assimpBuildDir "Assimp.sln"
+Write-Host "[$step/$totalSteps] TODO: Open solution $nanoVgSolution in Visual Studio and build project ALL_BUILD for MinSizeRel/x64."

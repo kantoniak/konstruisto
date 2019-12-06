@@ -31,6 +31,8 @@ To build release configuration use `make rebuild run CONFIG=RELEASE`. Command `m
 
 ### Building on Windows
 
+You will need to set up `cmake` in `PATH` if it's not already there.
+
 1. Set up dependencies running `scripts/setup-deps.ps1` in Powershell from the main directory:
     ```
     git clone git@github.com:kantoniak/konstruisto.git konstruisto
@@ -40,7 +42,10 @@ To build release configuration use `make rebuild run CONFIG=RELEASE`. Command `m
 1. Build NanoVG release libraries:
     1. Open solution `ext\nanovg\build-msvc\nanovg.sln`
     1. Build project `nanovg` for Release/x64.
-1. Open Visual Studio solution and build project.
+1. Build Assimp release libraries:
+    1. Open solution `ext\assimp-5.0.0\build-msvc\Assimp.sln`
+    1. Build project `ALL_BUILD` for MinSizeRel/x64.
+1. Open Visual Studio solution and build project `Konstruisto`.
 
 Please note that only x64 builds are supported.
 
@@ -85,3 +90,4 @@ Contents of this repository is licensed under GNU General Public License, versio
 * [Cereal 1.3.0](http://uscilab.github.io/cereal/) under BSD license
 * [NanoVG](https://github.com/memononen/nanovg) under the zlib/libpng license
 * [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h), a public domain image loading library
+* [Assimp 5.0.0](https://github.com/assimp/assimp) under BSD license

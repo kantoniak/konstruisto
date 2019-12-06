@@ -46,7 +46,7 @@ ifeq ($(OS), Windows_NT)
 
 	INCLUDES += -I$(EXTDIR)/stb/
 
-	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32 -lnanovg
+	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32 -lnanovg -lassimp
 else
 	SYSTEM := LINUX
 
@@ -61,7 +61,7 @@ else
 
 	INCLUDES += -I$(EXTDIR)/stb/
 
-	LIBS := -lglfw -ldl -lGL -lGLU -lnanovg
+	LIBS := -lglfw -ldl -lGL -lGLU -lnanovg -lassimp
 endif
 
 DEFINES +=-D_USE_MATH_DEFINES -DPROJECT_NAME=\""$(PROJECT_NAME)\"" -DPROJECT_VERSION=\""$(PROJECT_VERSION)\"" -DBUILD_DESC=\""$(BUILD_DESC)\""
