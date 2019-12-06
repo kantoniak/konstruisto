@@ -19,6 +19,14 @@ Material& ModelManager::register_material(std::string name, glm::vec3 ambient, g
   return new_material;
 }
 
+bool ModelManager::has_material(std::string name) const noexcept {
+  return materials.find(name) != materials.end();
+}
+
+Material& ModelManager::get_material(std::string name) noexcept {
+  return materials.at(name);
+}
+
 Model& ModelManager::register_model(std::string name) noexcept {
   auto it = models.find(name);
   if (it != models.end()) {

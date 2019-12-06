@@ -30,8 +30,8 @@ void main() {
 
     // diffuse 
     vec3 norm = normalize(v_normal);
-    vec3 lightDir = normalize(lighPosCor - v_position);
-    //vec3 lightDir = vec3(-1, 0.7f, 0.8f);
+    //vec3 lightDir = normalize(lighPosCor - v_position);
+    vec3 lightDir = vec3(-1, 0.7f, 0.8f);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = lightColor * (diff * material.diffuse);
 

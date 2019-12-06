@@ -25,6 +25,7 @@
 #include "../opengl/VertexArray.hpp"
 #include "../settings.hpp"
 #include "../world/World.hpp"
+#include "AssimpLoader.hpp"
 #include "Material.hpp"
 #include "ModelManager.hpp"
 #include "Object.hpp"
@@ -94,9 +95,10 @@ protected:
 
   // Renderer
   ModelManager model_manager;
+  AssimpLoader assimp_loader;
   SceneRenderer renderer;
-  std::unique_ptr<Object> test_object;
   bool set_up_models();
+  std::unique_ptr<Object> test_tree;
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;
@@ -109,6 +111,9 @@ protected:
 
   // Buildings - normals
   opengl::ShaderProgram building_normals_shader_prog;
+
+  // Trees
+
 
   // Left menu
   int leftMenuActiveIcon = -1;

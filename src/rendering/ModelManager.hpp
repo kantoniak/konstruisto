@@ -24,6 +24,8 @@ public:
   // Materials
   Material& register_material(std::string name, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,
                               float shininess) noexcept;
+  bool has_material(std::string name) const noexcept;
+  Material& get_material(std::string name) noexcept;
 
   // Models
   Model& register_model(std::string name) noexcept;

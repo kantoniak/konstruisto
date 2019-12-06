@@ -202,6 +202,7 @@
     <ClCompile Include="src\opengl\UniformBlock.cpp" />
     <ClCompile Include="src\opengl\UniformBuffer.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
+    <ClCompile Include="src\rendering\AssimpLoader.cpp" />
     <ClCompile Include="src\rendering\Material.cpp" />
     <ClCompile Include="src\rendering\Mesh.cpp" />
     <ClCompile Include="src\rendering\Model.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="src\opengl\UniformBlock.hpp" />
     <ClInclude Include="src\opengl\UniformBuffer.hpp" />
     <ClInclude Include="src\opengl\VertexArray.hpp" />
+    <ClInclude Include="src\rendering\AssimpLoader.hpp" />
     <ClInclude Include="src\rendering\Material.hpp" />
     <ClInclude Include="src\rendering\Mesh.hpp" />
     <ClInclude Include="src\rendering\Model.hpp" />

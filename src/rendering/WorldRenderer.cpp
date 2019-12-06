@@ -4,7 +4,8 @@
 
 namespace rendering {
 WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world)
-    : Renderer(engine), world(world), model_manager(/* rewrite_indices */ false), renderer(engine) {
+    : Renderer(engine), world(world), model_manager(/* rewrite_indices */ false),
+      assimp_loader(model_manager, engine.getLogger()), renderer(engine) {
   clearColor = glm::vec3(89, 159, 209) / 255.f;
 }
 
@@ -232,35 +233,10 @@ bool WorldRenderer::setupBuildings() {
 }
 
 bool WorldRenderer::set_up_models() {
-  // Materials
-  Material& red_plastic = model_manager.register_material("red_plastic", glm::vec3(0.0, 0.0, 0.0),
-                                                          glm::vec3(0.5, 0.0, 0.0), glm::vec3(0.7, 0.6, 0.6), 0.25f);
-  Material& gold =
-      model_manager.register_material("gold", glm::vec3(0.24725, 0.1995, 0.0745), glm::vec3(0.75164, 0.60648, 0.22648),
-                                      glm::vec3(0.628281, 0.555802, 0.366065), 0.4);
-  Material& pearl =
-      model_manager.register_material("pearl", glm::vec3(0.25, 0.20725, 0.20725), glm::vec3(1, 0.829, 0.829),
-                                      glm::vec3(0.296648, 0.296648, 0.296648), 0.088);
-  Material& chrome = model_manager.register_material("chrome", glm::vec3(0.25, 0.25, 0.25), glm::vec3(0.4, 0.4, 0.4),
-                                                     glm::vec3(0.774597, 0.774597, 0.774597), 0.6);
-
-  // Test model
-  Model& test_model = model_manager.register_model("test_model");
-  test_model.add_mesh(model_manager.create_mesh(pearl, {0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0},
-                                                {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1}, {0, 1, 2, 1, 3, 2}));
-  test_model.add_mesh(
-      model_manager.create_mesh(red_plastic, {0, 0, 0, 0, 0, 1, 1, 0, 0}, {0, 1, 0, 0, 1, 0, 0, 1, 0}, {0, 1, 2}));
-  test_model.add_mesh(
-      model_manager.create_mesh(chrome, {0, 0, 0, 0, 1, 0, 0, 0, 1}, {1, 0, 0, 1, 0, 0, 1, 0, 0}, {0, 1, 2}));
-  test_model.add_mesh(
-      model_manager.create_mesh(red_plastic, {0, 0, 0, 1, 0, 0, 0, 1, 0}, {0, 0, -1, 0, 0, -1, 0, 0, -1}, {0, 2, 1}));
-  test_model.add_mesh(
-      model_manager.create_mesh(gold, {0, 0, 0, 0, 0, 1, 1, 0, 0}, {0, -1, 0, 0, -1, 0, 0, -1, 0}, {0, 2, 1}));
-  test_model.add_mesh(
-      model_manager.create_mesh(pearl, {0, 0, 0, 0, 1, 0, 0, 0, 1}, {-1, 0, 0, -1, 0, 0, -1, 0, 0}, {0, 2, 1}));
-
-  test_object =
-      std::make_unique<Object>(model_manager.get_model("test_model"), glm::scale(glm::mat4(1), glm::vec3(5, 5, 5)));
+  assimp_loader.load_model_from_file("assets/models/tree.obj");
+  test_tree =
+      std::make_unique<Object>(model_manager.get_model("tree"),
+                               glm::translate(glm::scale(glm::mat4(1), glm::vec3(5, 8, 5)), glm::vec3(10, 0, 10)));
 
   renderer.submit_static_models(model_manager);
   return true;
@@ -370,7 +346,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   }
 
   // Scene renderer
-  Object& object = *(test_object.get());
+  Object& object = *(test_tree.get());
   renderer.render({object});
 
   glFlush();

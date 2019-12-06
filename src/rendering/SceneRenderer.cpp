@@ -86,8 +86,8 @@ void SceneRenderer::render(std::vector<std::reference_wrapper<Object>> to_render
   vao.bind();
   shader_program.use();
 
-  glm::vec3 light_pos = glm::vec3(3) * (float)sin(engine.getDeltaSinceStart().count() / 2000.f);
-  shader_program.submit("light_pos", light_pos);
+  // glm::vec3 light_pos = glm::vec3(3) * (float)sin(engine.getDeltaSinceStart().count() / 2000.f);
+  // shader_program.submit("light_pos", light_pos);
 
   vbo.bind();
   for (const auto& ref : to_render) {
