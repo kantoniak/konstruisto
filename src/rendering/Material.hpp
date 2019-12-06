@@ -4,6 +4,7 @@
 #include <string>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "../opengl/ShaderProgram.hpp"
 
@@ -19,6 +20,9 @@ public:
   [[nodiscard]] std::string get_name() const noexcept;
   [[nodiscard]] unsigned int get_index() const noexcept;
   void set_in(const opengl::ShaderProgram& shader) const noexcept;
+
+  friend std::ostream& operator<<(std::ostream& os, const Material& material) noexcept;
+  friend std::string to_string(const Material& material) noexcept;
 
 protected:
   std::string name;

@@ -23,4 +23,16 @@ void Material::set_in(const opengl::ShaderProgram& shader) const noexcept {
   shader.submit("material.specular", specular);
   shader.submit("material.shininess", shininess * 128);
 }
+
+std::ostream& operator<<(std::ostream& os, const Material& material) noexcept {
+  return os << "Material [name=\"" << material.name << "\", index=" << material.index
+            << ", ambient=" << glm::to_string(material.ambient) << ", diffuse=" << glm::to_string(material.diffuse)
+            << ", specular=" << glm::to_string(material.specular) << ", shininess=" << material.shininess << "]";
+}
+
+std::string to_string(const Material& material) noexcept {
+  std::stringstream result;
+  result << material;
+  return result.str();
+}
 }

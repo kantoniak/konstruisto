@@ -20,4 +20,15 @@ int32_t Mesh::get_ebo_offset() const noexcept {
 const Material& Mesh::get_material() const noexcept {
   return material;
 }
+
+std::ostream& operator<<(std::ostream& os, const Mesh& mesh) noexcept {
+  return os << "Mesh [vertex_count=" << mesh.vertex_count << ", vbo_offset=" << mesh.vbo_offset
+            << ", ebo_offset=" << mesh.ebo_offset << ", material=" << to_string(mesh.material) << "]";
+}
+
+std::string to_string(const Mesh& mesh) noexcept {
+  std::stringstream result;
+  result << mesh;
+  return result.str();
+}
 }
