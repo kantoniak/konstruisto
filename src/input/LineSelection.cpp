@@ -30,7 +30,7 @@ glm::ivec2 LineSelection::getTo() const {
   }
 }
 
-const std::vector<data::Position> LineSelection::getSelected() const {
+const std::vector<data::Position<int32_t>> LineSelection::getSelected() const {
   const glm::ivec2 start = this->getFrom();
 
   const glm::ivec2 diff = toPoint - fromPoint;
@@ -38,7 +38,7 @@ const std::vector<data::Position> LineSelection::getSelected() const {
 
   int length = 1 + (goesNorth ? std::abs(diff.y) : std::abs(diff.x));
 
-  std::vector<data::Position> result;
+  std::vector<data::Position<int32_t>> result;
   for (int i = 0; i < length; i++) {
     const glm::ivec2 toAdd = goesNorth ? glm::ivec2(0, i) : glm::ivec2(i, 0);
     result.emplace_back(start + toAdd);

@@ -43,7 +43,7 @@ void RoadGraph<L>::addRoad(const data::Road& road) {
 }
 
 template <unsigned int L>
-void RoadGraph<L>::update(const std::vector<data::Position>& tiles) {
+void RoadGraph<L>::update(const std::vector<data::Position<int32_t>>& tiles) {
   for (auto& tile : tiles) {
     this->updateIndex(tile.getLocalIndex());
   }

@@ -32,7 +32,7 @@ public:
 
   [[nodiscard]] virtual glm::ivec2 getFrom() const;
   [[nodiscard]] virtual glm::ivec2 getTo() const;
-  [[nodiscard]] virtual const std::vector<data::Position> getSelected() const;
+  [[nodiscard]] virtual const std::vector<data::Position<int32_t>> getSelected() const;
 
 protected:
   bool selecting;

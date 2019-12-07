@@ -58,7 +58,7 @@ void Chunk::addRoad(data::Road road) {
   this->roadGraph.addRoad(road);
 }
 
-void Chunk::updateRoadGraph(const std::vector<data::Position>& tiles) {
+void Chunk::updateRoadGraph(const std::vector<data::Position<int32_t>>& tiles) {
   this->roadGraph.update(tiles);
 }
 

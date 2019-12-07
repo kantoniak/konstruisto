@@ -88,8 +88,8 @@ glm::ivec2 Selection::getTo() const {
   return result;
 }
 
-const std::vector<data::Position> Selection::getSelected() const {
+const std::vector<data::Position<int32_t>> Selection::getSelected() const {
   // FIXME(kantoniak): Return all in selection
-  return std::vector<data::Position>();
+  return std::vector<data::Position<int32_t>>();
 }
 }

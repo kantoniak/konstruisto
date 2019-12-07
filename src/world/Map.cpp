@@ -133,7 +133,7 @@ void Map::addRoads(const std::vector<data::Road>& roads) {
     }
   };
 
-  std::vector<data::Position> toUpdate;
+  std::vector<data::Position<int32_t>> toUpdate;
   std::unordered_set<glm::ivec2, KeyFuncs, KeyFuncs> chunksToUpdate;
 
   for (auto road : roads) {
@@ -158,7 +158,7 @@ void Map::addRoads(const std::vector<data::Road>& roads) {
       continue;
     }
 
-    std::vector<data::Position> fromCurrentChunk;
+    std::vector<data::Position<int32_t>> fromCurrentChunk;
 
     for (auto& tile : toUpdate) {
       if (tile.getChunk() == chunk) {

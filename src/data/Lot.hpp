@@ -8,7 +8,7 @@ namespace data {
 
 struct Lot {
   unsigned int objectId;
-  Position position;
+  Position<int32_t> position;
   Direction direction;
   glm::ivec2 size;
 };

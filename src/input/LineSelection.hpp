@@ -17,7 +17,7 @@ public:
   [[nodiscard]] glm::ivec2 getFrom() const override;
   [[nodiscard]] glm::ivec2 getTo() const override;
 
-  [[nodiscard]] const std::vector<data::Position> getSelected() const override;
+  [[nodiscard]] const std::vector<data::Position<int32_t>> getSelected() const override;
   [[nodiscard]] const std::vector<LineSelection> divideByChunk() const;
 
 private:

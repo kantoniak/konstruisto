@@ -3,10 +3,10 @@
 #include <utility>
 
 namespace data {
-Road::Road(std::vector<Position> tiles) : tiles(std::move(tiles)) {
+Road::Road(std::vector<Position<int32_t>> tiles) : tiles(std::move(tiles)) {
 }
 
-const std::vector<Position> Road::getTiles() const {
+const std::vector<Position<int32_t>> Road::getTiles() const {
   return this->tiles;
 }
 }

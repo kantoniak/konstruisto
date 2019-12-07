@@ -1,38 +1,47 @@
 #include "Position.hpp"
 
 namespace data {
-Position::Position() = default;
+template <typename T>
+Position<T>::Position() = default;
 
-Position::Position(glm::ivec2 global) : global(global) {
+template <typename T>
+Position<T>::Position(vec2 global) : global(global) {
 }
 
-void Position::setGlobal(glm::ivec2 global) {
+template <typename T>
+void Position<T>::setGlobal(vec2 global) {
   this->global = global;
 }
 
-void Position::setLocal(glm::ivec2 local, glm::ivec2 chunk) {
-  this->global = chunk * 64 + local;
+template <typename T>
+void Position<T>::setLocal(vec2 local, vec2 chunk) {
+  this->global = chunk * static_cast<int>(SIDE_LENGTH) + local;
 }
 
-glm::ivec2 Position::getLocal() const {
-  return glm::mod(glm::vec2(global), glm::vec2(1, 1) * (float)64);
+template <typename T>
+typename Position<T>::vec2 Position<T>::getLocal() const {
+  return glm::mod(glm::vec2(global), glm::vec2(1, 1) * (float)static_cast<int>(SIDE_LENGTH));
 }
 
-glm::ivec2 Position::getLocal(const glm::ivec2 chunk) const {
-  return global - glm::ivec2(chunk.x * 64, chunk.y * 64);
+template <typename T>
+typename Position<T>::vec2 Position<T>::getLocal(const vec2 chunk) const {
+  return global - vec2(chunk.x * static_cast<int>(SIDE_LENGTH), chunk.y * static_cast<int>(SIDE_LENGTH));
 }
 
-glm::ivec2 Position::getGlobal() const {
+template <typename T>
+typename Position<T>::vec2 Position<T>::getGlobal() const {
   return global;
 }
 
-unsigned int Position::getLocalIndex() const {
-  const glm::ivec2 local = getLocal();
-  return local.x + local.y * 64;
+template <typename T>
+unsigned int Position<T>::getLocalIndex() const {
+  const vec2 local = getLocal();
+  return local.x + local.y * static_cast<int>(SIDE_LENGTH);
 }
 
-glm::ivec2 Position::getChunk() const {
-  glm::ivec2 result = global / 64;
+template <typename T>
+typename Position<T>::vec2 Position<T>::getChunk() const {
+  vec2 result = global / static_cast<int>(SIDE_LENGTH);
   if (global.x < 0) {
     result.x--;
   }
@@ -42,20 +51,24 @@ glm::ivec2 Position::getChunk() const {
   return result;
 }
 
-std::vector<Position> Position::getNeighbors() const {
+template <typename T>
+std::vector<Position<T>> Position<T>::getNeighbors() const {
   std::vector<Position> result;
-  result.emplace_back(global + glm::ivec2(1, -1));
-  result.emplace_back(global + glm::ivec2(1, 0));
-  result.emplace_back(global + glm::ivec2(1, 1));
-  result.emplace_back(global + glm::ivec2(0, -1));
-  result.emplace_back(global + glm::ivec2(0, +1));
-  result.emplace_back(global + glm::ivec2(-1, -1));
-  result.emplace_back(global + glm::ivec2(-1, 0));
-  result.emplace_back(global + glm::ivec2(-1, +1));
+  result.emplace_back(global + vec2(1, -1));
+  result.emplace_back(global + vec2(1, 0));
+  result.emplace_back(global + vec2(1, 1));
+  result.emplace_back(global + vec2(0, -1));
+  result.emplace_back(global + vec2(0, +1));
+  result.emplace_back(global + vec2(-1, -1));
+  result.emplace_back(global + vec2(-1, 0));
+  result.emplace_back(global + vec2(-1, +1));
   return result;
 }
+
+template struct Position<int32_t>;
 }
 
-bool operator==(const data::Position& a, const data::Position& b) {
+template <typename T>
+bool operator==(const data::Position<T>& a, const data::Position<T>& b) {
   return a.getGlobal() == b.getGlobal();
 }

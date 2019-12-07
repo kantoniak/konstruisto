@@ -42,7 +42,7 @@ public:
   void setNeighborE(RoadGraph* neigborE);
 
   void addRoad(const data::Road& road);
-  void update(const std::vector<data::Position>& tiles);
+  void update(const std::vector<data::Position<int32_t>>& tiles);
 
   template <class Archive>
   void save(Archive& archive) const {
