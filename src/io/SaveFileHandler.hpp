@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-#include <cereal/archives/binary.hpp>
+#include <cereal/archives/portable_binary.hpp>
 
 #include "../data/CameraState.hpp"
 #include "../engine/Engine.hpp"

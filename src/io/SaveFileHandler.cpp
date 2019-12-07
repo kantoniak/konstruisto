@@ -17,7 +17,7 @@ void SaveFileHandler::createSave(world::World& world) {
   }
 
   // Create an output archive
-  cereal::BinaryOutputArchive archive(saveFileStream);
+  cereal::PortableBinaryOutputArchive archive(saveFileStream);
 
   archive(world.getCamera().getCameraState());
 
@@ -39,7 +39,9 @@ void SaveFileHandler::loadSave(world::World& world) {
     engine.getLogger().error("Could not open file for reading.");
     return;
   }
-  cereal::BinaryInputArchive archive(saveFileStream); // Create an output archive
+
+  // Create an input archive
+  cereal::PortableBinaryInputArchive archive(saveFileStream);
 
   data::CameraState cameraState;
   archive(cameraState);
