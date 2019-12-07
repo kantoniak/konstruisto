@@ -182,6 +182,7 @@
     <ClCompile Include="src\data\Position.cpp" />
     <ClCompile Include="src\data\Road.cpp" />
     <ClCompile Include="src\data\RoadGraph.cpp" />
+    <ClCompile Include="src\data\Tree.cpp" />
     <ClCompile Include="src\engine\DebugInfo.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\Logger.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="src\data\Position.hpp" />
     <ClInclude Include="src\data\Road.hpp" />
     <ClInclude Include="src\data\RoadGraph.hpp" />
+    <ClInclude Include="src\data\Tree.hpp" />
     <ClInclude Include="src\engine\DebugInfo.hpp" />
     <ClInclude Include="src\engine\Engine.hpp" />
     <ClInclude Include="src\engine\GameState.hpp" />

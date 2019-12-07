@@ -178,6 +178,22 @@ void Map::removeBuilding(data::buildings::Building building) {
   }
 }
 
+void Map::add_tree(data::Tree tree) noexcept {
+  glm::ivec2 chunk = tree.get_position().getChunk();
+  if (chunkExists(chunk)) {
+    getNonConstChunk(chunk).add_tree(tree);
+  }
+}
+
+bool Map::remove_tree(const data::Tree& tree) noexcept {
+  for (data::Chunk* chunk : chunks) {
+    if (chunk->remove_tree(tree)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 data::Chunk& Map::getNonConstChunk(glm::ivec2 chunkPosition) const {
   for (auto chunk : chunks) {
     if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {

@@ -20,7 +20,7 @@ public:
 
   bool set_up(opengl::ShaderManager& shader_manager) noexcept;
   void submit_static_models(ModelManager& model_manager) const noexcept;
-  void render(std::vector<std::reference_wrapper<Object>> to_render) const noexcept;
+  void render(std::vector<Object>& to_render) const noexcept;
   void clean_up() const noexcept;
 
 protected:

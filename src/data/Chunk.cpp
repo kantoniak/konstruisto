@@ -91,4 +91,29 @@ bool Chunk::removeBuilding(data::buildings::Building building) {
   residential.erase(toRemove);
   return true;
 }
+
+void Chunk::add_tree(data::Tree tree) noexcept {
+  trees.push_back(tree);
+}
+
+bool Chunk::remove_tree(const data::Tree& tree) noexcept {
+  const auto& to_remove = std::find(trees.begin(), trees.end(), tree);
+
+  if (to_remove == trees.end()) {
+    return false;
+  }
+
+  trees.erase(to_remove);
+  return false;
+}
+
+void Chunk::age_trees(float delta) noexcept {
+  for (auto& tree : trees) {
+    tree.add_age(delta);
+  }
+}
+
+const std::vector<data::Tree>& Chunk::get_trees() const noexcept {
+  return trees;
+}
 }

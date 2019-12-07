@@ -70,6 +70,13 @@ unsigned short Timer::getSpeed() {
   return currentSpeed;
 }
 
+float Timer::delta_to_turns(std::chrono::milliseconds delta) noexcept {
+  if (isPaused) {
+    return 0;
+  }
+  return static_cast<float>(delta.count()) / static_cast<float>(getTurnLength());
+}
+
 unsigned short Timer::getTurnLength() const {
   switch (currentSpeed) {
   default:

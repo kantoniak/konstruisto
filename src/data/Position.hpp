@@ -1,13 +1,20 @@
 #ifndef DATA_POSITION_HPP
 #define DATA_POSITION_HPP
 
-#include <glm/glm.hpp>
 #include <vector>
+
+#include <glm/glm.hpp>
 
 namespace data {
 
 template <typename T>
-struct Position {
+class Position;
+
+template <typename T>
+bool operator==(const data::Position<T>& a, const data::Position<T>& b);
+
+template <typename T>
+class Position {
   using vec2 = glm::vec<2, T, glm::qualifier::defaultp>;
 
 private:
@@ -17,17 +24,19 @@ private:
 public:
   Position();
   Position(vec2 global);
+
   void setGlobal(vec2 global);
   void setLocal(vec2 local, vec2 chunk);
   [[nodiscard]] vec2 getLocal() const;
   [[nodiscard]] vec2 getLocal(const vec2 chunk) const;
   [[nodiscard]] unsigned int getLocalIndex() const;
   [[nodiscard]] vec2 getGlobal() const;
-  [[nodiscard]] vec2 getChunk() const;
+  [[nodiscard]] glm::ivec2 getChunk() const;
   [[nodiscard]] std::vector<Position> getNeighbors() const;
 
-  template <typename T>
-  friend bool operator==(const Position<T>& a, const Position<T>& b);
+  friend bool operator==(const Position& a, const Position& b) {
+    return a.getGlobal() == b.getGlobal();
+  }
 };
 }
 
@@ -36,7 +45,7 @@ namespace std {
 template <typename T>
 struct hash<data::Position<T>> {
   std::size_t operator()(const data::Position<T>& p) const {
-    vec2 globalPos = p.getGlobal();
+    typename data::Position<T>::vec2 globalPos = p.getGlobal();
     return std::hash<int>()(globalPos.x) ^ std::hash<int>()(globalPos.y);
   }
 };

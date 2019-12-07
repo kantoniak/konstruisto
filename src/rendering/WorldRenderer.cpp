@@ -242,6 +242,25 @@ bool WorldRenderer::set_up_models() {
   return true;
 }
 
+void WorldRenderer::update_tree_objects(const data::Chunk& chunk) noexcept {
+  std::pair<int, int> chunk_pos = std::make_pair(chunk.getPosition().x, chunk.getPosition().y);
+  auto list_iter = chunk_to_tree_objects.find(chunk_pos);
+
+  // Clear or create list of trees
+  if (list_iter != chunk_to_tree_objects.end()) {
+    (*list_iter).second.clear();
+  } else {
+    list_iter = chunk_to_tree_objects.emplace(chunk_pos, std::vector<Object>()).first;
+  }
+
+  // Now add trees
+  const Model& tree_model = model_manager.get_model("tree");
+  std::vector<Object>& objects = (*list_iter).second;
+  for (const auto& tree : chunk.get_trees()) {
+    objects.emplace_back(tree_model, tree.get_transform());
+  }
+}
+
 void WorldRenderer::cleanup() {
   glUseProgram(0);
   terrain_vao.delete_vertex_array();
@@ -345,9 +364,18 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
   }
 
-  // Scene renderer
-  Object& object = *(test_tree.get());
-  renderer.render({object});
+  // Trees
+  for (data::Chunk* chunk : world.getMap().getChunks()) {
+    const auto chunk_pos = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
+
+    auto it = chunk_to_tree_objects.find(chunk_pos);
+    if (it == chunk_to_tree_objects.end()) {
+      continue;
+    }
+
+    std::vector<Object>& objects = (*it).second;
+    renderer.render(objects);
+  }
 
   glFlush();
 }

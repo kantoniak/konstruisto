@@ -38,6 +38,16 @@ void MapState::init() {
     return;
   }
 
+  // Temporary trees
+  for (unsigned int i = 1; i + 1 < data::Chunk::SIDE_LENGTH; i++) {
+    for (unsigned int j = 1; j + 1 < data::Chunk::SIDE_LENGTH; j++) {
+      float age = 2000.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+      float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+      data::Tree tree(data::Position<float>(glm::vec2(i, j)), rotation, age);
+      world.getMap().add_tree(tree);
+    }
+  }
+
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
   world.getTimer().start();
@@ -49,7 +59,6 @@ void MapState::cleanup() {
 }
 
 void MapState::update(std::chrono::milliseconds delta) {
-
   if (rmbPressed) {
     handleMapDragging(delta);
   }
@@ -105,6 +114,12 @@ void MapState::update(std::chrono::milliseconds delta) {
   }
 
   world.update(delta);
+
+  // Update renderer
+  for (auto chunk_ptr : world.getMap().getChunks()) {
+    data::Chunk& chunk = *chunk_ptr;
+    renderer.update_tree_objects(world.getMap().getChunk(chunk.getPosition()));
+  }
 };
 
 void MapState::render() {

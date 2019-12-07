@@ -23,6 +23,8 @@ public:
     return 3;
   }
 
+  float delta_to_turns(std::chrono::milliseconds delta) noexcept;
+
   bool paused();
   const std::string getDate();
 

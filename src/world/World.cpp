@@ -11,6 +11,12 @@ void World::cleanup() {
 
 void World::update(std::chrono::milliseconds delta) {
   getTimer().update(delta);
+
+  float age_delta = timer.delta_to_turns(delta);
+  for (auto chunk_ptr : getMap().getChunks()) {
+    data::Chunk& chunk = *chunk_ptr;
+    chunk.age_trees(age_delta);
+  }
 }
 
 Camera& World::getCamera() {

@@ -54,6 +54,7 @@ public:
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();
+  void update_tree_objects(const data::Chunk& chunk) noexcept;
 
   void renderWorld(const input::Selection& selection);
   void renderDebug();
@@ -113,7 +114,7 @@ protected:
   opengl::ShaderProgram building_normals_shader_prog;
 
   // Trees
-
+  std::map<std::pair<int, int>, std::vector<Object>> chunk_to_tree_objects;
 
   // Left menu
   int leftMenuActiveIcon = -1;

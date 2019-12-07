@@ -1,11 +1,12 @@
 #ifndef WORLD_MAP_HPP
 #define WORLD_MAP_HPP
 
-#include <glm/glm.hpp>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#include <glm/glm.hpp>
 
 #include "../data/Chunk.hpp"
 #include "../data/City.hpp"
@@ -43,6 +44,10 @@ public:
   void addRoads(const std::vector<data::Road>& roads);
 
   void removeBuilding(data::buildings::Building building);
+
+  // Trees
+  void add_tree(data::Tree tree) noexcept;
+  bool remove_tree(const data::Tree& tree) noexcept;
 
 protected:
   std::vector<data::Chunk*> chunks;

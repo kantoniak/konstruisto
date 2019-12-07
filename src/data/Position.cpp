@@ -15,7 +15,7 @@ void Position<T>::setGlobal(vec2 global) {
 
 template <typename T>
 void Position<T>::setLocal(vec2 local, vec2 chunk) {
-  this->global = chunk * static_cast<int>(SIDE_LENGTH) + local;
+  this->global = chunk * static_cast<T>(SIDE_LENGTH) + local;
 }
 
 template <typename T>
@@ -40,8 +40,8 @@ unsigned int Position<T>::getLocalIndex() const {
 }
 
 template <typename T>
-typename Position<T>::vec2 Position<T>::getChunk() const {
-  vec2 result = global / static_cast<int>(SIDE_LENGTH);
+typename glm::ivec2 Position<T>::getChunk() const {
+  vec2 result = glm::ivec2(static_cast<int>(global.x / SIDE_LENGTH), static_cast<int>(global.y / SIDE_LENGTH));
   if (global.x < 0) {
     result.x--;
   }
@@ -65,10 +65,6 @@ std::vector<Position<T>> Position<T>::getNeighbors() const {
   return result;
 }
 
-template struct Position<int32_t>;
-}
-
-template <typename T>
-bool operator==(const data::Position<T>& a, const data::Position<T>& b) {
-  return a.getGlobal() == b.getGlobal();
+template class Position<int32_t>;
+template class Position<float>;
 }

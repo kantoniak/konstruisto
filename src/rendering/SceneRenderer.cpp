@@ -82,7 +82,7 @@ void SceneRenderer::submit_static_models(ModelManager& model_manager) const noex
   opengl::VertexArray::unbind();
 }
 
-void SceneRenderer::render(std::vector<std::reference_wrapper<Object>> to_render) const noexcept {
+void SceneRenderer::render(std::vector<Object>& to_render) const noexcept {
   vao.bind();
   shader_program.use();
 
@@ -90,8 +90,7 @@ void SceneRenderer::render(std::vector<std::reference_wrapper<Object>> to_render
   // shader_program.submit("light_pos", light_pos);
 
   vbo.bind();
-  for (const auto& ref : to_render) {
-    Object& object = ref.get();
+  for (const auto& object : to_render) {
     shader_program.submit("model", object.get_transform());
     for (auto const mesh : object.get_model().get_meshes()) {
       mesh.get_material().set_in(shader_program);
