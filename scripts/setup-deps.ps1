@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 $currentDir = Resolve-Path .
-$extDir = Join-Path (Resolve-Path .) "ext\"
+$vendorDir = Join-Path (Resolve-Path .) "vendor\"
 $webClient = New-Object System.Net.WebClient
 
 $glfwVersion = "3.3"
@@ -12,10 +12,10 @@ $premakeVersion = "5.0.0-alpha14"
 $assimpVersion = "5.0.0"
 
 Write-Output "Setting up Konstruisto dependencies for MSVC..."
-Write-Output "Dependencies directory: $extDir"
+Write-Output "Dependencies directory: $vendorDir"
 
 # Create directory
-New-Item -ErrorAction Ignore -ItemType directory -Path $extDir | Out-Null
+New-Item -ErrorAction Ignore -ItemType directory -Path $vendorDir | Out-Null
 
 # Step counter
 $step = 0
@@ -23,18 +23,18 @@ $totalSteps = 10
 
 $step++
 # Set up GLFW
-$glfwTargetPath = Join-Path $extDir "glfw-$glfwVersion.zip"
+$glfwTargetPath = Join-Path $vendorDir "glfw-$glfwVersion.zip"
 if (!(Test-Path $glfwTargetPath)) {
     Write-Output "[$step/$totalSteps] Downloading GLFW..."
     $glfwUrl = "https://github.com/glfw/glfw/releases/download/" + $glfwVersion + "/glfw-" + $glfwVersion + ".bin.WIN64.zip"
     $webClient.DownloadFile($glfwUrl, $glfwTargetPath)
 }
 
-$glfwIntermediateDir = Join-Path $extDir "glfw-$glfwVersion.bin.WIN64"
-$glfwFinalDir = Join-Path $extDir "glfw-$glfwVersion"
+$glfwIntermediateDir = Join-Path $vendorDir "glfw-$glfwVersion.bin.WIN64"
+$glfwFinalDir = Join-Path $vendorDir "glfw-$glfwVersion"
 if (!(Test-Path $glfwFinalDir) -And !(Test-Path $glfwIntermediateDir)) {
     Write-Output "[$step/$totalSteps] Unzipping GLFW..."
-    Expand-Archive $glfwTargetPath -DestinationPath $extDir
+    Expand-Archive $glfwTargetPath -DestinationPath $vendorDir
 }
 if (Test-Path $glfwIntermediateDir) {
     Rename-Item -path $glfwIntermediateDir -newName $glfwFinalDir
@@ -42,18 +42,18 @@ if (Test-Path $glfwIntermediateDir) {
 
 $step++
 # Set up GLM
-$glmTargetPath = Join-Path $extDir "glm-$glmVersion.zip"
+$glmTargetPath = Join-Path $vendorDir "glm-$glmVersion.zip"
 if (!(Test-Path $glmTargetPath)) {
     Write-Output "[$step/$totalSteps] Downloading GLM..."
     $glmUrl = "https://github.com/g-truc/glm/releases/download/$glmVersion/glm-$glmVersion.zip"
     $webClient.DownloadFile($glmUrl, $glmTargetPath)
 }
 
-$glmIntermediateDir = Join-Path $extDir "glm"
-$glmFinalDir = Join-Path $extDir "glm-$glmVersion"
+$glmIntermediateDir = Join-Path $vendorDir "glm"
+$glmFinalDir = Join-Path $vendorDir "glm-$glmVersion"
 if (!(Test-Path $glmFinalDir) -And !(Test-Path $glmIntermediateDir)) {
     Write-Output "[$step/$totalSteps] Unzipping GLM..."
-    Expand-Archive $glmTargetPath -DestinationPath $extDir
+    Expand-Archive $glmTargetPath -DestinationPath $vendorDir
 }
 if (Test-Path $glmIntermediateDir) {
     Rename-Item -path $glmIntermediateDir -newName $glmFinalDir
@@ -61,24 +61,24 @@ if (Test-Path $glmIntermediateDir) {
 
 $step++
 # Set up Cereal
-$cerealTargetPath = Join-Path $extDir "cereal-$cerealVersion.zip"
+$cerealTargetPath = Join-Path $vendorDir "cereal-$cerealVersion.zip"
 if (!(Test-Path $cerealTargetPath)) {
     Write-Output "[$step/$totalSteps] Downloading Cereal..."
     $cerealUrl = "https://github.com/USCiLab/cereal/archive/v" + $cerealVersion + ".zip"
     $webClient.DownloadFile($cerealUrl, $cerealTargetPath)
 }
 
-$cerealFinalDir = Join-Path $extDir "cereal-$cerealVersion"
+$cerealFinalDir = Join-Path $vendorDir "cereal-$cerealVersion"
 if (!(Test-Path $cerealFinalDir)) {
     Write-Output "[$step/$totalSteps] Unzipping Cereal..."
-    Expand-Archive $cerealTargetPath -DestinationPath $extDir
+    Expand-Archive $cerealTargetPath -DestinationPath $vendorDir
 }
 
 $step++
 # Set up stb_image
-$stbImageTargetPath = Join-Path $extDir "stb\stb\stb_image.h"
+$stbImageTargetPath = Join-Path $vendorDir "stb\stb\stb_image.h"
 if (!(Test-Path $stbImageTargetPath)) {
-    $stbImageTargetDir = Join-Path $extDir "stb\stb"
+    $stbImageTargetDir = Join-Path $vendorDir "stb\stb"
     New-Item -ErrorAction Ignore -ItemType directory -Path $stbImageTargetDir | Out-Null
 
     Write-Output "[$step/$totalSteps] Downloading stb_image..."
@@ -88,7 +88,7 @@ if (!(Test-Path $stbImageTargetPath)) {
 
 $step++
 # Get NanoVG
-$nanoVgDir = Join-Path $extDir "nanovg"
+$nanoVgDir = Join-Path $vendorDir "nanovg"
 if (!(Test-Path $nanoVgDir)) {
     Write-Output "[$step/$totalSteps] Cloning memononen/nanovg for build..."
     git clone git@github.com:memononen/nanovg.git $nanoVgDir
@@ -96,17 +96,17 @@ if (!(Test-Path $nanoVgDir)) {
 
 $step++
 # Get premake5
-$premakeTargetPath = Join-Path $extDir "premake-$premakeVersion.zip"
+$premakeTargetPath = Join-Path $vendorDir "premake-$premakeVersion.zip"
 if (!(Test-Path $premakeTargetPath)) {
     Write-Output "[$step/$totalSteps] Downloading Premake..."
     $premakeUrl = "https://github.com/premake/premake-core/releases/download/v" + $premakeVersion + "/premake-" + $premakeVersion + "-windows.zip"
     $webClient.DownloadFile($premakeUrl, $premakeTargetPath)
 }
 
-$premakeExePath = Join-Path $extDir "premake5.exe"
+$premakeExePath = Join-Path $vendorDir "premake5.exe"
 if (!(Test-Path $premakeExePath)) {
     Write-Output "[$step/$totalSteps] Unzipping premake..."
-    Expand-Archive $premakeTargetPath -DestinationPath $extDir
+    Expand-Archive $premakeTargetPath -DestinationPath $vendorDir
 }
 
 $step++
@@ -132,17 +132,17 @@ if (!(Test-Path $nanoVgBuildDir) -And !(Test-Path $nanoVgFinalBuildDir)) {
 
 $step++
 # Get Assimp
-$assimpTargetPath = Join-Path $extDir "assimp-$assimpVersion.zip"
+$assimpTargetPath = Join-Path $vendorDir "assimp-$assimpVersion.zip"
 if (!(Test-Path $assimpTargetPath)) {
     Write-Output "[$step/$totalSteps] Downloading assimp..."
     $assimpUrl = "https://github.com/assimp/assimp/archive/v$assimpVersion.zip"
     $webClient.DownloadFile($assimpUrl, $assimpTargetPath)
 }
 
-$assimpFinalDir = Join-Path $extDir "assimp-$assimpVersion"
+$assimpFinalDir = Join-Path $vendorDir "assimp-$assimpVersion"
 if (!(Test-Path $assimpFinalDir)) {
     Write-Output "[$step/$totalSteps] Unzipping assimp..."
-    Expand-Archive $assimpTargetPath -DestinationPath $extDir
+    Expand-Archive $assimpTargetPath -DestinationPath $vendorDir
 }
 
 $step++

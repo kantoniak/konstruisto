@@ -40,10 +40,10 @@ You will need to set up `cmake` in `PATH` if it's not already there.
     .\scripts\setup-deps.ps1
     ```
 1. Build NanoVG release libraries:
-    1. Open solution `ext\nanovg\build-msvc\nanovg.sln`
+    1. Open solution `vendor\nanovg\build-msvc\nanovg.sln`
     1. Build project `nanovg` for Release/x64.
 1. Build Assimp release libraries:
-    1. Open solution `ext\assimp-5.0.0\build-msvc\Assimp.sln`
+    1. Open solution `vendor\assimp-5.0.0\build-msvc\Assimp.sln`
     1. Build project `ALL_BUILD` for MinSizeRel/x64.
 1. Open Visual Studio solution and build project `Konstruisto`.
 
@@ -55,21 +55,21 @@ You can use `scripts/setup-deps.ps1` to set up the dependencies.
 
 1. You will need `make`, `clang`, `clang++`, `clang-format` in `PATH`.
 1. You will need `windres` in `PATH` from `mingw-w64`
-1. Install GLFW in `ext/glew-3.3`
-1. Extract `glm` library to `ext/glm-0.9.9.6`
-1. Extract `cereal` library to `ext/cereal-1.3.0`
-1. Put `stb_image.h` to `ext/stb/stb/stb_image.h`
+1. Install GLFW in `vendor/glew-3.3`
+1. Extract `glm` library to `vendor/glm-0.9.9.6`
+1. Extract `cereal` library to `vendor/cereal-1.3.0`
+1. Put `stb_image.h` to `vendor/stb/stb/stb_image.h`
 1. Build and install `nanovg` (see below)
 
 ### Building `nanovg`
 
 You will need `premake5` [(download)](https://premake.github.io/download.html).
 
-1. Extract repo into `ext/nanovg`.
+1. Extract repo into `vendor/nanovg`.
 1. Build x64 release:
 
     ```
-    cd ext/nanovg
+    cd vendor/nanovg
     premake [vs2019|--cc=gcc gmake]
     mv build build-[msvc|windows|linux]
     cd build-[msvc|windows|linux]

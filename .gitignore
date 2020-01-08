@@ -7,8 +7,8 @@ releases/*
 !bin/assets
 
 # Libraries
-ext/*
-!ext/glad
+vendor/*
+!vendor/glad
 
 # Visual Studio & VS Code
 vs-generated-defines.props

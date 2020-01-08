@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ext\glad\src\gl.c">
+    <ClCompile Include="vendor\glad\src\gl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -158,10 +158,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ext\glad\include\glad\gl.h">
+    <ClInclude Include="vendor\glad\include\glad\gl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ext\glad\include\KHR\khrplatform.h">
+    <ClInclude Include="vendor\glad\include\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\settings.hpp">

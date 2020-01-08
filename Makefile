@@ -17,8 +17,8 @@ BUILD_DESC = $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT) $(CONFIG)
 SRCDIR := src
 OBJDIR := obj
 BINDIR := bin
-EXTDIR := ext
-GLADDIR := $(EXTDIR)/glad
+VENDORDIR := vendor
+GLADDIR := $(VENDORDIR)/glad
 
 CC=clang
 CXX=clang++
@@ -32,19 +32,19 @@ ifeq ($(OS), Windows_NT)
 		LDFLAGS += -Wl,--subsystem,windows
 	endif
 
-	INCLUDES += -I$(EXTDIR)/glfw-3.3/include
-	LDFLAGS  += -L$(EXTDIR)/glfw-3.3/lib
+	INCLUDES += -I$(VENDORDIR)/glfw-3.3/include
+	LDFLAGS  += -L$(VENDORDIR)/glfw-3.3/lib
 
 	INCLUDES += -I$(GLADDIR)/include
 
-	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
+	INCLUDES += -I$(VENDORDIR)/glm-0.9.9.6/
 
-	INCLUDES += -I$(EXTDIR)/cereal-1.3.0/include
+	INCLUDES += -I$(VENDORDIR)/cereal-1.3.0/include
 
-	INCLUDES += -I$(EXTDIR)/nanovg/src
-	LDFLAGS  += -L$(EXTDIR)/nanovg/build-windows
+	INCLUDES += -I$(VENDORDIR)/nanovg/src
+	LDFLAGS  += -L$(VENDORDIR)/nanovg/build-windows
 
-	INCLUDES += -I$(EXTDIR)/stb/
+	INCLUDES += -I$(VENDORDIR)/stb/
 
 	LIBS := -lglfw3 -lopengl32 -lglu32 -lgdi32 -lnanovg -lassimp
 else
@@ -52,14 +52,14 @@ else
 
 	INCLUDES += -I$(GLADDIR)/include
 
-	INCLUDES += -I$(EXTDIR)/glm-0.9.9.6/
+	INCLUDES += -I$(VENDORDIR)/glm-0.9.9.6/
 
-	INCLUDES += -I$(EXTDIR)/cereal-1.3.0/include
+	INCLUDES += -I$(VENDORDIR)/cereal-1.3.0/include
 
-	INCLUDES += -I$(EXTDIR)/nanovg/src
-	LDFLAGS  += -L$(EXTDIR)/nanovg/build-linux
+	INCLUDES += -I$(VENDORDIR)/nanovg/src
+	LDFLAGS  += -L$(VENDORDIR)/nanovg/build-linux
 
-	INCLUDES += -I$(EXTDIR)/stb/
+	INCLUDES += -I$(VENDORDIR)/stb/
 
 	LIBS := -lglfw -ldl -lGL -lGLU -lnanovg -lassimp
 endif
@@ -142,13 +142,13 @@ release-zip: rebuild $(RELEASE_DLLS)
 	@mkdir -p "releases/$(RELEASE_ZIP_NAME)"
 	@cd $(BINDIR); cp -r assets "../releases/$(RELEASE_ZIP_NAME)"
 	@cd $(BINDIR); cp "$(PROJECT_NAME)$(EXTENSION)" "../releases/$(RELEASE_ZIP_NAME)"
-	@cd $(EXTDIR)/dlls/; cp -t "../../releases/$(RELEASE_ZIP_NAME)" $(RELEASE_DLLS)
+	@cd $(VENDORDIR)/dlls/; cp -t "../../releases/$(RELEASE_ZIP_NAME)" $(RELEASE_DLLS)
 	@echo "Zipping to releases/$(RELEASE_ZIP_NAME).zip..."
 	@cd releases; zip -r "$(RELEASE_ZIP_NAME).zip" "$(RELEASE_ZIP_NAME)"
 
 %.dll:
-	@mkdir -p $(EXTDIR)/dlls
-	@wget -q -nv -N http://konstruisto.com/download/dlls/$@ -O $(EXTDIR)/dlls/$@
+	@mkdir -p $(VENDORDIR)/dlls
+	@wget -q -nv -N http://konstruisto.com/download/dlls/$@ -O $(VENDORDIR)/dlls/$@
 
 help:
 	@echo $(PROJECT_NAME) $(PROJECT_VERSION)-$(PROJECT_LAST_COMMIT)

@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.3.0\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\cereal-1.3.0\include;$(ProjectDir)vendor\glew-2.1.0\include;$(ProjectDir)vendor\glfw-3.3\include;$(ProjectDir)vendor\glm-0.9.9.6;$(ProjectDir)vendor\nanovg\src;$(ProjectDir)vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -116,7 +116,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\cereal-1.3.0\include;$(ProjectDir)ext\glew-2.1.0\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\cereal-1.3.0\include;$(ProjectDir)vendor\glew-2.1.0\include;$(ProjectDir)vendor\glfw-3.3\include;$(ProjectDir)vendor\glm-0.9.9.6;$(ProjectDir)vendor\nanovg\src;$(ProjectDir)vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -137,12 +137,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\assimp-5.0.0\include;$(ProjectDir)ext\assimp-5.0.0\build-msvc\include;$(ProjectDir)ext\cereal-1.3.0\include;$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\assimp-5.0.0\include;$(ProjectDir)vendor\assimp-5.0.0\build-msvc\include;$(ProjectDir)vendor\cereal-1.3.0\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glfw-3.3\include;$(ProjectDir)vendor\glm-0.9.9.6;$(ProjectDir)vendor\nanovg\src;$(ProjectDir)vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)ext\assimp-5.0.0\build-msvc\code\MinSizeRel;$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\assimp-5.0.0\build-msvc\code\MinSizeRel;$(ProjectDir)vendor\glew-2.1.0\lib\Release\x64;$(ProjectDir)vendor\glfw-3.3\lib-vc2019;$(ProjectDir)vendor\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;assimp-vc142-mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -156,12 +156,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\assimp-5.0.0\include;$(ProjectDir)ext\assimp-5.0.0\build-msvc\include;$(ProjectDir)ext\cereal-1.3.0\include;$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glfw-3.3\include;$(ProjectDir)ext\glm-0.9.9.6;$(ProjectDir)ext\nanovg\src;$(ProjectDir)ext\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\assimp-5.0.0\include;$(ProjectDir)vendor\assimp-5.0.0\build-msvc\include;$(ProjectDir)vendor\cereal-1.3.0\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glfw-3.3\include;$(ProjectDir)vendor\glm-0.9.9.6;$(ProjectDir)vendor\nanovg\src;$(ProjectDir)vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)ext\assimp-5.0.0\build-msvc\code\MinSizeRel;$(ProjectDir)ext\glew-2.1.0\lib\Release\x64;$(ProjectDir)ext\glfw-3.3\lib-vc2019;$(ProjectDir)ext\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\assimp-5.0.0\build-msvc\code\MinSizeRel;$(ProjectDir)vendor\glew-2.1.0\lib\Release\x64;$(ProjectDir)vendor\glfw-3.3\lib-vc2019;$(ProjectDir)vendor\nanovg\build-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3dll.lib;nanovg.lib;assimp-vc142-mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -174,7 +174,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ext\glad\src\gl.c" />
+    <ClCompile Include="vendor\glad\src\gl.c" />
     <ClCompile Include="src\data\CameraState.cpp" />
     <ClCompile Include="src\data\Chunk.cpp" />
     <ClCompile Include="src\data\Direction.cpp" />
@@ -223,8 +223,8 @@
     <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ext\glad\include\glad\gl.h" />
-    <ClInclude Include="ext\glad\include\KHR\khrplatform.h" />
+    <ClInclude Include="vendor\glad\include\glad\gl.h" />
+    <ClInclude Include="vendor\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="src\data\buildings.hpp" />
     <ClInclude Include="src\data\CameraState.hpp" />
     <ClInclude Include="src\data\Chunk.hpp" />
