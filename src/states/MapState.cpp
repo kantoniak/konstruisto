@@ -39,12 +39,14 @@ void MapState::init() {
   }
 
   // Temporary trees
+  int type = 0;
   for (unsigned int i = 1; i < data::Chunk::SIDE_LENGTH; i++) {
     for (unsigned int j = 1; j < data::Chunk::SIDE_LENGTH; j++) {
       float age = 2000.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
       float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-      data::Tree tree(data::Position<float>(glm::vec2(i, j)), rotation, age);
+      data::Tree tree(static_cast<data::Tree::TreeType>(type), data::Position<float>(glm::vec2(i, j)), rotation, age);
       world.getMap().add_tree(tree);
+      type = (type + 1) % 3;
     }
   }
 

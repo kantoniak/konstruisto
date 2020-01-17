@@ -10,16 +10,20 @@ namespace data {
 
 class Tree {
 public:
-  Tree(Position<float> position, float rotation, float age) noexcept;
+  enum TreeType { GREEN, ORANGE, MODEL2 };
+
+  Tree(TreeType type, Position<float> position, float rotation, float age) noexcept;
 
   bool operator==(const Tree& other) const noexcept;
 
   void add_age(float age_delta) noexcept;
 
+  [[nodiscard]] TreeType get_type() const noexcept;
   [[nodiscard]] Position<float> get_position() const noexcept;
   [[nodiscard]] glm::mat4 get_transform() const noexcept;
 
 private:
+  TreeType type;
   Position<float> position;
   float rotation_angle;
   float age;

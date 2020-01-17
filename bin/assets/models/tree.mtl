@@ -3,9 +3,14 @@
 
 newmtl tree_green_branches
 Ns 0.05
-#96.078431
 Ka 0.0035 0.15 0
 Kd 0.000168 0.027228 0.001273
+Ks 0.01 0.01 0.01
+
+newmtl tree_orange_branches
+Ns 0.05
+Ka 0.14 0.03 0.003
+Kd 0.14 0.03 0.0025
 Ks 0.01 0.01 0.01
 
 newmtl tree_trunk

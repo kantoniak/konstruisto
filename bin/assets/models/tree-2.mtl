@@ -1,0 +1,14 @@
+# Blender MTL File: 'tree-2.blend'
+# Material Count: 2
+
+newmtl tree_light_green_branches
+Ns 0.05
+Ka 0.0035 0.15 0
+Kd 0.0002 0.030228 0.001773
+Ks 0.01 0.01 0.01
+
+newmtl tree_trunk
+Ns 0
+Ka 0.081791 0.031862 0.008269
+Kd 0 0 0 
+Ks 0 0 0

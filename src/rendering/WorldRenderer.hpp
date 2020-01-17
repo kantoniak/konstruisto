@@ -99,7 +99,6 @@ protected:
   AssimpLoader assimp_loader;
   SceneRenderer renderer;
   bool set_up_models();
-  std::unique_ptr<Object> test_tree;
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;

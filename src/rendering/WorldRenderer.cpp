@@ -233,10 +233,27 @@ bool WorldRenderer::setupBuildings() {
 }
 
 bool WorldRenderer::set_up_models() {
-  assimp_loader.load_model_from_file("assets/models/tree.obj");
-  test_tree =
-      std::make_unique<Object>(model_manager.get_model("tree"),
-                               glm::translate(glm::scale(glm::mat4(1), glm::vec3(5, 8, 5)), glm::vec3(10, 0, 10)));
+  if (!assimp_loader.load_model_from_file("assets/models/tree.obj", "tree-green") ||
+      !assimp_loader.load_model_from_file("assets/models/tree-2.obj", "tree-2")) {
+    return false;
+  }
+
+  // Register orange tree
+  const Model& tree_model_green = model_manager.get_model("tree-green");
+  Model& tree_model_orange = model_manager.register_model("tree-orange");
+  {
+    const Material& orange_branches = model_manager.get_material("tree_orange_branches");
+    const size_t mesh_count = tree_model_green.get_meshes().size();
+    for (size_t i = 0; i < mesh_count; i++) {
+      const Mesh& orig_mesh = tree_model_green.get_meshes()[i];
+      const Material& orig_material = tree_model_green.get_materials()[i];
+      if (orig_material.get_name() == "tree_green_branches") {
+        tree_model_orange.add_mesh(orig_mesh, orange_branches);
+      } else {
+        tree_model_orange.add_mesh(orig_mesh, orig_material);
+      }
+    }
+  }
 
   renderer.submit_static_models(model_manager);
   return true;
@@ -254,10 +271,22 @@ void WorldRenderer::update_tree_objects(const data::Chunk& chunk) noexcept {
   }
 
   // Now add trees
-  const Model& tree_model = model_manager.get_model("tree");
+  const Model& tree_model_green = model_manager.get_model("tree-green");
+  const Model& tree_model_orange = model_manager.get_model("tree-orange");
+  const Model& tree_model_2 = model_manager.get_model("tree-2");
   std::vector<Object>& objects = (*list_iter).second;
   for (const auto& tree : chunk.get_trees()) {
-    objects.emplace_back(tree_model, tree.get_transform());
+    switch (tree.get_type()) {
+    case data::Tree::TreeType::GREEN:
+      objects.emplace_back(tree_model_orange, tree.get_transform());
+      break;
+    case data::Tree::TreeType::ORANGE:
+      objects.emplace_back(tree_model_green, tree.get_transform());
+      break;
+    case data::Tree::TreeType::MODEL2:
+      objects.emplace_back(tree_model_2, tree.get_transform());
+      break;
+    }
   }
 }
 
