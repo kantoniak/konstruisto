@@ -39,8 +39,8 @@ void MapState::init() {
   }
 
   // Temporary trees
-  for (unsigned int i = 1; i + 1 < data::Chunk::SIDE_LENGTH; i++) {
-    for (unsigned int j = 1; j + 1 < data::Chunk::SIDE_LENGTH; j++) {
+  for (unsigned int i = 1; i < data::Chunk::SIDE_LENGTH; i++) {
+    for (unsigned int j = 1; j < data::Chunk::SIDE_LENGTH; j++) {
       float age = 2000.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
       float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
       data::Tree tree(data::Position<float>(glm::vec2(i, j)), rotation, age);
