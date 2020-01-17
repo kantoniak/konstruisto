@@ -22,6 +22,7 @@ public:
   AssimpLoader(ModelManager& model_manager, engine::Logger& log) noexcept;
 
   bool load_model_from_file(const std::string& path) noexcept;
+  bool load_model_from_file(const std::string& path, const std::string name) noexcept;
 
 protected:
   engine::Logger& log;

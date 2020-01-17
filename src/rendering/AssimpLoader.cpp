@@ -7,6 +7,11 @@ AssimpLoader::AssimpLoader(ModelManager& model_manager, engine::Logger& log) noe
 }
 
 bool AssimpLoader::load_model_from_file(const std::string& path) noexcept {
+  const std::string model_name = std::filesystem::path(path).stem().string();
+  return load_model_from_file(path, model_name);
+}
+
+bool AssimpLoader::load_model_from_file(const std::string& path, const std::string name) noexcept {
 
   const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -23,8 +28,7 @@ bool AssimpLoader::load_model_from_file(const std::string& path) noexcept {
   std::vector<std::reference_wrapper<Material>> materials = read_materials(*scene);
 
   // Get meshes
-  const std::string model_name = std::filesystem::path(path).stem().string();
-  Model& model = model_manager.register_model(model_name);
+  Model& model = model_manager.register_model(name);
   process_nodes_recursive(*scene->mRootNode, *scene, model, materials);
 
   return true;
