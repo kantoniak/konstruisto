@@ -11,12 +11,11 @@ class Mesh {
 
 public:
   Mesh() = delete;
-  Mesh(int32_t vertex_count, int32_t vbo_offset, int32_t ebo_offset, const Material& material) noexcept;
+  Mesh(int32_t vertex_count, int32_t vbo_offset, int32_t ebo_offset) noexcept;
 
   [[nodiscard]] int32_t get_vertex_count() const noexcept;
   [[nodiscard]] int32_t get_vbo_offset() const noexcept;
   [[nodiscard]] int32_t get_ebo_offset() const noexcept;
-  [[nodiscard]] const Material& get_material() const noexcept;
 
   friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh) noexcept;
   friend std::string to_string(const Mesh& mesh) noexcept;
@@ -25,7 +24,6 @@ protected:
   int32_t vertex_count;
   int32_t vbo_offset;
   int32_t ebo_offset;
-  const Material& material;
 };
 }
 

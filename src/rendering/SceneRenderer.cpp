@@ -92,8 +92,12 @@ void SceneRenderer::render(std::vector<Object>& to_render) const noexcept {
   vbo.bind();
   for (const auto& object : to_render) {
     shader_program.submit("model", object.get_transform());
-    for (auto const mesh : object.get_model().get_meshes()) {
-      mesh.get_material().set_in(shader_program);
+
+    const size_t mesh_count = object.get_model().get_meshes().size();
+    for (size_t i = 0; i < mesh_count; i++) {
+      const Mesh& mesh = object.get_model().get_meshes()[i];
+      const Material& material = object.get_model().get_materials()[i];
+      material.set_in(shader_program);
       glDrawElementsBaseVertex(GL_TRIANGLES, mesh.get_vertex_count(), GL_UNSIGNED_INT,
                                (GLvoid*)(mesh.get_ebo_offset() * sizeof(uint32_t)), mesh.get_vbo_offset());
     }

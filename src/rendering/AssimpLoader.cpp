@@ -20,7 +20,7 @@ bool AssimpLoader::load_model_from_file(const std::string& path) noexcept {
   }
 
   // Get materials
-  std::vector<Material*> materials = read_materials(*scene);
+  std::vector<std::reference_wrapper<Material>> materials = read_materials(*scene);
 
   // Get meshes
   const std::string model_name = std::filesystem::path(path).stem().string();
@@ -30,8 +30,8 @@ bool AssimpLoader::load_model_from_file(const std::string& path) noexcept {
   return true;
 }
 
-std::vector<Material*> AssimpLoader::read_materials(const aiScene& scene) const noexcept {
-  std::vector<Material*> materials;
+std::vector<std::reference_wrapper<Material>> AssimpLoader::read_materials(const aiScene& scene) const noexcept {
+  std::vector<std::reference_wrapper<Material>> materials;
 
   for (unsigned int i = 0; i < scene.mNumMaterials; i++) {
     const aiMaterial& assimp_material = *scene.mMaterials[i];
@@ -50,29 +50,26 @@ std::vector<Material*> AssimpLoader::read_materials(const aiScene& scene) const 
     assimp_material.Get(AI_MATKEY_COLOR_SPECULAR, specular);
     assimp_material.Get(AI_MATKEY_SHININESS, shininess);
 
-    // Skip assimp default material
     std::string material_name = to_std_string(name);
-    if (material_name == "DefaultMaterial") {
-      materials.push_back(nullptr);
-      continue;
-    }
 
     // Skip if material with this name exists
     if (model_manager.has_material(material_name)) {
-      materials.push_back(std::addressof(model_manager.get_material(material_name)));
+      materials.push_back(model_manager.get_material(material_name));
       continue;
     }
 
     Material& new_material = model_manager.register_material(material_name, to_vec3(ambient), to_vec3(diffuse),
                                                              to_vec3(specular), shininess);
-    materials.push_back(std::addressof(new_material));
+    materials.push_back(new_material);
     log.debug(to_string(new_material));
   }
 
   return materials;
 }
 
-Mesh AssimpLoader::read_mesh(const aiMesh& mesh, const std::vector<Material*> materials) const noexcept {
+std::pair<Mesh, const Material&>
+AssimpLoader::read_mesh(const aiMesh& mesh, const std::vector<std::reference_wrapper<Material>> materials) const
+    noexcept {
   std::vector<float> vertices;
   std::vector<float> normals;
   std::vector<uint32_t> indices;
@@ -96,16 +93,18 @@ Mesh AssimpLoader::read_mesh(const aiMesh& mesh, const std::vector<Material*> ma
     }
   }
 
-  Mesh new_mesh = model_manager.create_mesh(*(materials[mesh.mMaterialIndex]), vertices, normals, indices);
+  Mesh new_mesh = model_manager.create_mesh(vertices, normals, indices);
   log.debug(to_string(new_mesh));
-  return new_mesh;
+  return std::make_pair(std::move(new_mesh), materials[mesh.mMaterialIndex]);
 }
 
 void AssimpLoader::process_nodes_recursive(const aiNode& node, const aiScene& scene, Model& model,
-                                           const std::vector<Material*> materials) const noexcept {
+                                           const std::vector<std::reference_wrapper<Material>> materials) const
+    noexcept {
   for (unsigned int i = 0; i < node.mNumMeshes; i++) {
     aiMesh& mesh = *scene.mMeshes[node.mMeshes[i]];
-    model.add_mesh(read_mesh(mesh, materials));
+    const auto mesh_material_pair = read_mesh(mesh, materials);
+    model.add_mesh(mesh_material_pair.first, mesh_material_pair.second);
   }
   for (unsigned int i = 0; i < node.mNumChildren; i++) {
     process_nodes_recursive(*node.mChildren[i], scene, model, materials);

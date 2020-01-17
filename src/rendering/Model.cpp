@@ -14,7 +14,12 @@ const std::vector<Mesh>& Model::get_meshes() const noexcept {
   return meshes;
 }
 
-void Model::add_mesh(const Mesh mesh) noexcept {
+const std::vector<std::reference_wrapper<const Material>>& Model::get_materials() const noexcept {
+  return materials;
+}
+
+void Model::add_mesh(const Mesh mesh, const Material& material) noexcept {
   meshes.push_back(std::move(mesh));
+  materials.push_back(material);
 }
 }

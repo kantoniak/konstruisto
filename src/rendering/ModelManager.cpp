@@ -45,8 +45,8 @@ const std::unordered_map<std::string, Model>& ModelManager::get_models() const n
   return models;
 }
 
-Mesh ModelManager::create_mesh(const Material& material, const std::vector<float>& vertices,
-                               const std::vector<float>& normals, const std::vector<uint32_t>& indices) noexcept {
+Mesh ModelManager::create_mesh(const std::vector<float>& vertices, const std::vector<float>& normals,
+                               const std::vector<uint32_t>& indices) noexcept {
   const size_t added_vertices_size = vertices.size();
   const size_t added_indices_size = indices.size();
   const size_t previous_vertices_size = this->vertices_size;
@@ -55,7 +55,7 @@ Mesh ModelManager::create_mesh(const Material& material, const std::vector<float
   assert(added_vertices_size % 3 == 0);
   assert(added_indices_size % 3 == 0);
 
-  Mesh result(added_indices_size, previous_vertices_size / 3, previous_indices_size, material);
+  Mesh result(added_indices_size, previous_vertices_size / 3, previous_indices_size);
 
   this->vertices.insert(this->vertices.end(), vertices.begin(), vertices.end());
   this->normals.insert(this->normals.end(), normals.begin(), normals.end());

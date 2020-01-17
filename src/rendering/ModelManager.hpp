@@ -33,7 +33,7 @@ public:
   const std::unordered_map<std::string, Model>& get_models() const noexcept;
 
   // Meshes
-  Mesh create_mesh(const Material& material, const std::vector<float>& vertices, const std::vector<float>& normals,
+  Mesh create_mesh(const std::vector<float>& vertices, const std::vector<float>& normals,
                    const std::vector<uint32_t>& indices) noexcept;
   const std::vector<float>& get_vertices() const noexcept;
   const std::vector<float>& get_normals() const noexcept;

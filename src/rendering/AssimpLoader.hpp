@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <string>
+#include <utility>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -27,11 +28,12 @@ protected:
   Assimp::Importer importer;
   ModelManager& model_manager;
 
-  [[nodiscard]] std::vector<Material*> read_materials(const aiScene& scene) const noexcept;
-  [[nodiscard]] Mesh read_mesh(const aiMesh& mesh, const std::vector<Material*> materials) const noexcept;
+  [[nodiscard]] std::vector<std::reference_wrapper<Material>> read_materials(const aiScene& scene) const noexcept;
+  [[nodiscard]] std::pair<Mesh, const Material&>
+  read_mesh(const aiMesh& mesh, const std::vector<std::reference_wrapper<Material>> materials) const noexcept;
 
   void process_nodes_recursive(const aiNode& node, const aiScene& scene, Model& model,
-                               const std::vector<Material*> materials) const noexcept;
+                               const std::vector<std::reference_wrapper<Material>> materials) const noexcept;
 
   [[nodiscard]] std::string to_std_string(const aiString& ai_string) const noexcept;
   glm::vec3 to_vec3(aiVector3D& vec) const noexcept;
