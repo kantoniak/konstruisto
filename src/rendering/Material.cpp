@@ -17,6 +17,22 @@ unsigned int Material::get_index() const noexcept {
   return index;
 }
 
+[[nodiscard]] glm::vec3 Material::get_ambient() const noexcept {
+  return ambient;
+}
+
+[[nodiscard]] glm::vec3 Material::get_diffuse() const noexcept {
+  return diffuse;
+}
+
+[[nodiscard]] glm::vec3 Material::get_specular() const noexcept {
+  return specular;
+}
+
+[[nodiscard]] float Material::get_shininess() const noexcept {
+  return shininess;
+}
+
 void Material::set_in(const opengl::ShaderProgram& shader) const noexcept {
   shader.submit("material.ambient", ambient);
   shader.submit("material.diffuse", diffuse);

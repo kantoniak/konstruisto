@@ -403,9 +403,12 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
     }
 
     std::vector<Object>& objects = (*it).second;
-    renderer.render(objects);
+    for (const auto& object : objects) {
+      renderer.draw_single(object);
+    }
   }
 
+  renderer.flush();
   glFlush();
 }
 

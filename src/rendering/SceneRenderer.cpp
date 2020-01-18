@@ -82,26 +82,66 @@ void SceneRenderer::submit_static_models(ModelManager& model_manager) const noex
   opengl::VertexArray::unbind();
 }
 
-void SceneRenderer::render(std::vector<Object>& to_render) const noexcept {
-  vao.bind();
-  shader_program.use();
+void SceneRenderer::draw_single(const Object& object) noexcept {
+  const size_t mesh_count = object.get_model().get_meshes().size();
+  for (size_t i = 0; i < mesh_count; i++) {
+    const Mesh& mesh = object.get_model().get_meshes()[i];
+    const Material& material = object.get_model().get_materials()[i];
 
-  // glm::vec3 light_pos = glm::vec3(3) * (float)sin(engine.getDeltaSinceStart().count() / 2000.f);
-  // shader_program.submit("light_pos", light_pos);
-
-  vbo.bind();
-  for (const auto& object : to_render) {
-    shader_program.submit("model", object.get_transform());
-
-    const size_t mesh_count = object.get_model().get_meshes().size();
-    for (size_t i = 0; i < mesh_count; i++) {
-      const Mesh& mesh = object.get_model().get_meshes()[i];
-      const Material& material = object.get_model().get_materials()[i];
-      material.set_in(shader_program);
-      glDrawElementsBaseVertex(GL_TRIANGLES, mesh.get_vertex_count(), GL_UNSIGNED_INT,
-                               (GLvoid*)(mesh.get_ebo_offset() * sizeof(uint32_t)), mesh.get_vbo_offset());
-    }
+    CommandSet<int32_t>::Element packet;
+    packet.type = DRAW_SINGLE;
+    packet.key = DrawSingleCommand::create_key(material);
+    packet.data = DrawSingleCommand::create(object.get_transform(), material, mesh);
+    main_queue.push(packet);
   }
+}
+
+void SceneRenderer::flush() noexcept {
+  main_queue.sort();
+
+  shader_program.use();
+  vao.bind();
+  vbo.bind();
+
+  bool first = true;
+  int32_t previous_key;
+
+  const opengl::Uniform& u_material_ambient = shader_program.get_uniform("material.ambient");
+  const opengl::Uniform& u_material_diffuse = shader_program.get_uniform("material.diffuse");
+  const opengl::Uniform& u_material_specular = shader_program.get_uniform("material.specular");
+  const opengl::Uniform& u_material_shininess = shader_program.get_uniform("material.shininess");
+  const opengl::Uniform& u_model = shader_program.get_uniform("model");
+
+  while (!main_queue.empty()) {
+    const CommandSet<int32_t>::Element& packet = main_queue.next();
+
+    switch (packet.type) {
+    case DRAW_SINGLE:
+      DrawSingleCommand* command_ptr = static_cast<DrawSingleCommand*>(packet.data);
+      DrawSingleCommand& command = *command_ptr;
+
+      if (first || previous_key != packet.key) {
+        // Only material differs
+        u_material_ambient.submit(command.ambient);
+        u_material_diffuse.submit(command.diffuse);
+        u_material_specular.submit(command.specular);
+        u_material_shininess.submit(command.shininess * 128);
+      }
+
+      u_model.submit(command.model_transform);
+      glDrawElementsBaseVertex(GL_TRIANGLES, command.vertex_count, GL_UNSIGNED_INT,
+                               (GLvoid*)(command.ebo_offset * sizeof(uint32_t)), command.vbo_offset);
+
+      delete command_ptr;
+      break;
+    }
+
+    first = false;
+    previous_key = packet.key;
+    main_queue.pop();
+  }
+
+  main_queue.clear();
 }
 
 void SceneRenderer::clean_up() const noexcept {

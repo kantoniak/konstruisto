@@ -19,6 +19,10 @@ public:
 
   [[nodiscard]] std::string get_name() const noexcept;
   [[nodiscard]] unsigned int get_index() const noexcept;
+  [[nodiscard]] glm::vec3 get_ambient() const noexcept;
+  [[nodiscard]] glm::vec3 get_diffuse() const noexcept;
+  [[nodiscard]] glm::vec3 get_specular() const noexcept;
+  [[nodiscard]] float get_shininess() const noexcept;
   void set_in(const opengl::ShaderProgram& shader) const noexcept;
 
   friend std::ostream& operator<<(std::ostream& os, const Material& material) noexcept;

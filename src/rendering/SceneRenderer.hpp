@@ -8,6 +8,8 @@
 #include "../opengl/ShaderManager.hpp"
 #include "../opengl/ShaderProgram.hpp"
 #include "../opengl/VertexArray.hpp"
+#include "CommandSet.hpp"
+#include "DrawSingleCommand.hpp"
 #include "ModelManager.hpp"
 #include "Object.hpp"
 
@@ -20,7 +22,8 @@ public:
 
   bool set_up(opengl::ShaderManager& shader_manager) noexcept;
   void submit_static_models(ModelManager& model_manager) const noexcept;
-  void render(std::vector<Object>& to_render) const noexcept;
+  void draw_single(const Object& to_render) noexcept;
+  void flush() noexcept;
   void clean_up() const noexcept;
 
 protected:
@@ -31,6 +34,8 @@ protected:
   opengl::ArrayBuffer vbo;
   opengl::ArrayBuffer normals_vbo;
   opengl::ElementArrayBuffer ebo;
+
+  CommandSet<int32_t> main_queue;
 
   bool set_up_shaders(opengl::ShaderManager& shader_manager) noexcept;
   bool set_up_buffers() noexcept;

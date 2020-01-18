@@ -174,7 +174,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="vendor\glad\src\gl.c" />
     <ClCompile Include="src\data\CameraState.cpp" />
     <ClCompile Include="src\data\Chunk.cpp" />
     <ClCompile Include="src\data\Direction.cpp" />
@@ -204,6 +203,8 @@
     <ClCompile Include="src\opengl\UniformBuffer.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
     <ClCompile Include="src\rendering\AssimpLoader.cpp" />
+    <ClCompile Include="src\rendering\CommandSet.cpp" />
+    <ClCompile Include="src\rendering\DrawSingleCommand.cpp" />
     <ClCompile Include="src\rendering\Material.cpp" />
     <ClCompile Include="src\rendering\Mesh.cpp" />
     <ClCompile Include="src\rendering\Model.cpp" />
@@ -221,10 +222,9 @@
     <ClCompile Include="src\world\Map.cpp" />
     <ClCompile Include="src\world\Timer.cpp" />
     <ClCompile Include="src\world\World.cpp" />
+    <ClCompile Include="vendor\glad\src\gl.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vendor\glad\include\glad\gl.h" />
-    <ClInclude Include="vendor\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="src\data\buildings.hpp" />
     <ClInclude Include="src\data\CameraState.hpp" />
     <ClInclude Include="src\data\Chunk.hpp" />
@@ -261,6 +261,8 @@
     <ClInclude Include="src\opengl\UniformBuffer.hpp" />
     <ClInclude Include="src\opengl\VertexArray.hpp" />
     <ClInclude Include="src\rendering\AssimpLoader.hpp" />
+    <ClInclude Include="src\rendering\CommandSet.hpp" />
+    <ClInclude Include="src\rendering\DrawSingleCommand.hpp" />
     <ClInclude Include="src\rendering\Material.hpp" />
     <ClInclude Include="src\rendering\Mesh.hpp" />
     <ClInclude Include="src\rendering\Model.hpp" />
@@ -281,6 +283,8 @@
     <ClInclude Include="src\world\settings.hpp" />
     <ClInclude Include="src\world\Timer.hpp" />
     <ClInclude Include="src\world\World.hpp" />
+    <ClInclude Include="vendor\glad\include\glad\gl.h" />
+    <ClInclude Include="vendor\glad\include\KHR\khrplatform.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\windows.rc" />
