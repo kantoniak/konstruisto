@@ -2,7 +2,7 @@
 
 namespace data {
 
-Tree::Tree(TreeType type, Position<float> position, float rotation, float age) noexcept
+Tree::Tree(Type type, Position<float> position, float rotation, float age) noexcept
     : type(type), position(position), rotation_angle(rotation), age(age) {
   init_matrices();
 }
@@ -16,7 +16,7 @@ void Tree::add_age(float age_delta) noexcept {
   update_transform();
 }
 
-Tree::TreeType Tree::get_type() const noexcept {
+Tree::Type Tree::get_type() const noexcept {
   return type;
 }
 

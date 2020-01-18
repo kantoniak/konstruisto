@@ -54,7 +54,6 @@ public:
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();
-  void update_tree_objects(const data::Chunk& chunk) noexcept;
 
   void renderWorld(const input::Selection& selection);
   void renderDebug();

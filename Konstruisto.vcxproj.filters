@@ -162,6 +162,9 @@
     <ClCompile Include="src\rendering\DrawSingleCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\data\TreeGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glad\include\glad\gl.h">
@@ -342,6 +345,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\DrawSingleCommand.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\TreeGroup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

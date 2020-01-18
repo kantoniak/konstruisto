@@ -259,37 +259,6 @@ bool WorldRenderer::set_up_models() {
   return true;
 }
 
-void WorldRenderer::update_tree_objects(const data::Chunk& chunk) noexcept {
-  std::pair<int, int> chunk_pos = std::make_pair(chunk.getPosition().x, chunk.getPosition().y);
-  auto list_iter = chunk_to_tree_objects.find(chunk_pos);
-
-  // Clear or create list of trees
-  if (list_iter != chunk_to_tree_objects.end()) {
-    (*list_iter).second.clear();
-  } else {
-    list_iter = chunk_to_tree_objects.emplace(chunk_pos, std::vector<Object>()).first;
-  }
-
-  // Now add trees
-  const Model& tree_model_green = model_manager.get_model("tree-green");
-  const Model& tree_model_orange = model_manager.get_model("tree-orange");
-  const Model& tree_model_2 = model_manager.get_model("tree-2");
-  std::vector<Object>& objects = (*list_iter).second;
-  for (const auto& tree : chunk.get_trees()) {
-    switch (tree.get_type()) {
-    case data::Tree::TreeType::GREEN:
-      objects.emplace_back(tree_model_orange, tree.get_transform());
-      break;
-    case data::Tree::TreeType::ORANGE:
-      objects.emplace_back(tree_model_green, tree.get_transform());
-      break;
-    case data::Tree::TreeType::MODEL2:
-      objects.emplace_back(tree_model_2, tree.get_transform());
-      break;
-    }
-  }
-}
-
 void WorldRenderer::cleanup() {
   glUseProgram(0);
   terrain_vao.delete_vertex_array();
@@ -394,17 +363,20 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   }
 
   // Trees
-  for (data::Chunk* chunk : world.getMap().getChunks()) {
-    const auto chunk_pos = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
+  {
+    using data::Tree;
 
-    auto it = chunk_to_tree_objects.find(chunk_pos);
-    if (it == chunk_to_tree_objects.end()) {
-      continue;
-    }
+    const std::unordered_map<Tree::Type, const Model&> type_to_model = {
+        {Tree::Type::GREEN, model_manager.get_model("tree-green")},
+        {Tree::Type::ORANGE, model_manager.get_model("tree-orange")},
+        {Tree::Type::MODEL2, model_manager.get_model("tree-2")}};
 
-    std::vector<Object>& objects = (*it).second;
-    for (const auto& object : objects) {
-      renderer.draw_single(object);
+    for (Tree::Type type : Tree::TYPES) {
+      for (data::Chunk* chunk : world.getMap().getChunks()) {
+        for (const auto& tree : chunk->get_trees().get_trees(type)) {
+          renderer.draw_single(Object(type_to_model.at(type), tree.get_transform()));
+        }
+      }
     }
   }
 

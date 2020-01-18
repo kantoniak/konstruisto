@@ -7,7 +7,7 @@
 
 #include "Lot.hpp"
 #include "RoadGraph.hpp"
-#include "Tree.hpp"
+#include "TreeGroup.hpp"
 #include "buildings.hpp"
 
 namespace data {
@@ -47,10 +47,10 @@ public:
   void addBuilding(data::buildings::Building building);
   bool removeBuilding(data::buildings::Building building);
 
-  void add_tree(data::Tree tree) noexcept;
+  void add_tree(const data::Tree& tree) noexcept;
   bool remove_tree(const data::Tree& tree) noexcept;
-  void age_trees(float delta) noexcept;
-  [[nodiscard]] const std::vector<data::Tree>& get_trees() const noexcept;
+  void age_trees(float delta_in_turns) noexcept;
+  [[nodiscard]] const TreeGroup& get_trees() const noexcept;
 
   template <class Archive>
   void save(Archive& archive) const {
@@ -76,7 +76,7 @@ private:
   unsigned int residentialSize;
 
   std::vector<data::Lot> lots;
-  std::vector<data::Tree> trees;
+  TreeGroup trees;
 };
 }
 
