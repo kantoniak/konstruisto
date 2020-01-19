@@ -1,6 +1,7 @@
 #ifndef OPENGL_BUFFER_HPP
 #define OPENGL_BUFFER_HPP
 
+#include <cassert>
 #include <cstdint>
 
 #include <glad/gl.h>
@@ -35,11 +36,30 @@ public:
 
   void generate() noexcept;
   void bind() const noexcept;
+  void orphan() noexcept;
   void delete_buffer() const noexcept;
+
+  template <class T>
+  void buffer_data(const T& data, GLenum usage) noexcept {
+    assert(sizeof(T) > 0);
+    this->usage = usage;
+    this->data_size = sizeof(T);
+    glBufferData(this->type, this->data_size, std::addressof(data), this->usage);
+  }
+
+  template <class T>
+  void buffer_data(const std::vector<T>& v, GLenum usage) noexcept {
+    assert(v.size() * sizeof(T) > 0);
+    this->usage = usage;
+    this->data_size = v.size() * sizeof(T);
+    glBufferData(this->type, this->data_size, &v[0], this->usage);
+  }
 
 protected:
   uint32_t id;
   const BufferType type;
+  size_t data_size;
+  GLenum usage;
 
   static void unbind(const BufferType type) noexcept;
 

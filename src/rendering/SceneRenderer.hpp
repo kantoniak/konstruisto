@@ -21,7 +21,8 @@ public:
   SceneRenderer(engine::Engine& engine) noexcept;
 
   bool set_up(opengl::ShaderManager& shader_manager) noexcept;
-  void submit_static_models(ModelManager& model_manager) const noexcept;
+  void submit_static_models(ModelManager& model_manager) noexcept;
+
   void draw_single(const Object& to_render) noexcept;
   void flush() noexcept;
   void clean_up() const noexcept;
@@ -40,10 +41,6 @@ protected:
   bool set_up_shaders(opengl::ShaderManager& shader_manager) noexcept;
   bool set_up_buffers() noexcept;
 
-  template <class T>
-  void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) const noexcept {
-    glBufferData(target, v.size() * sizeof(T), &v[0], usage);
-  }
 };
 }
 

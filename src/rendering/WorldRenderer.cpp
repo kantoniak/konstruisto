@@ -208,7 +208,7 @@ bool WorldRenderer::setupBuildings() {
   // Vertex buffer
   building_mesh_vbo.generate();
   building_mesh_vbo.bind();
-  glBufferData(GL_ARRAY_BUFFER, sizeof(building), building.data(), GL_STATIC_DRAW);
+  building_mesh_vbo.buffer_data(building, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
@@ -314,7 +314,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   camera_ub.get_uniform("Camera.position").memcpy(camera_buffer_data, world.getCamera().getPosition());
 
   camera_ubo.bind();
-  glBufferDataVector(GL_UNIFORM_BUFFER, camera_buffer_data, GL_DYNAMIC_DRAW);
+  camera_ubo.buffer_data(camera_buffer_data, GL_DYNAMIC_DRAW);
   UniformBuffer::unbind();
 
   // Terrain
@@ -567,7 +567,7 @@ void WorldRenderer::sendBuildingData() {
 
   buildings_vao.bind();
   building_positions_vbo.bind();
-  glBufferDataVector(GL_ARRAY_BUFFER, buildingPositions, GL_STATIC_DRAW);
+  building_positions_vbo.buffer_data(buildingPositions, GL_STATIC_DRAW);
   ArrayBuffer::unbind();
   VertexArray::unbind();
 }
@@ -622,7 +622,7 @@ void WorldRenderer::sendTileData() {
       chunk_to_vbo.emplace(key, vbo);
     }
     chunk_to_vbo[key].bind();
-    glBufferDataVector(GL_ARRAY_BUFFER, toBuffer, GL_STATIC_DRAW);
+    chunk_to_vbo[key].buffer_data(toBuffer, GL_STATIC_DRAW);
   }
 
   // Lazy VAO setup because there was no bound buffer before

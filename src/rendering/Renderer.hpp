@@ -45,11 +45,6 @@ protected:
   glm::vec3 clearColor;
 
   [[nodiscard]] std::optional<Shader> compileShader(Shader::ShaderType shader_type, std::string filename);
-
-  template <class T>
-  void glBufferDataVector(GLenum target, const std::vector<T>& v, GLenum usage) {
-    glBufferData(target, v.size() * sizeof(T), &v[0], usage);
-  }
 };
 }
 

@@ -2,7 +2,7 @@
 
 namespace opengl {
 
-Buffer::Buffer(Buffer::BufferType type) noexcept : type(type) {
+Buffer::Buffer(Buffer::BufferType type) noexcept : type(type), data_size(0), usage(0) {
 }
 
 uint32_t Buffer::get_id() const noexcept {
@@ -19,6 +19,15 @@ void Buffer::generate() noexcept {
 
 void Buffer::bind() const noexcept {
   glBindBuffer(this->type, this->id);
+}
+
+void Buffer::orphan() noexcept {
+  if (this->data_size == 0) {
+    return;
+  }
+  glBufferData(this->type, this->data_size, nullptr, usage);
+  this->data_size = 0;
+  this->usage = 0;
 }
 
 void Buffer::delete_buffer() const noexcept {

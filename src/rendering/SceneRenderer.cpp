@@ -48,7 +48,6 @@ bool SceneRenderer::set_up_buffers() noexcept {
   // Vertex buffer
   vbo.generate();
   vbo.bind();
-
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)nullptr);
 
@@ -71,13 +70,13 @@ void SceneRenderer::submit_static_models(ModelManager& model_manager) const noex
   vao.bind();
 
   vbo.bind();
-  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_vertices(), GL_STATIC_DRAW);
+  vbo.buffer_data(model_manager.get_vertices(), GL_STATIC_DRAW);
 
   normals_vbo.bind();
-  glBufferDataVector(GL_ARRAY_BUFFER, model_manager.get_normals(), GL_STATIC_DRAW);
+  normals_vbo.buffer_data(model_manager.get_normals(), GL_STATIC_DRAW);
 
   ebo.bind();
-  glBufferDataVector(GL_ELEMENT_ARRAY_BUFFER, model_manager.get_indices(), GL_STATIC_DRAW);
+  ebo.buffer_data(model_manager.get_indices(), GL_STATIC_DRAW);
 
   opengl::VertexArray::unbind();
 }
