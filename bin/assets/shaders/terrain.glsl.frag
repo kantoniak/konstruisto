@@ -7,6 +7,12 @@ uniform bool renderGrid;
 uniform ivec4 selection;
 uniform vec4 selectionColor;
 
+uniform float brush_radius;
+uniform vec2 brush_center;
+uniform vec4 brush_fill_color;
+uniform vec4 brush_border_color;
+uniform float brush_border_width;
+
 in vec3 vPos;
 flat in int vTile;
 
@@ -35,5 +41,18 @@ void main() {
 
   if (selectionStart.x <= vPos.x && vPos.x <= selectionStop.x && selectionStart.y <= vPos.z && vPos.z <= selectionStop.y) {
     color = mix(color, vec4(selectionColor.xyz, 1), selectionColor.w);
+  }
+  
+  // Brush
+  if (brush_radius >= 0.f) {
+    const float dx_sq = (vPos.x - brush_center.x)*(vPos.x - brush_center.x);
+    const float dy_sq = (vPos.z - brush_center.y)*(vPos.z - brush_center.y);
+    const float inner_radius_sq = (brush_radius - brush_border_width/2)*(brush_radius - brush_border_width/2);
+    const float outer_radius_sq = (brush_radius + brush_border_width/2)*(brush_radius + brush_border_width/2);
+    if (dx_sq + dy_sq < inner_radius_sq) {
+      color = mix(color, vec4(brush_fill_color.xyz, 1), brush_fill_color.w);
+    } else if (dx_sq + dy_sq <= outer_radius_sq) {
+      color = mix(color, vec4(brush_border_color.xyz, 1), brush_border_color.w);
+    }
   }
 } 

@@ -44,6 +44,12 @@ void Uniform::submit<float>(const float& data) const noexcept {
 }
 
 template <>
+void Uniform::submit<glm::vec2>(const glm::vec2& data) const noexcept {
+  assert(ShaderProgram::bound_id == owner_id);
+  glUniform2fv(location, 1, glm::value_ptr(data));
+}
+
+template <>
 void Uniform::submit<glm::vec3>(const glm::vec3& data) const noexcept {
   assert(ShaderProgram::bound_id == owner_id);
   glUniform3fv(location, 1, glm::value_ptr(data));

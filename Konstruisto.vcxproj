@@ -186,6 +186,7 @@
     <ClCompile Include="src\engine\DebugInfo.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\Logger.cpp" />
+    <ClCompile Include="src\input\Brush.cpp" />
     <ClCompile Include="src\input\LineSelection.cpp" />
     <ClCompile Include="src\input\Selection.cpp" />
     <ClCompile Include="src\input\WindowHandler.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="src\engine\Engine.hpp" />
     <ClInclude Include="src\engine\GameState.hpp" />
     <ClInclude Include="src\engine\Logger.hpp" />
+    <ClInclude Include="src\input\Brush.hpp" />
     <ClInclude Include="src\input\callbacks.hpp" />
     <ClInclude Include="src\input\LineSelection.hpp" />
     <ClInclude Include="src\input\Selection.hpp" />

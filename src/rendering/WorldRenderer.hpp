@@ -14,6 +14,7 @@
 #include "../data/RoadGraph.hpp"
 #include "../engine/DebugInfo.hpp"
 #include "../engine/Engine.hpp"
+#include "../input/Brush.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../opengl/ArrayBuffer.hpp"
@@ -54,8 +55,9 @@ public:
 
   void markBuildingDataForUpdate();
   void markTileDataForUpdate();
+  void mark_brush_dirty() noexcept;
 
-  void renderWorld(const input::Selection& selection);
+  void renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush);
   void renderDebug();
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
@@ -72,6 +74,9 @@ protected:
 
   bool resendTileData = false;
   void sendTileData();
+
+  bool brush_dirty = true;
+  void update_brush_appearance(const std::shared_ptr<input::Brush>& brush) noexcept;
 
   // Shared
   opengl::UniformBuffer camera_ubo;

@@ -296,7 +296,7 @@ void WorldRenderer::markTileDataForUpdate() {
   resendTileData = true;
 }
 
-void WorldRenderer::renderWorld(const input::Selection& selection) {
+void WorldRenderer::renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -343,6 +343,14 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   terrain_shader_prog.submit("renderGrid", engine.getSettings().world.showGrid);
   terrain_shader_prog.submit("selection", selection_coords);
   terrain_shader_prog.submit("selectionColor", selection_color);
+
+  // Brush
+  if (brush_dirty) {
+    update_brush_appearance(brush);
+  }
+  if (brush) {
+    terrain_shader_prog.submit("brush_center", static_cast<glm::vec2>(brush->get_center().getGlobal()));
+  }
 
   for (data::Chunk* chunk : world.getMap().getChunks()) {
     const auto chunk_pos = std::make_pair(chunk->getPosition().x, chunk->getPosition().y);
@@ -551,6 +559,31 @@ void WorldRenderer::renderDebugUI() {
 
 void WorldRenderer::setLeftMenuActiveIcon(int index) {
   leftMenuActiveIcon = index;
+}
+
+void WorldRenderer::mark_brush_dirty() noexcept {
+  brush_dirty = true;
+}
+
+void WorldRenderer::update_brush_appearance(const std::shared_ptr<input::Brush>& brush) noexcept {
+  if (!brush) {
+    terrain_shader_prog.submit("brush_radius", 0.f);
+    brush_dirty = false;
+    return;
+  }
+
+  terrain_shader_prog.submit("brush_radius", brush->get_radius());
+  terrain_shader_prog.submit("brush_border_width", brush->get_border_width());
+
+  if (brush->is_active()) {
+    terrain_shader_prog.submit("brush_fill_color", brush->get_fill_color_active());
+    terrain_shader_prog.submit("brush_border_color", brush->get_border_color_active());
+  } else {
+    terrain_shader_prog.submit("brush_fill_color", brush->get_fill_color_base());
+    terrain_shader_prog.submit("brush_border_color", brush->get_border_color_base());
+  }
+
+  brush_dirty = false;
 }
 
 void WorldRenderer::sendBuildingData() {
