@@ -1,15 +1,28 @@
 #ifndef CALLBACKS_HPP
 #define CALLBACKS_HPP
 
+#include <iostream>
+
 #include "WindowHandler.hpp"
 
 namespace callbacks {
+
+input::WindowHandler* main_window_handler = nullptr;
 
 // OpenGL debugging
 void APIENTRY onOpenGLDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity,
                                   [[maybe_unused]] GLsizei length, const GLchar* message, const void* user_param) {
   auto* window_handler = (input::WindowHandler*)user_param;
   window_handler->onOpenGLDebugOutput(source, type, id, severity, message);
+}
+
+// GLFW error handling
+void onGLFWError(int code, const char* description) {
+  if (main_window_handler != nullptr) {
+    main_window_handler->onGLFWError(code, description);
+  } else {
+    std::cout << "GLFW error #" << code << ": " << description << std::endl;
+  }
 }
 
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {

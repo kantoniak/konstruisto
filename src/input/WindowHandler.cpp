@@ -14,6 +14,7 @@ void WindowHandler::update() {
 
 void WindowHandler::cleanup() {
   glfwMakeContextCurrent(nullptr);
+  glfwDestroyWindow(window);
   glfwTerminate();
 }
 
@@ -163,6 +164,14 @@ void WindowHandler::onOpenGLDebugOutput(uint32_t source, uint32_t type, uint32_t
   to_print += "severity: " + gl_debug_severity_to_string(severity) + "): ";
   to_print += message;
   engine.getLogger().debug(to_print);
+}
+
+void WindowHandler::onGLFWError(int code, const char* description) {
+  std::string to_print = "GLFW error #";
+  to_print += code;
+  to_print += ": ";
+  to_print += description;
+  engine.getLogger().error(to_print);
 }
 
 void WindowHandler::onKey(int key, int scancode, int action, int mods) {

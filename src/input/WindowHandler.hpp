@@ -33,6 +33,8 @@ public:
 
   // OpenGL callback
   void onOpenGLDebugOutput(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, const char* message);
+  // GLFW callback
+  void onGLFWError(int code, const char* description);
 
   // Event callbacks
   void onKey(int key, int scancode, int action, int mods);
