@@ -7,6 +7,7 @@ MapPauseState::MapPauseState(engine::Engine& engine, world::World& world, render
 }
 
 void MapPauseState::init() {
+  worldRenderer.mark_brush_dirty();
 }
 
 void MapPauseState::update(std::chrono::milliseconds) {
@@ -17,7 +18,7 @@ void MapPauseState::render() {
   renderer.prepareFrame();
 
   input::Selection tmpSelection;
-  worldRenderer.renderWorld(tmpSelection);
+  worldRenderer.renderWorld(tmpSelection, nullptr);
   engine.getDebugInfo().onRenderWorldEnd();
 
   NVGcontext* context = engine.getUI().getContext();
@@ -47,6 +48,7 @@ void MapPauseState::render() {
 
 void MapPauseState::onKey(int key, int, int action, int) {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    worldRenderer.mark_brush_dirty();
     engine.popState();
   }
 }

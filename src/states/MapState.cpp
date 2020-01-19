@@ -32,6 +32,7 @@ void MapState::init() {
   createNewWorld();
 
   geometry.init(engine, world);
+  init_brushes();
 
   if (!renderer.init()) {
     engine.stop();
@@ -56,6 +57,13 @@ void MapState::init() {
 
   world.getTimer().start();
 };
+
+void MapState::init_brushes() noexcept {
+  tree_brush =
+      std::make_unique<input::Brush>(data::Position<float>(), TREE_BRUSH_RADIUS_NORMAL, TREE_BRUSH_BORDER_WIDTH);
+  tree_brush->set_base_colors(glm::vec4(1, 1, 1, 0.05f), glm::vec4(1, 1, 1, 0.4f));
+  tree_brush->set_active_colors(glm::vec4(1, 1, 0, 0.1f), glm::vec4(1, 1, 0, 0.4f));
+}
 
 void MapState::cleanup() {
   renderer.cleanup();
@@ -117,13 +125,21 @@ void MapState::update(std::chrono::milliseconds delta) {
     }
   }
 
+  if (currentAction == MapStateAction::PLACE_TREES) {
+    glm::vec3 hitpoint;
+    if (geometry.hitGround(engine.getWindowHandler().getMousePositionNormalized(), hitpoint)) {
+      tree_brush->set_center(glm::vec2(hitpoint.x, hitpoint.z));
+    }
+  }
+
   world.update(delta);
 };
 
 void MapState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld(*selection);
+  renderer.renderWorld(*selection, current_brush);
+
 #ifdef _DEBUG
   renderer.renderDebug();
 #endif
@@ -246,6 +262,37 @@ void MapState::onKey(int key, int, int action, int mods) {
     renderer.markTileDataForUpdate();
     renderer.markBuildingDataForUpdate();
   }
+
+  if (currentAction == MapStateAction::PLACE_TREES) {
+    switch (action) {
+    case GLFW_PRESS: {
+      if (key == GLFW_KEY_LEFT_ALT) {
+        tree_brush->set_radius(TREE_BRUSH_RADIUS_SINGLE);
+        renderer.mark_brush_dirty();
+      }
+      if (key == GLFW_KEY_LEFT_CONTROL) {
+        tree_brush->set_radius(TREE_BRUSH_RADIUS_SMALL);
+        renderer.mark_brush_dirty();
+      }
+      if (key == GLFW_KEY_LEFT_SHIFT) {
+        tree_brush->set_radius(TREE_BRUSH_RADIUS_BIG);
+        renderer.mark_brush_dirty();
+      }
+      break;
+    }
+
+    case GLFW_RELEASE: {
+      if (key != GLFW_KEY_LEFT_ALT && key != GLFW_KEY_LEFT_SHIFT && key != GLFW_KEY_LEFT_CONTROL) {
+        break;
+      }
+      if (tree_brush->get_radius() != TREE_BRUSH_RADIUS_NORMAL) {
+        tree_brush->set_radius(TREE_BRUSH_RADIUS_NORMAL);
+        renderer.mark_brush_dirty();
+      }
+      break;
+    }
+    }
+  }
 }
 
 void MapState::onMouseButton(int button, int action, int) {
@@ -295,6 +342,15 @@ void MapState::onMouseButton(int button, int action, int) {
     } else {
       rmbPressed = false;
     }
+  }
+
+  if (current_brush && button == GLFW_MOUSE_BUTTON_LEFT) {
+    if (action == GLFW_PRESS) {
+      current_brush->set_active(true);
+    } else if (action == GLFW_RELEASE) {
+      current_brush->set_active(false);
+    }
+    renderer.mark_brush_dirty();
   }
 }
 
@@ -391,6 +447,11 @@ void MapState::setCurrentAction(MapStateAction action) {
   currentAction = action;
   renderer.setLeftMenuActiveIcon(currentAction - MapStateAction::PLACE_BUILDING);
 
+  // Reset brush and selection
+  engine.getSettings().rendering.renderSelection = false;
+  current_brush = nullptr;
+  renderer.mark_brush_dirty();
+
   switch (action) {
   case MapStateAction::PLACE_BUILDING:
     engine.getSettings().rendering.renderSelection = true;
@@ -398,7 +459,6 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ZONE:
-    engine.getSettings().rendering.renderSelection = false;
     break;
   case MapStateAction::PLACE_ROAD:
     engine.getSettings().rendering.renderSelection = true;
@@ -406,7 +466,9 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_TREES:
-    engine.getSettings().rendering.renderSelection = false;
+    current_brush = tree_brush;
+    tree_brush->set_center(glm::vec2(10, 10));
+    renderer.mark_brush_dirty();
     break;
   case MapStateAction::BULDOZE:
     engine.getSettings().rendering.renderSelection = true;

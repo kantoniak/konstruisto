@@ -10,6 +10,7 @@
 #include "../data/Road.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
+#include "../input/Brush.hpp"
 #include "../input/LineSelection.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
@@ -43,15 +44,27 @@ public:
   void onWindowResize(int width, int height) override;
 
 private:
+  const float TREE_BRUSH_RADIUS_SINGLE = 0.1f;
+  const float TREE_BRUSH_RADIUS_SMALL = 1.f;
+  const float TREE_BRUSH_RADIUS_NORMAL = 3.f;
+  const float TREE_BRUSH_RADIUS_BIG = 8.f;
+  const float TREE_BRUSH_BORDER_WIDTH = 0.05f;
+
   rendering::WorldRenderer renderer;
   world::Geometry geometry;
   world::World world;
+
   std::unique_ptr<input::Selection> selection;
+  std::shared_ptr<input::Brush> current_brush;
+
+  // Tree painting
+  std::shared_ptr<input::Brush> tree_brush;
 
   io::SaveFileHandler saveFileHandler;
   data::City city;
   void createNewWorld();
   void createRandomWorld();
+  void init_brushes() noexcept;
 
   MapStateAction currentAction;
   void setCurrentAction(MapStateAction action);
