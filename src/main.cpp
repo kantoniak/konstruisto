@@ -41,6 +41,13 @@ void initSettings(engine::Logger& logger, settings& gameSettings, int argc, char
       continue;
     }
 
+    // Render frame and close
+    char* render_and_stop = stripPrefix("--render_frame_and_close", argv[i]);
+    if (nullptr != render_and_stop) {
+      gameSettings.render_frame_and_close = true;
+      continue;
+    }
+
     // Logging
     char* loggingLevel = stripPrefix("--loggingLevel=", argv[i]);
     if (nullptr != loggingLevel) {
@@ -83,10 +90,14 @@ int main(int argc, char** argv) {
     windowHandler.update();
     engine.tick(std::chrono::high_resolution_clock::now());
     engine.getDebugInfo().onFrameEnd();
+
+    if (engine.getSettings().render_frame_and_close) {
+      engine.stop();
+    }
   }
 
   engine.cleanup();
-  windowHandler.cleanup();
   ui.cleanup();
+  windowHandler.cleanup();
   return 0;
 }
