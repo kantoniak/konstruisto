@@ -372,10 +372,15 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
         {Tree::Type::MODEL2, model_manager.get_model("tree-2")}};
 
     for (Tree::Type type : Tree::TYPES) {
+      std::vector<glm::mat4> transforms;
       for (data::Chunk* chunk : world.getMap().getChunks()) {
+        transforms.reserve(transforms.size() + chunk->get_trees().get_count(type));
         for (const auto& tree : chunk->get_trees().get_trees(type)) {
-          renderer.draw_single(Object(type_to_model.at(type), tree.get_transform()));
+          transforms.push_back(tree.get_transform());
         }
+      }
+      if (transforms.size() > 0) {
+        renderer.draw_instanced(type_to_model.at(type), transforms);
       }
     }
   }

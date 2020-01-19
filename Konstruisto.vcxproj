@@ -205,7 +205,6 @@
     <ClCompile Include="src\opengl\VertexArray.cpp" />
     <ClCompile Include="src\rendering\AssimpLoader.cpp" />
     <ClCompile Include="src\rendering\CommandSet.cpp" />
-    <ClCompile Include="src\rendering\DrawSingleCommand.cpp" />
     <ClCompile Include="src\rendering\Material.cpp" />
     <ClCompile Include="src\rendering\Mesh.cpp" />
     <ClCompile Include="src\rendering\Model.cpp" />
@@ -263,7 +262,9 @@
     <ClInclude Include="src\opengl\UniformBuffer.hpp" />
     <ClInclude Include="src\opengl\VertexArray.hpp" />
     <ClInclude Include="src\rendering\AssimpLoader.hpp" />
+    <ClInclude Include="src\rendering\Command.hpp" />
     <ClInclude Include="src\rendering\CommandSet.hpp" />
+    <ClInclude Include="src\rendering\DrawInstancedCommand.hpp" />
     <ClInclude Include="src\rendering\DrawSingleCommand.hpp" />
     <ClInclude Include="src\rendering\Material.hpp" />
     <ClInclude Include="src\rendering\Mesh.hpp" />

@@ -159,9 +159,6 @@
     <ClCompile Include="src\rendering\CommandSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\DrawSingleCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\data\TreeGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -348,6 +345,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\data\TreeGroup.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\Command.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\DrawInstancedCommand.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

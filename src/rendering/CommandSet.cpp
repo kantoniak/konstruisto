@@ -44,5 +44,5 @@ void CommandSet<Key>::clear() noexcept {
   this->locked = false;
 }
 
-template class CommandSet<int32_t>;
+template class CommandSet<uint16_t>;
 }

@@ -6,31 +6,30 @@
 #include <stdexcept>
 #include <vector>
 
-namespace rendering {
+#include "Command.hpp"
 
-enum CommandType { DRAW_SINGLE };
+namespace rendering {
 
 template <typename Key>
 class CommandSet {
 
 public:
-  typedef struct Element {
-    CommandType type;
+  using Element = struct Element {
+    Command::Type type;
     Key key;
     void* data;
 
     bool operator<(const struct Element& other) const {
       return key < other.key;
     }
-  } Element;
+  };
 
   CommandSet();
 
-  void hint_push_count() noexcept;
   bool push(const Element element) noexcept;
   const Element& next() const noexcept;
   void pop() const noexcept;
-  bool empty() const noexcept;
+  [[nodiscard]] bool empty() const noexcept;
 
   void sort() noexcept;
   void clear() noexcept;
