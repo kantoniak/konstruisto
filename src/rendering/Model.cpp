@@ -20,6 +20,6 @@ const std::vector<std::reference_wrapper<const Material>>& Model::get_materials(
 
 void Model::add_mesh(const Mesh mesh, const Material& material) noexcept {
   meshes.push_back(std::move(mesh));
-  materials.push_back(material);
+  materials.emplace_back(material);
 }
 }

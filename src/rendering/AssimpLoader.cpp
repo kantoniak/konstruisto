@@ -58,13 +58,13 @@ std::vector<std::reference_wrapper<Material>> AssimpLoader::read_materials(const
 
     // Skip if material with this name exists
     if (model_manager.has_material(material_name)) {
-      materials.push_back(model_manager.get_material(material_name));
+      materials.emplace_back(model_manager.get_material(material_name));
       continue;
     }
 
     Material& new_material = model_manager.register_material(material_name, to_vec3(ambient), to_vec3(diffuse),
                                                              to_vec3(specular), shininess);
-    materials.push_back(new_material);
+    materials.emplace_back(new_material);
     log.debug(to_string(new_material));
   }
 

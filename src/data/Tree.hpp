@@ -14,7 +14,7 @@ class Tree {
 public:
   enum Type { GREEN, ORANGE, MODEL2 };
   static constexpr size_t TREE_TYPE_COUNT = 3;
-  static constexpr std::array<Type, TREE_TYPE_COUNT> TYPES = { GREEN, ORANGE, MODEL2 };
+  static constexpr std::array<Type, TREE_TYPE_COUNT> TYPES = {GREEN, ORANGE, MODEL2};
 
   Tree(Type type, Position<float> position, float rotation, float age) noexcept;
 
