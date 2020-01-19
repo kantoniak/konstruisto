@@ -1,0 +1,54 @@
+{
+   <i965_dri>
+   Memcheck:Addr1
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Addr2
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Addr4
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Addr8
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Cond
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Value4
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <i965_dri>
+   Memcheck:Value8
+   ...
+   obj:/*lib*/i965_dri*
+}
+{
+   <valgrind>
+   Memcheck:Leak
+   ...
+   obj:/*lib*/vgpreload_memcheck-amd64-linux.so
+}
+{
+   <libX11>
+   Memcheck:Leak
+   ...
+   obj:/*lib*/libX11*
+}

@@ -19,6 +19,7 @@ OBJDIR := obj
 BINDIR := bin
 VENDORDIR := vendor
 GLADDIR := $(VENDORDIR)/glad
+TMPDIR := `echo "/tmp/$(PROJECT_NAME)/" | tr A-Z a-z`
 
 CC=clang
 CXX=clang++
@@ -133,6 +134,10 @@ format-all:
 
 modernize-all:
 	clang-tidy-9 -checks="modernize-*,-modernize-use-trailing-return-type" -fix $(CPP_FILES) $(HPP_FILES) -- $(CPPFLAGS) $(DEFINES)
+
+valgrind:
+	@mkdir -p $(TMPDIR)
+	@cd $(BINDIR); valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --show-reachable=yes --log-file="$(TMPDIR)/valgrind.log" --suppressions=../valgrind.supp ./$(PROJECT_NAME)$(EXTENSION)
 
 todos:
 	@grep -norwP src/ -e '(TODO|FIXME).*$''
