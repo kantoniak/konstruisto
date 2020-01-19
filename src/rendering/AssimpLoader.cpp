@@ -86,14 +86,14 @@ AssimpLoader::read_mesh(const aiMesh& mesh, const std::vector<std::reference_wra
     normals.push_back(static_cast<float>(mesh.mNormals[i].x));
     normals.push_back(static_cast<float>(mesh.mNormals[i].y));
     normals.push_back(static_cast<float>(mesh.mNormals[i].z));
+  }
 
-    // TODO(kantoniak): load texture coords
+  // TODO(kantoniak): Load texture coords
 
-    for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
-      aiFace face = mesh.mFaces[i];
-      for (unsigned int j = 0; j < face.mNumIndices; j++) {
-        indices.push_back(face.mIndices[j]);
-      }
+  for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+    aiFace face = mesh.mFaces[i];
+    for (unsigned int j = 0; j < face.mNumIndices; j++) {
+      indices.push_back(face.mIndices[j]);
     }
   }
 
