@@ -71,7 +71,6 @@ void UI::startFrame() {
 
 void UI::endFrame() {
   nvgEndFrame(engine.getUI().getContext());
-  glFlush();
   engine.getDebugInfo().onRenderUIEnd();
 }
 

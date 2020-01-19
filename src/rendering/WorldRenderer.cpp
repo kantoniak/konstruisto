@@ -381,7 +381,6 @@ void WorldRenderer::renderWorld(const input::Selection& selection) {
   }
 
   renderer.flush();
-  glFlush();
 }
 
 void WorldRenderer::renderDebug() {
