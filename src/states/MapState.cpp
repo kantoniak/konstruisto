@@ -39,6 +39,7 @@ void MapState::init() {
   }
 
   // Temporary trees
+  /*
   int type = 0;
   for (unsigned int i = 1; i < data::Chunk::SIDE_LENGTH; i++) {
     for (unsigned int j = 1; j < data::Chunk::SIDE_LENGTH; j++) {
@@ -49,6 +50,7 @@ void MapState::init() {
       type = (type + 1) % 3;
     }
   }
+  */
 
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
@@ -222,6 +224,10 @@ void MapState::onKey(int key, int, int action, int mods) {
     setCurrentAction(MapStateAction::PLACE_ROAD);
   }
 
+  if (key == GLFW_KEY_V && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::PLACE_TREES);
+  }
+
   if (key == GLFW_KEY_B && action == GLFW_PRESS) {
     setCurrentAction(MapStateAction::BULDOZE);
   }
@@ -387,18 +393,23 @@ void MapState::setCurrentAction(MapStateAction action) {
 
   switch (action) {
   case MapStateAction::PLACE_BUILDING:
+    engine.getSettings().rendering.renderSelection = true;
     selection = std::make_unique<input::Selection>();
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ZONE:
-    selection = std::make_unique<input::Selection>();
-    selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
+    engine.getSettings().rendering.renderSelection = false;
     break;
   case MapStateAction::PLACE_ROAD:
+    engine.getSettings().rendering.renderSelection = true;
     selection = std::make_unique<input::LineSelection>(1);
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
+  case MapStateAction::PLACE_TREES:
+    engine.getSettings().rendering.renderSelection = false;
+    break;
   case MapStateAction::BULDOZE:
+    engine.getSettings().rendering.renderSelection = true;
     selection = std::make_unique<input::Selection>();
     selection->setColors(glm::vec4(1, 0.f, 0.f, 0.2f), glm::vec4(1, 0.f, 0.f, 0.6f), glm::vec4(1, 0, 0, 1.f));
     break;

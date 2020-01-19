@@ -485,7 +485,7 @@ void WorldRenderer::renderUI() {
 
   // Left menu
   {
-    const unsigned short optionsCount = 5;
+    const unsigned short optionsCount = 6;
     const unsigned short buttonSide = 3 * UI::ICON_SIDE;
     int x = 0;
     int y = viewport.y / 2 - optionsCount * buttonSide / 2.f;
@@ -510,6 +510,8 @@ void WorldRenderer::renderUI() {
     engine.getUI().renderIcon(UI::ICON_ZONES, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
     engine.getUI().renderIcon(UI::ICON_ROAD, x, y, UI::ICON_SIDE_24);
+    y += buttonSide;
+    engine.getUI().renderIcon(UI::ICON_NATURE, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
     engine.getUI().renderIcon(UI::ICON_BULDOZER, x, y, UI::ICON_SIDE_24);
     y += buttonSide;
