@@ -4,6 +4,11 @@
 #include <iostream>
 
 namespace world {
+Geometry::Geometry()
+    : generator(std::chrono::high_resolution_clock::now().time_since_epoch().count()), uniform_distribution(0.f, 1.f),
+      normal_distribution(0.f, 1.f) {
+}
+
 void Geometry::init(engine::Engine& engine, World& world) {
   this->world = &world;
   this->engine = &engine;
@@ -94,6 +99,27 @@ std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 f
         result.push_back(building);
       }
     }
+  }
+
+  return result;
+}
+
+std::vector<glm::vec2> Geometry::distribute_in_circle(size_t point_count, float radius, float normal_cutoff) noexcept {
+  std::vector<glm::vec2> result;
+  result.reserve(point_count);
+
+  for (size_t i = 0; i < point_count; i++) {
+    const float a = uniform_distribution(generator) * 2.f * M_PI;
+    const float radius_base = abs(normal_distribution(generator)) / normal_cutoff;
+
+    if (radius_base > 1.f) {
+      continue;
+    }
+
+    float r = radius * sqrt(abs(radius_base));
+    float x = r * cos(a);
+    float y = r * sin(a);
+    result.emplace_back(glm::vec2(x, y));
   }
 
   return result;

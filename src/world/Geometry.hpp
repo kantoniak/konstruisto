@@ -2,6 +2,7 @@
 #define WORLD_GEOMETRY_HPP
 
 #include <algorithm>
+#include <random>
 
 #include "../data/Chunk.hpp"
 #include "../engine/Engine.hpp"
@@ -13,6 +14,7 @@ namespace world {
 class Geometry {
 
 public:
+  Geometry();
   void init(engine::Engine& engine, World& world);
 
   /**
@@ -33,9 +35,15 @@ public:
 
   [[nodiscard]] std::vector<data::buildings::Building> getBuildings(const glm::ivec2 from, const glm::ivec2 to) const;
 
+  std::vector<glm::vec2> distribute_in_circle(size_t point_count, float radius, float normal_cutoff) noexcept;
+
 protected:
   World* world;
   engine::Engine* engine;
+
+  std::mt19937 generator;
+  std::uniform_real_distribution<float> uniform_distribution;
+  std::normal_distribution<float> normal_distribution;
 
   [[nodiscard]] World& getWorld() const;
   [[nodiscard]] engine::Engine& getEngine() const;

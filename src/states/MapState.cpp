@@ -347,6 +347,22 @@ void MapState::onMouseButton(int button, int action, int) {
   if (current_brush && button == GLFW_MOUSE_BUTTON_LEFT) {
     if (action == GLFW_PRESS) {
       current_brush->set_active(true);
+
+      // Add trees immediately
+      glm::vec3 hitpoint;
+      if (geometry.hitGround(engine.getWindowHandler().getMousePositionNormalized(), hitpoint)) {
+
+        const float tree_density = 2.5f;
+        const float brush_radius = current_brush->get_radius();
+        size_t point_count = tree_density * brush_radius * brush_radius;
+
+        std::vector<glm::vec2> points = geometry.distribute_in_circle(point_count, brush_radius, 3.f);
+        glm::vec2 brush_center(hitpoint.x, hitpoint.z);
+        for (auto& point : points) {
+          world.getMap().add_tree(create_random_tree(brush_center + point));
+        }
+      }
+
     } else if (action == GLFW_RELEASE) {
       current_brush->set_active(false);
     }
@@ -366,6 +382,13 @@ void MapState::onWindowFocusChange(int focused) {
 
 void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
+}
+
+data::Tree MapState::create_random_tree(const data::Position<float>& position) noexcept {
+  const auto type = static_cast<data::Tree::Type>(rand() % data::Tree::TREE_TYPE_COUNT);
+  const float age = 100.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+  const float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+  return data::Tree(type, position, rotation, age);
 }
 
 void MapState::createNewWorld() {

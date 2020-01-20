@@ -59,6 +59,7 @@ private:
 
   // Tree painting
   std::shared_ptr<input::Brush> tree_brush;
+  static data::Tree create_random_tree(const data::Position<float>& position) noexcept;
 
   io::SaveFileHandler saveFileHandler;
   data::City city;
