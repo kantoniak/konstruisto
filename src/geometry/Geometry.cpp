@@ -3,13 +3,13 @@
 #include "glm/gtx/string_cast.hpp"
 #include <iostream>
 
-namespace world {
+namespace geometry {
 Geometry::Geometry()
     : generator(std::chrono::high_resolution_clock::now().time_since_epoch().count()), uniform_distribution(0.f, 1.f),
       normal_distribution(0.f, 1.f) {
 }
 
-void Geometry::init(engine::Engine& engine, World& world) {
+void Geometry::init(engine::Engine& engine, world::World& world) {
   this->world = &world;
   this->engine = &engine;
 }
@@ -18,7 +18,7 @@ void Geometry::init(engine::Engine& engine, World& world) {
  * @param entryPoint ray position in near field, [-1, 1]x[-1, 1]
  */
 bool Geometry::hitGround(glm::vec2 entryPoint, glm::vec3& hit) {
-  Camera camera = getWorld().getCamera();
+  world::Camera camera = getWorld().getCamera();
   const glm::vec3 cameraPos = camera.getPosition();
   const glm::vec3 ray = camera.getRay(entryPoint);
   hit = cameraPos - (cameraPos.y / ray.y) * ray;
@@ -125,7 +125,7 @@ std::vector<glm::vec2> Geometry::distribute_in_circle(size_t point_count, float 
   return result;
 }
 
-World& Geometry::getWorld() const {
+world::World& Geometry::getWorld() const {
   return *world;
 }
 

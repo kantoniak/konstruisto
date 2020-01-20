@@ -10,6 +10,7 @@
 #include "../data/Road.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
+#include "../geometry/Geometry.hpp"
 #include "../input/Brush.hpp"
 #include "../input/LineSelection.hpp"
 #include "../input/Selection.hpp"
@@ -18,7 +19,6 @@
 #include "../rendering/Renderer.hpp"
 #include "../settings.hpp"
 #include "../world/Camera.hpp"
-#include "../world/Geometry.hpp"
 #include "../world/World.hpp"
 #include "MapPauseState.hpp"
 
@@ -51,7 +51,7 @@ private:
   const float TREE_BRUSH_BORDER_WIDTH = 0.05f;
 
   rendering::WorldRenderer renderer;
-  world::Geometry geometry;
+  geometry::Geometry geometry;
   world::World world;
 
   std::unique_ptr<input::Selection> selection;

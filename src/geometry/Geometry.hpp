@@ -6,16 +6,16 @@
 
 #include "../data/Chunk.hpp"
 #include "../engine/Engine.hpp"
-#include "Camera.hpp"
-#include "World.hpp"
+#include "../world/Camera.hpp"
+#include "../world/World.hpp"
 
-namespace world {
+namespace geometry {
 
 class Geometry {
 
 public:
   Geometry();
-  void init(engine::Engine& engine, World& world);
+  void init(engine::Engine& engine, world::World& world);
 
   /**
    * @param entryPoint ray position in near field, [-1, 1]x[-1, 1]
@@ -38,14 +38,14 @@ public:
   std::vector<glm::vec2> distribute_in_circle(size_t point_count, float radius, float normal_cutoff) noexcept;
 
 protected:
-  World* world;
+  world::World* world;
   engine::Engine* engine;
 
   std::mt19937 generator;
   std::uniform_real_distribution<float> uniform_distribution;
   std::normal_distribution<float> normal_distribution;
 
-  [[nodiscard]] World& getWorld() const;
+  [[nodiscard]] world::World& getWorld() const;
   [[nodiscard]] engine::Engine& getEngine() const;
 
   [[nodiscard]] const glm::ivec2 getEnd(const data::buildings::Building& building) const;

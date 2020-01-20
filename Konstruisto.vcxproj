@@ -219,7 +219,7 @@
     <ClCompile Include="src\states\MapPauseState.cpp" />
     <ClCompile Include="src\states\MapState.cpp" />
     <ClCompile Include="src\world\Camera.cpp" />
-    <ClCompile Include="src\world\Geometry.cpp" />
+    <ClCompile Include="src\geometry\Geometry.cpp" />
     <ClCompile Include="src\world\Map.cpp" />
     <ClCompile Include="src\world\Timer.cpp" />
     <ClCompile Include="src\world\World.cpp" />
@@ -283,7 +283,7 @@
     <ClInclude Include="src\states\MapPauseState.hpp" />
     <ClInclude Include="src\states\MapState.hpp" />
     <ClInclude Include="src\world\Camera.hpp" />
-    <ClInclude Include="src\world\Geometry.hpp" />
+    <ClInclude Include="src\geometry\Geometry.hpp" />
     <ClInclude Include="src\world\Map.hpp" />
     <ClInclude Include="src\world\settings.hpp" />
     <ClInclude Include="src\world\Timer.hpp" />
