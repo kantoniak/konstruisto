@@ -2,12 +2,13 @@
 
 namespace geometry {
 
-void CollisionSpace::insert(std::shared_ptr<Collidable> collidable_ptr) noexcept {
+void CollisionSpace::insert(Collidable::ptr collidable_ptr) noexcept {
   collidables.push_back(collidable_ptr);
 }
 
-bool CollisionSpace::remove(std::shared_ptr<Collidable> collidable_ptr) noexcept {
-  auto to_remove = std::find(collidables.begin(), collidables.end(), collidable_ptr);
+bool CollisionSpace::remove(const Collidable& collidable) noexcept {
+  auto to_remove = std::find_if(collidables.begin(), collidables.end(),
+                                [&](const Collidable::ptr& ptr) { return *ptr == collidable; });
   if (to_remove == collidables.end()) {
     return false;
   }

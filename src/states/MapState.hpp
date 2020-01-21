@@ -61,10 +61,10 @@ private:
 
   // Tree painting
   glm::vec2 saved_tree_brush_hitpoint;
-  std::shared_ptr<geometry::Circle> tree_shape;
+  geometry::Circle::ptr tree_shape;
   std::shared_ptr<input::Brush> tree_brush;
   static data::Tree create_random_tree(const data::Position<float>& position,
-                                       std::shared_ptr<geometry::Collidable> tree_body) noexcept;
+                                       geometry::Collidable::ptr tree_body) noexcept;
   void insert_trees_from_brush() noexcept;
   void insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept;
 
