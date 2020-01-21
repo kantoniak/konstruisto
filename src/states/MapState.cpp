@@ -117,6 +117,13 @@ void MapState::update(std::chrono::milliseconds delta) {
     glm::vec3 hitpoint;
     if (geometry.hitGround(engine.getWindowHandler().getMousePositionNormalized(), hitpoint)) {
       tree_brush->set_center(glm::vec2(hitpoint.x, hitpoint.z));
+
+      if (tree_brush->get_radius() > TREE_BRUSH_RADIUS_SINGLE && tree_brush->is_active()) {
+        if (glm::distance(saved_tree_brush_hitpoint, tree_brush->get_center().getGlobal()) > 2.f) {
+          saved_tree_brush_hitpoint = tree_brush->get_center().getGlobal();
+          insert_trees_from_brush();
+        }
+      }
     }
   }
 
@@ -338,21 +345,12 @@ void MapState::onMouseButton(int button, int action, int) {
 
       glm::vec3 hitpoint;
       if (geometry.hitGround(engine.getWindowHandler().getMousePositionNormalized(), hitpoint)) {
-        const glm::vec2 brush_center(hitpoint.x, hitpoint.z);
+        saved_tree_brush_hitpoint = glm::vec2(hitpoint.x, hitpoint.z);
 
         if (current_brush->get_radius() == TREE_BRUSH_RADIUS_SINGLE) {
-
-          // Single tree insert
-          insert_trees_around(brush_center, {glm::vec2()});
-
+          insert_trees_around(saved_tree_brush_hitpoint, {glm::vec2()});
         } else {
-
-          // Inserting multiple trees
-          const float tree_density = 2.5f;
-          const float brush_radius = current_brush->get_radius();
-          size_t point_count = tree_density * brush_radius * brush_radius;
-          std::vector<glm::vec2> points = geometry.distribute_in_circle(point_count, brush_radius, 3.f);
-          insert_trees_around(brush_center, points);
+          insert_trees_from_brush();
         }
       }
 
@@ -383,6 +381,14 @@ data::Tree MapState::create_random_tree(const data::Position<float>& position,
   const float age = 100.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
   const float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
   return data::Tree(type, position, rotation, age, tree_body);
+}
+
+void MapState::insert_trees_from_brush() noexcept {
+  static const float tree_density = 2.5f;
+  const float brush_radius = current_brush->get_radius();
+  size_t point_count = tree_density * brush_radius * brush_radius;
+  std::vector<glm::vec2> points = geometry.distribute_in_circle(point_count, brush_radius, 3.f);
+  insert_trees_around(saved_tree_brush_hitpoint, points);
 }
 
 void MapState::insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept {
