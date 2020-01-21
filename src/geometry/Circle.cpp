@@ -13,10 +13,13 @@ bool Circle::test_collision_dd(const glm::vec2& transform, const Shape& other, c
   return other.test_collision(other_transform, *this, transform);
 }
 
+bool Circle::test_collision(const glm::vec2& transform, const AABB& other, const glm::vec2& other_transform) const
+    noexcept {
+  return CollisionTester::test_collision<>(*this, transform, other, other_transform);
+}
+
 bool Circle::test_collision(const glm::vec2& transform, const Circle& other, const glm::vec2& other_transform) const
     noexcept {
-  const glm::vec2 delta = glm::abs(transform - other_transform);
-  const float radius_sum = radius + other.radius;
-  return !(radius_sum * radius_sum < (delta.x * delta.x + delta.y * delta.y));
+  return CollisionTester::test_collision<>(*this, transform, other, other_transform);
 }
 }

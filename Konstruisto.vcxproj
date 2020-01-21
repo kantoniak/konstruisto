@@ -186,9 +186,11 @@
     <ClCompile Include="src\engine\DebugInfo.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\Logger.cpp" />
+    <ClCompile Include="src\geometry\AABB.cpp" />
     <ClCompile Include="src\geometry\Circle.cpp" />
     <ClCompile Include="src\geometry\Collidable.cpp" />
     <ClCompile Include="src\geometry\CollisionSpace.cpp" />
+    <ClCompile Include="src\geometry\CollisionTester.cpp" />
     <ClCompile Include="src\input\Brush.cpp" />
     <ClCompile Include="src\input\LineSelection.cpp" />
     <ClCompile Include="src\input\Selection.cpp" />
@@ -245,9 +247,11 @@
     <ClInclude Include="src\engine\Engine.hpp" />
     <ClInclude Include="src\engine\GameState.hpp" />
     <ClInclude Include="src\engine\Logger.hpp" />
+    <ClInclude Include="src\geometry\AABB.hpp" />
     <ClInclude Include="src\geometry\Circle.hpp" />
     <ClInclude Include="src\geometry\Collidable.hpp" />
     <ClInclude Include="src\geometry\CollisionSpace.hpp" />
+    <ClInclude Include="src\geometry\CollisionTester.hpp" />
     <ClInclude Include="src\geometry\Shape.hpp" />
     <ClInclude Include="src\input\Brush.hpp" />
     <ClInclude Include="src\input\callbacks.hpp" />

@@ -1,20 +1,21 @@
-#ifndef GEOMETRY_CIRCLE_HPP
-#define GEOMETRY_CIRCLE_HPP
+#ifndef GEOMETRY_AABB_HPP
+#define GEOMETRY_AABB_HPP
 
 #include <glm/glm.hpp>
 
-#include "AABB.hpp"
+#include "Circle.hpp"
 #include "CollisionTester.hpp"
 #include "Shape.hpp"
 
 namespace geometry {
 
-class Circle : public Shape {
+class AABB : public Shape {
 public:
-  Circle(float radius) noexcept;
-  virtual ~Circle() = default;
+  AABB(glm::vec2 from, glm::vec2 to) noexcept;
+  virtual ~AABB() = default;
 
-  [[nodiscard]] float get_radius() const noexcept;
+  [[nodiscard]] const glm::vec2& get_from() const noexcept;
+  [[nodiscard]] const glm::vec2& get_to() const noexcept;
 
   [[nodiscard]] virtual bool test_collision_dd(const glm::vec2& transform, const Shape& other,
                                                const glm::vec2& other_transform) const noexcept;
@@ -25,7 +26,8 @@ public:
 
 private:
   using Shape::test_collision;
-  float radius;
+  glm::vec2 from;
+  glm::vec2 to;
 };
 }
 
