@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <random>
 
-#include "../data/Chunk.hpp"
 #include "../engine/Engine.hpp"
 #include "../world/Camera.hpp"
 #include "../world/World.hpp"
@@ -25,11 +24,6 @@ public:
 
   [[nodiscard]] glm::ivec2 pointToField(glm::vec3 point) const;
 
-  template <typename T>
-  bool checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const;
-
-  [[nodiscard]] std::vector<data::buildings::Building> getBuildings(const glm::ivec2 from, const glm::ivec2 to) const;
-
   std::vector<glm::vec2> distribute_in_circle(size_t point_count, float radius, float normal_cutoff) noexcept;
 
 protected:
@@ -42,8 +36,6 @@ protected:
 
   [[nodiscard]] world::World& getWorld() const;
   [[nodiscard]] engine::Engine& getEngine() const;
-
-  [[nodiscard]] const glm::ivec2 getEnd(const data::buildings::Building& building) const;
 };
 }
 

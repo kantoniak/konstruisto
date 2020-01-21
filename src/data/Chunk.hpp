@@ -5,17 +5,15 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "Building.hpp"
 #include "Lot.hpp"
 #include "RoadGraph.hpp"
 #include "TreeGroup.hpp"
-#include "buildings.hpp"
 
 namespace data {
 
 class Chunk {
   using lotList = const std::vector<data::Lot>;
-  using residentialList = const std::vector<data::buildings::Building>;
-  using residentialListIter = std::vector<data::buildings::Building>::const_iterator;
 
 public:
   constexpr unsigned static int SIDE_LENGTH = 64;
@@ -27,10 +25,6 @@ public:
 
   void setPosition(glm::ivec2 position);
   [[nodiscard]] glm::ivec2 getPosition() const;
-
-  [[nodiscard]] residentialList getResidentials() const;
-  [[nodiscard]] residentialListIter getResidentialIterator() const;
-  [[nodiscard]] unsigned int getResidentialSize() const;
 
   void setNeighborN(Chunk* neigborN);
   void setNeighborS(Chunk* neigborS);
@@ -44,10 +38,13 @@ public:
   void addLot(data::Lot lot);
   [[nodiscard]] lotList getLots() const;
 
-  void addBuilding(data::buildings::Building building);
-  bool removeBuilding(data::buildings::Building building);
+  // Buildings
+  void add_building(data::Building::ptr building) noexcept;
+  bool remove_building(const data::Building& building) noexcept;
+  [[nodiscard]] const std::vector<data::Building::ptr>& get_buildings() const noexcept;
 
-  void add_tree(const data::Tree& tree) noexcept;
+  // Trees
+  void add_tree(data::Tree::ptr tree) noexcept;
   bool remove_tree(const data::Tree& tree) noexcept;
   void age_trees(float delta_in_turns) noexcept;
   [[nodiscard]] const TreeGroup& get_trees() const noexcept;
@@ -72,7 +69,7 @@ private:
 
   RoadGraph<SIDE_LENGTH> roadGraph;
 
-  std::vector<data::buildings::Building> residential;
+  std::vector<data::Building::ptr> residential;
   unsigned int residentialSize;
 
   std::vector<data::Lot> lots;

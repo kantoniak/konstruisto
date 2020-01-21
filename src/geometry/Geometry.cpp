@@ -39,27 +39,6 @@ glm::ivec2 Geometry::pointToField(glm::vec3 point) const {
   return glm::ivec2(floor(point.x), floor(point.z));
 }
 
-template <typename T>
-bool Geometry::checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const {
-  return !(a1.y < b2.y || a2.y > b1.y || a1.x < b2.x || a2.x > b1.x);
-}
-
-std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 from, const glm::ivec2 to) const {
-  std::vector<data::buildings::Building> result;
-
-  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
-    for (data::buildings::Building building : chunk->getResidentials()) {
-      const glm::ivec2 b2 = glm::vec2(building.x, building.y);
-      const glm::ivec2 b1 = getEnd(building);
-      if (checkRectIntersection(to, from, b1, b2)) {
-        result.push_back(building);
-      }
-    }
-  }
-
-  return result;
-}
-
 std::vector<glm::vec2> Geometry::distribute_in_circle(size_t point_count, float radius, float normal_cutoff) noexcept {
   std::vector<glm::vec2> result;
   result.reserve(point_count);
@@ -87,9 +66,5 @@ world::World& Geometry::getWorld() const {
 
 engine::Engine& Geometry::getEngine() const {
   return *engine;
-}
-
-const glm::ivec2 Geometry::getEnd(const data::buildings::Building& building) const {
-  return glm::ivec2(building.x + building.width - 1, building.y + building.length - 1);
 }
 }

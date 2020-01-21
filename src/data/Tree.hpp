@@ -2,6 +2,7 @@
 #define DATA_TREE_HPP
 
 #include <array>
+#include <memory>
 
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
@@ -13,6 +14,9 @@ namespace data {
 
 class Tree {
 public:
+  // FIXME(kantoniak): Use `gsl::not_null<std::shared_ptr<Tree>>`.
+  using ptr = std::shared_ptr<Tree>;
+
   enum Type { GREEN, ORANGE, MODEL2 };
   static constexpr size_t TREE_TYPE_COUNT = 3;
   static constexpr std::array<Type, TREE_TYPE_COUNT> TYPES = {GREEN, ORANGE, MODEL2};

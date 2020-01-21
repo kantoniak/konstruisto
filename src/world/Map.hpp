@@ -34,19 +34,19 @@ public:
 
   bool addLot(data::Lot lot);
 
-  void addBuilding(data::buildings::Building building);
-  unsigned int getBuildingCount();
-
   // TODO(kantoniak): Map::setCurrentCity() - change parameter to ObjId one day
   void setCurrentCity(data::City* city);
   data::City& getCurrentCity();
 
   void addRoads(const std::vector<data::Road>& roads);
 
-  void removeBuilding(data::buildings::Building building);
+  // Buildings
+  void add_building(data::Building::ptr building) noexcept;
+  void remove_building(const data::Building& building) noexcept;
+  size_t get_building_count() const noexcept;
 
   // Trees
-  void add_tree(data::Tree tree) noexcept;
+  void add_tree(data::Tree::ptr tree_ptr) noexcept;
   bool remove_tree(const data::Tree& tree) noexcept;
 
 protected:
@@ -54,7 +54,7 @@ protected:
   data::City* currentCity;
 
   // Cached
-  unsigned int buildingCount;
+  size_t building_count;
 
   [[nodiscard]] data::Chunk& getNonConstChunk(glm::ivec2 chunkPosition) const;
 };

@@ -2,7 +2,7 @@
 
 namespace world {
 Map::Map() {
-  buildingCount = 0;
+  building_count = 0;
 }
 
 void Map::cleanup() {
@@ -10,7 +10,7 @@ void Map::cleanup() {
     delete *it;
   }
   chunks.clear();
-  buildingCount = 0;
+  building_count = 0;
 }
 
 void Map::createChunk(glm::ivec2 position) {
@@ -25,7 +25,7 @@ void Map::loadChunk(data::Chunk& chunk) {
   auto* ptr = new data::Chunk(chunk);
   chunks.push_back(ptr);
   this->setChunkNeighbors(*ptr);
-  buildingCount += ptr->getResidentialSize();
+  building_count += ptr->get_buildings().size();
 }
 
 void Map::setChunkNeighbors(data::Chunk& chunk) {
@@ -101,18 +101,6 @@ bool Map::addLot(data::Lot lot) {
   return true;
 }
 
-void Map::addBuilding(data::buildings::Building building) {
-  glm::ivec2 chunk = glm::ivec2(building.x, building.y) / (int)data::Chunk::SIDE_LENGTH;
-  if (chunkExists(chunk)) {
-    getNonConstChunk(chunk).addBuilding(building);
-    buildingCount++;
-  }
-}
-
-unsigned int Map::getBuildingCount() {
-  return buildingCount;
-}
-
 void Map::setCurrentCity(data::City* city) {
   currentCity = city;
 }
@@ -170,19 +158,30 @@ void Map::addRoads(const std::vector<data::Road>& roads) {
   }
 }
 
-void Map::removeBuilding(data::buildings::Building building) {
-  for (data::Chunk* chunk : chunks) {
-    if (chunk->removeBuilding(building)) {
-      buildingCount--;
-    }
+void Map::add_building(data::Building::ptr building) noexcept {
+  glm::ivec2 chunk = glm::ivec2(building->x, building->y) / (int)data::Chunk::SIDE_LENGTH;
+  if (chunkExists(chunk)) {
+    getNonConstChunk(chunk).add_building(building);
+    building_count++;
   }
 }
 
-void Map::add_tree(data::Tree tree) noexcept {
-  glm::ivec2 chunk = tree.get_position().getChunk();
+void Map::remove_building(const data::Building& building) noexcept {
+  glm::ivec2 chunk = glm::ivec2(building.x, building.y) / (int)data::Chunk::SIDE_LENGTH;
   if (chunkExists(chunk)) {
-    getNonConstChunk(chunk).add_tree(tree);
+    getNonConstChunk(chunk).remove_building(building);
+    building_count--;
   }
+}
+
+size_t Map::get_building_count() const noexcept {
+  return building_count;
+}
+
+void Map::add_tree(data::Tree::ptr tree_ptr) noexcept {
+  glm::ivec2 chunk = tree_ptr->get_position().getChunk();
+  assert(chunkExists(chunk));
+  getNonConstChunk(chunk).add_tree(tree_ptr);
 }
 
 bool Map::remove_tree(const data::Tree& tree) noexcept {

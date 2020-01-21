@@ -364,10 +364,10 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     resendBuildingData = false;
   }
 
-  if (world.getMap().getBuildingCount() > 0) {
+  if (world.getMap().get_building_count() > 0) {
     building_shader_prog.use();
     buildings_vao.bind();
-    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().get_building_count());
   }
 
   // Trees
@@ -383,8 +383,8 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
       std::vector<glm::mat4> transforms;
       for (data::Chunk* chunk : world.getMap().getChunks()) {
         transforms.reserve(transforms.size() + chunk->get_trees().get_count(type));
-        for (const auto& tree : chunk->get_trees().get_trees(type)) {
-          transforms.push_back(tree.get_transform());
+        for (const auto& tree_ptr : chunk->get_trees().get_trees(type)) {
+          transforms.push_back(tree_ptr->get_transform());
         }
       }
       if (transforms.size() > 0) {
@@ -400,7 +400,7 @@ void WorldRenderer::renderDebug() {
   if (engine.getSettings().rendering.renderNormals) {
     building_normals_shader_prog.use();
     buildings_vao.bind();
-    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().getBuildingCount());
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 16, world.getMap().get_building_count());
     VertexArray::unbind();
   }
 }
@@ -587,7 +587,7 @@ void WorldRenderer::update_brush_appearance(const std::shared_ptr<input::Brush>&
 }
 
 void WorldRenderer::sendBuildingData() {
-  const unsigned int buildingCount = world.getMap().getBuildingCount();
+  const unsigned int buildingCount = world.getMap().get_building_count();
   if (buildingCount < 1) {
     return;
   }
@@ -597,10 +597,10 @@ void WorldRenderer::sendBuildingData() {
 
   constexpr float buildingMargin = 0.2f;
   for (data::Chunk* chunk : world.getMap().getChunks()) {
-    for (data::buildings::Building building : chunk->getResidentials()) {
-      buildingPositions.emplace_back(building.x + buildingMargin, 0, building.y + buildingMargin);
-      buildingPositions.emplace_back(building.width - 2 * buildingMargin, building.level,
-                                     building.length - 2 * buildingMargin);
+    for (const data::Building::ptr& building : chunk->get_buildings()) {
+      buildingPositions.emplace_back(building->x + buildingMargin, 0, building->y + buildingMargin);
+      buildingPositions.emplace_back(building->width - 2 * buildingMargin, building->level,
+                                     building->length - 2 * buildingMargin);
     }
   }
 

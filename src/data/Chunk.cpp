@@ -26,18 +26,6 @@ glm::ivec2 Chunk::getPosition() const {
   return position;
 }
 
-Chunk::residentialList Chunk::getResidentials() const {
-  return residential;
-}
-
-Chunk::residentialListIter Chunk::getResidentialIterator() const {
-  return residential.begin();
-}
-
-unsigned int Chunk::getResidentialSize() const {
-  return residentialSize;
-}
-
 void Chunk::setNeighborN(Chunk* neigborN) {
   this->roadGraph.setNeighborN(&(neigborN->roadGraph));
 }
@@ -74,25 +62,29 @@ Chunk::lotList Chunk::getLots() const {
   return lots;
 }
 
-void Chunk::addBuilding(data::buildings::Building building) {
+void Chunk::add_building(data::Building::ptr building) noexcept {
   residential.push_back(building);
 }
 
-bool Chunk::removeBuilding(data::buildings::Building building) {
-  auto toRemove = residential.end();
+bool Chunk::remove_building(const data::Building& building) noexcept {
+  auto to_remove = residential.end();
   for (auto it = residential.begin(); it != residential.end(); it++) {
-    if ((*it).x == building.x && (*it).y == building.y) {
-      toRemove = it;
+    if ((*it)->x == building.x && (*it)->y == building.y) {
+      to_remove = it;
     }
   }
-  if (toRemove == residential.end()) {
+  if (to_remove == residential.end()) {
     return false;
   }
-  residential.erase(toRemove);
+  residential.erase(to_remove);
   return true;
 }
 
-void Chunk::add_tree(const data::Tree& tree) noexcept {
+const std::vector<data::Building::ptr>& Chunk::get_buildings() const noexcept {
+  return residential;
+}
+
+void Chunk::add_tree(data::Tree::ptr tree) noexcept {
   trees.add_tree(tree);
 }
 

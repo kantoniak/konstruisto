@@ -232,7 +232,7 @@
     <ClCompile Include="vendor\glad\src\gl.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\data\buildings.hpp" />
+    <ClInclude Include="src\data\Building.hpp" />
     <ClInclude Include="src\data\CameraState.hpp" />
     <ClInclude Include="src\data\Chunk.hpp" />
     <ClInclude Include="src\data\City.hpp" />
