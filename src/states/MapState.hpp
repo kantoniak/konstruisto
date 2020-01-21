@@ -59,6 +59,9 @@ private:
   std::unique_ptr<input::Selection> selection;
   std::shared_ptr<input::Brush> current_brush;
 
+  // Selection utils
+  geometry::Collidable::ptr selection_to_AABB(const input::Selection& selection) const noexcept;
+
   // Tree painting
   glm::vec2 saved_tree_brush_hitpoint;
   geometry::Circle::ptr tree_shape;

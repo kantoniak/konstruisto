@@ -39,53 +39,9 @@ glm::ivec2 Geometry::pointToField(glm::vec3 point) const {
   return glm::ivec2(floor(point.x), floor(point.z));
 }
 
-glm::ivec2 Geometry::fieldToChunk(glm::ivec2 field) const {
-  glm::vec2 chunk = glm::vec2(field) / static_cast<float>(data::Chunk::SIDE_LENGTH);
-  return glm::ivec2(floor(chunk.x), floor(chunk.y));
-}
-
 template <typename T>
 bool Geometry::checkRectIntersection(glm::tvec2<T> a1, glm::tvec2<T> a2, glm::tvec2<T> b1, glm::tvec2<T> b2) const {
   return !(a1.y < b2.y || a2.y > b1.y || a1.x < b2.x || a2.x > b1.x);
-}
-
-bool Geometry::checkCollisions(const data::buildings::Building& building) const {
-  const glm::ivec2 a2 = glm::vec2(building.x, building.y);
-  const glm::ivec2 a1 = getEnd(building);
-
-  if (!getWorld().getMap().chunkExists(fieldToChunk(a1)) || !getWorld().getMap().chunkExists(fieldToChunk(a2))) {
-    return true;
-  }
-
-  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
-    // With buildings
-    for (data::buildings::Building other : chunk->getResidentials()) {
-      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
-      const glm::ivec2 b1 = getEnd(other);
-      if (checkRectIntersection(a1, a2, b1, b2)) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-bool Geometry::checkCollisions(const data::Road& road) const {
-  std::vector<data::Position<int32_t>> tiles = road.getTiles();
-  const glm::ivec2 a2 = tiles[0].getGlobal();
-  const glm::ivec2 a1 = tiles[tiles.size() - 1].getGlobal();
-
-  for (data::Chunk* chunk : getWorld().getMap().getChunks()) {
-    // With buildings
-    for (data::buildings::Building other : chunk->getResidentials()) {
-      const glm::ivec2 b2 = glm::vec2(other.x, other.y);
-      const glm::ivec2 b1 = getEnd(other);
-      if (checkRectIntersection(a1, a2, b1, b2)) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
 
 std::vector<data::buildings::Building> Geometry::getBuildings(const glm::ivec2 from, const glm::ivec2 to) const {

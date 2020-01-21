@@ -84,32 +84,33 @@ void MapState::update(std::chrono::milliseconds delta) {
   }
 
   if (selection->isSelecting() && MapStateAction::PLACE_BUILDING == currentAction) {
-    glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-    data::buildings::Building toAdd;
-    toAdd.width = size.x;
-    toAdd.length = size.y;
-    toAdd.level = newBuildingHeight;
-    toAdd.x = selection->getFrom().x;
-    toAdd.y = selection->getFrom().y;
-    if (!geometry.checkCollisions(toAdd)) {
+
+    glm::vec2 selection_size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
+    auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), selection_size);
+    geometry::Collidable to_add(to_add_shape, selection->getFrom());
+    if (!world.get_collision_space().if_collides(to_add)) {
       selection->markValid();
     } else {
       selection->markInvalid();
     }
   }
 
-  if (selection->isSelecting() && MapStateAction::PLACE_ROAD == currentAction) {
+  if (MapStateAction::PLACE_ROAD == currentAction && selection->isSelecting()) {
     data::Position from(selection->getFrom());
     data::Position to(selection->getTo());
-    bool chunkExists = world.getMap().chunkExists(from.getChunk()) && world.getMap().chunkExists(to.getChunk());
 
-    auto* s = static_cast<input::LineSelection*>(selection.get());
-    bool roadCollides = geometry.checkCollisions(data::Road(s->getSelected()));
+    // FIXME(kantoniak): What if chunk in the middle is not active in the scene? Is it allowed.
+    bool chunk_exists = world.getMap().chunkExists(from.getChunk()) && world.getMap().chunkExists(to.getChunk());
 
-    if (!chunkExists || roadCollides) {
+    if (!chunk_exists) {
       selection->markInvalid();
     } else {
-      selection->markValid();
+      geometry::Collidable::ptr candidate = selection_to_AABB(*selection);
+      if (!world.get_collision_space().if_collides(*candidate)) {
+        selection->markValid();
+      } else {
+        selection->markInvalid();
+      }
     }
   }
 
@@ -306,22 +307,29 @@ void MapState::onMouseButton(int button, int action, int) {
       toAdd.level = newBuildingHeight;
       toAdd.x = selection->getFrom().x;
       toAdd.y = selection->getFrom().y;
-      if (!geometry.checkCollisions(toAdd)) {
+      auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), glm::vec2(size.x, size.y));
+      toAdd.body = std::make_shared<geometry::Collidable>(to_add_shape, selection->getFrom());
+      if (!world.get_collision_space().if_collides(*toAdd.body)) {
+        world.get_collision_space().insert(toAdd.body);
         world.getMap().addBuilding(toAdd);
         renderer.markBuildingDataForUpdate();
       }
     }
 
     if (MapStateAction::PLACE_ROAD == currentAction && selection->isValid()) {
-      // TODO(kantoniak): Collisions with buildings
-      auto* s = static_cast<input::LineSelection*>(selection.get());
-      const std::vector<input::LineSelection> selections = s->divideByChunk();
-      std::vector<data::Road> roads;
-      for (auto& selection : selections) {
-        roads.emplace_back(selection.getSelected());
+      geometry::Collidable::ptr candidate = selection_to_AABB(*selection);
+      if (!world.get_collision_space().if_collides(*candidate)) {
+        auto* s = static_cast<input::LineSelection*>(selection.get());
+        const std::vector<input::LineSelection> selections = s->divideByChunk();
+        std::vector<data::Road> roads;
+        for (auto& selection : selections) {
+          geometry::Collidable::ptr road_body = selection_to_AABB(selection);
+          world.get_collision_space().insert(road_body);
+          roads.emplace_back(selection.getSelected(), road_body);
+        }
+        world.getMap().addRoads(roads);
+        renderer.markTileDataForUpdate();
       }
-      world.getMap().addRoads(roads);
-      renderer.markTileDataForUpdate();
     }
 
     if (MapStateAction::BULDOZE == currentAction) {
@@ -376,8 +384,14 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
+geometry::Collidable::ptr MapState::selection_to_AABB(const input::Selection& selection) const noexcept {
+  glm::vec2 selection_size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
+  auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), selection_size);
+  return std::make_shared<geometry::Collidable>(to_add_shape, selection.getFrom());
+}
+
 data::Tree MapState::create_random_tree(const data::Position<float>& position,
-                                        std::shared_ptr<geometry::Collidable> tree_body) noexcept {
+                                        geometry::Collidable::ptr tree_body) noexcept {
   const auto type = static_cast<data::Tree::Type>(rand() % data::Tree::TREE_TYPE_COUNT);
   const float age = 100.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
   const float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
