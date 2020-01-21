@@ -28,4 +28,12 @@ const glm::vec2& Collidable::get_transform() const noexcept {
 bool Collidable::test_collision(const Collidable& other) const noexcept {
   return other.get_shape().test_collision_dd(other.get_transform(), *(this->shape), this->transform);
 }
+
+void Collidable::set_user_data(void* user_data) noexcept {
+  this->user_data = user_data;
+}
+
+void* Collidable::get_user_data() const noexcept {
+  return user_data;
+}
 }

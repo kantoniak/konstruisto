@@ -33,4 +33,38 @@ bool CollisionSpace::if_collides(const Collidable& collidable) const noexcept {
     return collidable.test_collision(other);
   });
 }
+
+std::vector<Collidable::ptr> CollisionSpace::collisions_with(const Collidable& collidable,
+                                                             const geometry::Collidable::layer_key layers) const
+    noexcept {
+  std::vector<Collidable::ptr> result;
+  std::copy_if(collidables.begin(), collidables.end(), std::back_inserter(result),
+               [collidable, layers](auto& other_collidable_ptr) {
+                 const Collidable& other = *other_collidable_ptr;
+
+                 // Skip objects in different layers
+                 if ((other.get_layer_key() & layers) == 0) {
+                   return false;
+                 }
+
+                 return collidable.test_collision(other);
+               });
+  return result;
+}
+
+std::vector<Collidable::ptr> CollisionSpace::find_colliding_with(const Collidable& collidable) const noexcept {
+  std::vector<Collidable::ptr> result;
+  std::copy_if(collidables.begin(), collidables.end(), std::back_inserter(result),
+               [collidable](auto& other_collidable_ptr) {
+                 const Collidable& other = *other_collidable_ptr;
+
+                 // Skip objects in different layers
+                 if ((other.get_colliding_layers() & collidable.get_layer_key()) == 0) {
+                   return false;
+                 }
+
+                 return collidable.test_collision(other);
+               });
+  return result;
+}
 }

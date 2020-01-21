@@ -302,19 +302,25 @@ void MapState::onMouseButton(int button, int action, int) {
 
     if (MapStateAction::PLACE_BUILDING == currentAction) {
       glm::ivec2 size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
-      data::buildings::Building toAdd;
-      toAdd.width = size.x;
-      toAdd.length = size.y;
-      toAdd.level = newBuildingHeight;
-      toAdd.x = selection->getFrom().x;
-      toAdd.y = selection->getFrom().y;
+      auto to_add = std::make_shared<data::Building>();
+      to_add->width = size.x;
+      to_add->length = size.y;
+      to_add->level = newBuildingHeight;
+      to_add->x = selection->getFrom().x;
+      to_add->y = selection->getFrom().y;
       auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), glm::vec2(size.x, size.y));
       auto colliders = collides_with(data::CollisionLayer::BUILDINGS);
-      toAdd.body = std::make_shared<geometry::Collidable>(data::CollisionLayer::BUILDINGS, colliders, to_add_shape,
-                                                          selection->getFrom());
-      if (!world.get_collision_space().if_collides(*toAdd.body)) {
-        world.get_collision_space().insert(toAdd.body);
-        world.getMap().addBuilding(toAdd);
+      to_add->body = std::make_shared<geometry::Collidable>(data::CollisionLayer::BUILDINGS, colliders, to_add_shape,
+                                                            selection->getFrom());
+      if (!world.get_collision_space().if_collides(*to_add->body)) {
+        // Delete colliding trees
+        auto collidables = world.get_collision_space().find_colliding_with(*to_add->body);
+        delete_collidables(collidables);
+
+        // Insert building
+        to_add->body->set_user_data(to_add.get());
+        world.get_collision_space().insert(to_add->body);
+        world.getMap().add_building(to_add);
         renderer.markBuildingDataForUpdate();
       }
     }
@@ -322,6 +328,11 @@ void MapState::onMouseButton(int button, int action, int) {
     if (MapStateAction::PLACE_ROAD == currentAction && selection->isValid()) {
       geometry::Collidable::ptr candidate = selection_to_AABB(*selection, data::CollisionLayer::ROADS);
       if (!world.get_collision_space().if_collides(*candidate)) {
+        // Delete colliding trees
+        auto collidables = world.get_collision_space().find_colliding_with(*candidate);
+        delete_collidables(collidables);
+
+        // Create and insert roads
         auto* s = static_cast<input::LineSelection*>(selection.get());
         const std::vector<input::LineSelection> selections = s->divideByChunk();
         std::vector<data::Road> roads;
@@ -336,9 +347,11 @@ void MapState::onMouseButton(int button, int action, int) {
     }
 
     if (MapStateAction::BULDOZE == currentAction) {
-      for (data::buildings::Building b : geometry.getBuildings(selection->getFrom(), selection->getTo())) {
-        world.getMap().removeBuilding(b);
-      }
+      // FIXME(kantoniak): Remove roads on buildozer
+      geometry::Collidable::ptr selection_phantom = selection_to_AABB(*selection, data::CollisionLayer::NONE);
+      geometry::Collidable::layer_key to_delete = data::CollisionLayer::BUILDINGS | data::CollisionLayer::TREES;
+      auto collidables = world.get_collision_space().collisions_with(*selection_phantom, to_delete);
+      delete_collidables(collidables);
       renderer.markBuildingDataForUpdate();
     }
   }
@@ -395,12 +408,35 @@ geometry::Collidable::ptr MapState::selection_to_AABB(const input::Selection& se
   return std::make_shared<geometry::Collidable>(layer, colliders, to_add_shape, selection.getFrom());
 }
 
-data::Tree MapState::create_random_tree(const data::Position<float>& position,
-                                        geometry::Collidable::ptr tree_body) noexcept {
+void MapState::delete_collidables(const std::vector<geometry::Collidable::ptr>& collidables) noexcept {
+  for (auto& collidable : collidables) {
+
+    if (collidable->get_user_data() != nullptr) {
+      switch (collidable->get_layer_key()) {
+      case data::CollisionLayer::BUILDINGS: {
+        const data::Building& building = *static_cast<data::Building*>(collidable->get_user_data());
+        world.getMap().remove_building(building);
+        break;
+      }
+
+      case data::CollisionLayer::TREES: {
+        const data::Tree& tree = *static_cast<data::Tree*>(collidable->get_user_data());
+        world.getMap().remove_tree(tree);
+        break;
+      }
+      }
+    }
+
+    world.get_collision_space().remove(*collidable);
+  }
+}
+
+data::Tree::ptr MapState::create_random_tree(const data::Position<float>& position,
+                                             geometry::Collidable::ptr tree_body) noexcept {
   const auto type = static_cast<data::Tree::Type>(rand() % data::Tree::TREE_TYPE_COUNT);
   const float age = 100.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
   const float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-  return data::Tree(type, position, rotation, age, tree_body);
+  return std::make_shared<data::Tree>(type, position, rotation, age, tree_body);
 }
 
 void MapState::insert_trees_from_brush() noexcept {
@@ -414,12 +450,22 @@ void MapState::insert_trees_from_brush() noexcept {
 void MapState::insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept {
   for (auto& point : points) {
     const glm::vec2 tree_center(center + point);
+
+    // Skip trees outside chunks
+    // FIXME(kantoniak): This should handle when there are multiple chunks on the board
+    if (tree_center.x < 0 || data::Chunk::SIDE_LENGTH < tree_center.x || tree_center.y < 0 ||
+        data::Chunk::SIDE_LENGTH < tree_center.y) {
+      continue;
+    }
+
     auto colliders = collides_with(data::CollisionLayer::TREES);
     auto collidable_ptr =
         std::make_shared<geometry::Collidable>(data::CollisionLayer::TREES, colliders, tree_shape, tree_center);
     if (!world.get_collision_space().if_collides(*collidable_ptr)) {
+      auto tree_ptr = create_random_tree(tree_center, collidable_ptr);
+      collidable_ptr->set_user_data(tree_ptr.get());
       world.get_collision_space().insert(collidable_ptr);
-      world.getMap().add_tree(create_random_tree(tree_center, collidable_ptr));
+      world.getMap().add_tree(tree_ptr);
     }
   }
 }

@@ -25,10 +25,14 @@ public:
 
   [[nodiscard]] bool test_collision(const Collidable& other) const noexcept;
 
+  void set_user_data(void* user_data) noexcept;
+  [[nodiscard]] void* get_user_data() const noexcept;
+
 private:
   layer_key layer;
   layer_key colliding_layers;
   Shape::ptr shape;
+  void* user_data = nullptr;
 
   /// Object transform. Currently only translation in 2D world.
   glm::vec2 transform;

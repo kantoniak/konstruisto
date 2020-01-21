@@ -63,13 +63,14 @@ private:
   // Selection utils
   geometry::Collidable::ptr selection_to_AABB(const input::Selection& selection, data::CollisionLayer layer) const
       noexcept;
+  void delete_collidables(const std::vector<geometry::Collidable::ptr>& collidable) noexcept;
 
   // Tree painting
   glm::vec2 saved_tree_brush_hitpoint;
   geometry::Circle::ptr tree_shape;
   std::shared_ptr<input::Brush> tree_brush;
-  static data::Tree create_random_tree(const data::Position<float>& position,
-                                       geometry::Collidable::ptr tree_body) noexcept;
+  static data::Tree::ptr create_random_tree(const data::Position<float>& position,
+                                            geometry::Collidable::ptr tree_body) noexcept;
   void insert_trees_from_brush() noexcept;
   void insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept;
 

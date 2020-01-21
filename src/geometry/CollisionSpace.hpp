@@ -17,6 +17,10 @@ public:
   void clear() noexcept;
 
   [[nodiscard]] bool if_collides(const Collidable& collidable) const noexcept;
+  [[nodiscard]] std::vector<Collidable::ptr> collisions_with(const Collidable& collidable,
+                                                             const geometry::Collidable::layer_key layers) const
+      noexcept;
+  [[nodiscard]] std::vector<Collidable::ptr> find_colliding_with(const Collidable& collidable) const noexcept;
 
 private:
   std::vector<Collidable::ptr> collidables;
