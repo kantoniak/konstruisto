@@ -30,4 +30,8 @@ Map& World::getMap() {
 Timer& World::getTimer() {
   return timer;
 }
+
+geometry::CollisionSpace& World::get_collision_space() noexcept {
+  return collision_space;
+}
 }

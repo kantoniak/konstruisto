@@ -11,8 +11,9 @@ TreeGroup::TreeGroup() noexcept {
 }
 
 void TreeGroup::add_tree(const data::Tree& tree) noexcept {
-  trees[tree.get_type()]->push_back(tree);
-  type_to_count[tree.get_type()]++;
+  const auto type = tree.get_type();
+  trees[type]->push_back(tree);
+  type_to_count[type]++;
 }
 
 bool TreeGroup::remove_tree(const Tree& tree) noexcept {
@@ -36,11 +37,11 @@ void TreeGroup::update(float delta_in_turns) noexcept {
   }
 }
 
-[[nodiscard]] size_t TreeGroup::get_count(Tree::Type type) const noexcept {
+size_t TreeGroup::get_count(Tree::Type type) const noexcept {
   return type_to_count[type];
 }
 
-[[nodiscard]] const std::vector<Tree>& TreeGroup::get_trees(Tree::Type type) const noexcept {
+const std::vector<Tree>& TreeGroup::get_trees(Tree::Type type) const noexcept {
   return *(trees[type]);
 }
 }

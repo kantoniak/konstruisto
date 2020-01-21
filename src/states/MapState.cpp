@@ -34,24 +34,12 @@ void MapState::init() {
   geometry.init(engine, world);
   init_brushes();
 
+  tree_shape = std::make_shared<geometry::Circle>(0.20f);
+
   if (!renderer.init()) {
     engine.stop();
     return;
   }
-
-  // Temporary trees
-  /*
-  int type = 0;
-  for (unsigned int i = 1; i < data::Chunk::SIDE_LENGTH; i++) {
-    for (unsigned int j = 1; j < data::Chunk::SIDE_LENGTH; j++) {
-      float age = 2000.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-      float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-      data::Tree tree(static_cast<data::Tree::Type>(type), data::Position<float>(glm::vec2(i, j)), rotation, age);
-      world.getMap().add_tree(tree);
-      type = (type + 1) % 3;
-    }
-  }
-  */
 
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
@@ -348,18 +336,23 @@ void MapState::onMouseButton(int button, int action, int) {
     if (action == GLFW_PRESS) {
       current_brush->set_active(true);
 
-      // Add trees immediately
       glm::vec3 hitpoint;
       if (geometry.hitGround(engine.getWindowHandler().getMousePositionNormalized(), hitpoint)) {
+        const glm::vec2 brush_center(hitpoint.x, hitpoint.z);
 
-        const float tree_density = 2.5f;
-        const float brush_radius = current_brush->get_radius();
-        size_t point_count = tree_density * brush_radius * brush_radius;
+        if (current_brush->get_radius() == TREE_BRUSH_RADIUS_SINGLE) {
 
-        std::vector<glm::vec2> points = geometry.distribute_in_circle(point_count, brush_radius, 3.f);
-        glm::vec2 brush_center(hitpoint.x, hitpoint.z);
-        for (auto& point : points) {
-          world.getMap().add_tree(create_random_tree(brush_center + point));
+          // Single tree insert
+          insert_trees_around(brush_center, {glm::vec2()});
+
+        } else {
+
+          // Inserting multiple trees
+          const float tree_density = 2.5f;
+          const float brush_radius = current_brush->get_radius();
+          size_t point_count = tree_density * brush_radius * brush_radius;
+          std::vector<glm::vec2> points = geometry.distribute_in_circle(point_count, brush_radius, 3.f);
+          insert_trees_around(brush_center, points);
         }
       }
 
@@ -384,11 +377,23 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
-data::Tree MapState::create_random_tree(const data::Position<float>& position) noexcept {
+data::Tree MapState::create_random_tree(const data::Position<float>& position,
+                                        std::shared_ptr<geometry::Collidable> tree_body) noexcept {
   const auto type = static_cast<data::Tree::Type>(rand() % data::Tree::TREE_TYPE_COUNT);
   const float age = 100.f * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
   const float rotation = 2.f * M_PI * static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-  return data::Tree(type, position, rotation, age);
+  return data::Tree(type, position, rotation, age, tree_body);
+}
+
+void MapState::insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept {
+  for (auto& point : points) {
+    const glm::vec2 tree_center(center + point);
+    auto collidable_ptr = std::make_shared<geometry::Collidable>(tree_shape, tree_center);
+    if (!world.get_collision_space().if_collides(*collidable_ptr)) {
+      world.get_collision_space().insert(collidable_ptr);
+      world.getMap().add_tree(create_random_tree(tree_center, collidable_ptr));
+    }
+  }
 }
 
 void MapState::createNewWorld() {

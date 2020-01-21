@@ -10,6 +10,8 @@
 #include "../data/Road.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
+#include "../geometry/Circle.hpp"
+#include "../geometry/Collidable.hpp"
 #include "../geometry/Geometry.hpp"
 #include "../input/Brush.hpp"
 #include "../input/LineSelection.hpp"
@@ -58,8 +60,11 @@ private:
   std::shared_ptr<input::Brush> current_brush;
 
   // Tree painting
+  std::shared_ptr<geometry::Circle> tree_shape;
   std::shared_ptr<input::Brush> tree_brush;
-  static data::Tree create_random_tree(const data::Position<float>& position) noexcept;
+  static data::Tree create_random_tree(const data::Position<float>& position,
+                                       std::shared_ptr<geometry::Collidable> tree_body) noexcept;
+  void insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept;
 
   io::SaveFileHandler saveFileHandler;
   data::City city;

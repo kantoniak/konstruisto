@@ -2,8 +2,9 @@
 
 namespace data {
 
-Tree::Tree(Type type, Position<float> position, float rotation, float age) noexcept
-    : type(type), position(position), rotation_angle(rotation), age(age) {
+Tree::Tree(Type type, Position<float> position, float rotation, float age,
+           std::shared_ptr<geometry::Collidable> body) noexcept
+    : type(type), position(position), rotation_angle(rotation), age(age), body(body) {
   init_matrices();
 }
 
@@ -26,6 +27,10 @@ Position<float> Tree::get_position() const noexcept {
 
 glm::mat4 Tree::get_transform() const noexcept {
   return transform;
+}
+
+std::shared_ptr<geometry::Collidable> Tree::get_body() const noexcept {
+  return body;
 }
 
 void Tree::init_matrices() noexcept {
