@@ -9,11 +9,11 @@ bool Collidable::operator==(const Collidable& other) const noexcept {
   return (layer == other.layer) && (shape == other.shape) && (transform == other.transform);
 }
 
-const Collidable::layer_key Collidable::get_layer_key() const noexcept {
+Collidable::layer_key Collidable::get_layer_key() const noexcept {
   return layer;
 }
 
-const Collidable::layer_key Collidable::get_colliding_layers() const noexcept {
+Collidable::layer_key Collidable::get_colliding_layers() const noexcept {
   return colliding_layers;
 }
 

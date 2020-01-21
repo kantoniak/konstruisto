@@ -26,9 +26,7 @@ private:
   std::vector<Collidable::ptr> collidables;
 
   template <typename T, typename U>
-  static bool test_collision(const T& a, const U& b, glm::vec2 a_transform, glm::vec2 b_transform) noexcept {
-    return true;
-  }
+  static bool test_collision(const T& a, const U& b, glm::vec2 a_transform, glm::vec2 b_transform) noexcept;
 };
 }
 

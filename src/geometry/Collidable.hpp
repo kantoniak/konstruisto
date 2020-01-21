@@ -18,8 +18,8 @@ public:
 
   bool operator==(const Collidable& other) const noexcept;
 
-  [[nodiscard]] const layer_key get_layer_key() const noexcept;
-  [[nodiscard]] const layer_key get_colliding_layers() const noexcept;
+  [[nodiscard]] layer_key get_layer_key() const noexcept;
+  [[nodiscard]] layer_key get_colliding_layers() const noexcept;
   [[nodiscard]] const Shape& get_shape() const noexcept;
   [[nodiscard]] const glm::vec2& get_transform() const noexcept;
 
