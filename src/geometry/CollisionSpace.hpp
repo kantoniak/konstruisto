@@ -12,7 +12,9 @@ namespace geometry {
 
 class CollisionSpace {
 public:
-  void insert(std::shared_ptr<Collidable> collidable) noexcept;
+  void insert(std::shared_ptr<Collidable> collidable_ptr) noexcept;
+  bool remove(std::shared_ptr<Collidable> collidable_ptr) noexcept;
+  void clear() noexcept;
 
   [[nodiscard]] bool if_collides(const Collidable& collidable) const noexcept;
 

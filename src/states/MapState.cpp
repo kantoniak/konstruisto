@@ -252,6 +252,7 @@ void MapState::onKey(int key, int, int action, int mods) {
   }
 
   if (key == GLFW_KEY_L && action == GLFW_RELEASE && mods == GLFW_MOD_CONTROL) {
+    world.get_collision_space().clear();
     world.getMap().cleanup();
     saveFileHandler.loadSave(world);
     renderer.markTileDataForUpdate();

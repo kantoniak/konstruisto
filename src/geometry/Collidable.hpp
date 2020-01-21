@@ -13,6 +13,8 @@ class Collidable {
 public:
   Collidable(std::shared_ptr<Shape> shape, glm::vec2 transform) noexcept;
 
+  bool operator==(const Collidable& other) const noexcept;
+
   [[nodiscard]] const std::shared_ptr<Shape>& get_shape() const noexcept;
   [[nodiscard]] const glm::vec2& get_transform() const noexcept;
 

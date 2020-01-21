@@ -5,6 +5,10 @@ Collidable::Collidable(std::shared_ptr<Shape> shape, glm::vec2 transform) noexce
     : shape(shape), transform(transform) {
 }
 
+bool Collidable::operator==(const Collidable& other) const noexcept {
+  return (shape == other.shape) && (transform == other.transform);
+}
+
 const std::shared_ptr<Shape>& Collidable::get_shape() const noexcept {
   return shape;
 }
