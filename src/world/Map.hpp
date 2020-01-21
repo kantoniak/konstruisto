@@ -43,7 +43,7 @@ public:
   // Buildings
   void add_building(data::Building::ptr building) noexcept;
   void remove_building(const data::Building& building) noexcept;
-  size_t get_building_count() const noexcept;
+  [[nodiscard]] size_t get_building_count() const noexcept;
 
   // Trees
   void add_tree(data::Tree::ptr tree_ptr) noexcept;

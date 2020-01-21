@@ -1,8 +1,10 @@
 #include "Collidable.hpp"
 
+#include <utility>
+
 namespace geometry {
 Collidable::Collidable(layer_key layer, layer_key colliding_layers, Shape::ptr shape, glm::vec2 transform) noexcept
-    : layer(layer), colliding_layers(colliding_layers), shape(shape), transform(transform) {
+    : layer(layer), colliding_layers(colliding_layers), shape(std::move(shape)), transform(transform) {
 }
 
 bool Collidable::operator==(const Collidable& other) const noexcept {

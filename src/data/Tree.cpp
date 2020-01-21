@@ -1,9 +1,11 @@
 #include "Tree.hpp"
 
+#include <utility>
+
 namespace data {
 
 Tree::Tree(Type type, Position<float> position, float rotation, float age, geometry::Collidable::ptr body) noexcept
-    : type(type), position(position), rotation_angle(rotation), age(age), body(body) {
+    : type(type), position(position), rotation_angle(rotation), age(age), body(std::move(body)) {
   init_matrices();
 }
 
