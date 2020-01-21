@@ -87,7 +87,8 @@ void MapState::update(std::chrono::milliseconds delta) {
 
     glm::vec2 selection_size = selection->getTo() - selection->getFrom() + glm::ivec2(1, 1);
     auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), selection_size);
-    geometry::Collidable to_add(to_add_shape, selection->getFrom());
+    auto colliders = collides_with(data::CollisionLayer::BUILDINGS);
+    geometry::Collidable to_add(data::CollisionLayer::BUILDINGS, colliders, to_add_shape, selection->getFrom());
     if (!world.get_collision_space().if_collides(to_add)) {
       selection->markValid();
     } else {
@@ -105,7 +106,7 @@ void MapState::update(std::chrono::milliseconds delta) {
     if (!chunk_exists) {
       selection->markInvalid();
     } else {
-      geometry::Collidable::ptr candidate = selection_to_AABB(*selection);
+      geometry::Collidable::ptr candidate = selection_to_AABB(*selection, data::CollisionLayer::ROADS);
       if (!world.get_collision_space().if_collides(*candidate)) {
         selection->markValid();
       } else {
@@ -308,7 +309,9 @@ void MapState::onMouseButton(int button, int action, int) {
       toAdd.x = selection->getFrom().x;
       toAdd.y = selection->getFrom().y;
       auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), glm::vec2(size.x, size.y));
-      toAdd.body = std::make_shared<geometry::Collidable>(to_add_shape, selection->getFrom());
+      auto colliders = collides_with(data::CollisionLayer::BUILDINGS);
+      toAdd.body = std::make_shared<geometry::Collidable>(data::CollisionLayer::BUILDINGS, colliders, to_add_shape,
+                                                          selection->getFrom());
       if (!world.get_collision_space().if_collides(*toAdd.body)) {
         world.get_collision_space().insert(toAdd.body);
         world.getMap().addBuilding(toAdd);
@@ -317,13 +320,13 @@ void MapState::onMouseButton(int button, int action, int) {
     }
 
     if (MapStateAction::PLACE_ROAD == currentAction && selection->isValid()) {
-      geometry::Collidable::ptr candidate = selection_to_AABB(*selection);
+      geometry::Collidable::ptr candidate = selection_to_AABB(*selection, data::CollisionLayer::ROADS);
       if (!world.get_collision_space().if_collides(*candidate)) {
         auto* s = static_cast<input::LineSelection*>(selection.get());
         const std::vector<input::LineSelection> selections = s->divideByChunk();
         std::vector<data::Road> roads;
         for (auto& selection : selections) {
-          geometry::Collidable::ptr road_body = selection_to_AABB(selection);
+          geometry::Collidable::ptr road_body = selection_to_AABB(selection, data::CollisionLayer::ROADS);
           world.get_collision_space().insert(road_body);
           roads.emplace_back(selection.getSelected(), road_body);
         }
@@ -384,10 +387,12 @@ void MapState::onWindowResize(int width, int height) {
   world.getCamera().updateAspect(width / (float)height);
 }
 
-geometry::Collidable::ptr MapState::selection_to_AABB(const input::Selection& selection) const noexcept {
+geometry::Collidable::ptr MapState::selection_to_AABB(const input::Selection& selection,
+                                                      data::CollisionLayer layer) const noexcept {
   glm::vec2 selection_size = selection.getTo() - selection.getFrom() + glm::ivec2(1, 1);
   auto to_add_shape = std::make_shared<geometry::AABB>(glm::vec2(), selection_size);
-  return std::make_shared<geometry::Collidable>(to_add_shape, selection.getFrom());
+  geometry::Collidable::layer_key colliders = collides_with(static_cast<data::CollisionLayer>(layer));
+  return std::make_shared<geometry::Collidable>(layer, colliders, to_add_shape, selection.getFrom());
 }
 
 data::Tree MapState::create_random_tree(const data::Position<float>& position,
@@ -409,7 +414,9 @@ void MapState::insert_trees_from_brush() noexcept {
 void MapState::insert_trees_around(const glm::vec2& center, const std::vector<glm::vec2>& points) noexcept {
   for (auto& point : points) {
     const glm::vec2 tree_center(center + point);
-    auto collidable_ptr = std::make_shared<geometry::Collidable>(tree_shape, tree_center);
+    auto colliders = collides_with(data::CollisionLayer::TREES);
+    auto collidable_ptr =
+        std::make_shared<geometry::Collidable>(data::CollisionLayer::TREES, colliders, tree_shape, tree_center);
     if (!world.get_collision_space().if_collides(*collidable_ptr)) {
       world.get_collision_space().insert(collidable_ptr);
       world.getMap().add_tree(create_random_tree(tree_center, collidable_ptr));

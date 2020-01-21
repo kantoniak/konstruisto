@@ -7,6 +7,7 @@
 
 #include "../data/CameraState.hpp"
 #include "../data/City.hpp"
+#include "../data/CollisionLayer.hpp"
 #include "../data/Road.hpp"
 #include "../engine/Engine.hpp"
 #include "../engine/GameState.hpp"
@@ -60,7 +61,8 @@ private:
   std::shared_ptr<input::Brush> current_brush;
 
   // Selection utils
-  geometry::Collidable::ptr selection_to_AABB(const input::Selection& selection) const noexcept;
+  geometry::Collidable::ptr selection_to_AABB(const input::Selection& selection, data::CollisionLayer layer) const
+      noexcept;
 
   // Tree painting
   glm::vec2 saved_tree_brush_hitpoint;

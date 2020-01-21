@@ -180,6 +180,9 @@
     <ClCompile Include="src\geometry\CollisionTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\data\CollisionLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glad\include\glad\gl.h">
@@ -390,6 +393,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\geometry\CollisionTester.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\CollisionLayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

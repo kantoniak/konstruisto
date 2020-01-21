@@ -23,7 +23,14 @@ void CollisionSpace::clear() noexcept {
 
 bool CollisionSpace::if_collides(const Collidable& collidable) const noexcept {
   return std::any_of(collidables.begin(), collidables.end(), [collidable](auto& other_collidable_ptr) {
-    return collidable.test_collision(*other_collidable_ptr);
+    const Collidable& other = *other_collidable_ptr;
+
+    // Skip objects in different layers
+    if ((other.get_layer_key() & collidable.get_colliding_layers()) == 0) {
+      return false;
+    }
+
+    return collidable.test_collision(other);
   });
 }
 }

@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClCompile Include="src\data\CameraState.cpp" />
     <ClCompile Include="src\data\Chunk.cpp" />
+    <ClCompile Include="src\data\CollisionLayer.cpp" />
     <ClCompile Include="src\data\Direction.cpp" />
     <ClCompile Include="src\data\Layer.cpp" />
     <ClCompile Include="src\data\Position.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="src\data\CameraState.hpp" />
     <ClInclude Include="src\data\Chunk.hpp" />
     <ClInclude Include="src\data\City.hpp" />
+    <ClInclude Include="src\data\CollisionLayer.hpp" />
     <ClInclude Include="src\data\Direction.hpp" />
     <ClInclude Include="src\data\Layer.hpp" />
     <ClInclude Include="src\data\Lot.hpp" />
