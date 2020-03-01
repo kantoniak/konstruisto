@@ -1,0 +1,8 @@
+# Blender MTL File: 'power_line_cable.blend'
+# Material Count: 1
+
+newmtl power_line_cable
+Ns 0.05
+Ka 0.800000 0.254837 0.000000
+Kd 0.00 0.00 0.00
+Ks 0.01 0.01 0.01

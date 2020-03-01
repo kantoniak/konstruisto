@@ -234,7 +234,9 @@ bool WorldRenderer::setupBuildings() {
 
 bool WorldRenderer::set_up_models() {
   if (!assimp_loader.load_model_from_file("assets/models/tree.obj", "tree-green") ||
-      !assimp_loader.load_model_from_file("assets/models/tree-2.obj", "tree-2")) {
+      !assimp_loader.load_model_from_file("assets/models/tree-2.obj", "tree-2") ||
+      !assimp_loader.load_model_from_file("assets/models/power-line-pole.obj") ||
+      !assimp_loader.load_model_from_file("assets/models/power-line-cable.obj")) {
     return false;
   }
 
@@ -392,6 +394,14 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
       }
     }
   }
+
+  // Electricity
+  glm::mat4 test_pole_transform = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 1));
+  rendering::Object test_pole(model_manager.get_model("power-line-pole"), test_pole_transform);
+  glm::mat4 test_cable_transform = glm::translate(glm::mat4(1.f), glm::vec3(2, 0, 2));
+  rendering::Object test_cable(model_manager.get_model("power-line-cable"), test_cable_transform);
+  renderer.draw_single(test_pole);
+  renderer.draw_single(test_cable);
 
   renderer.flush();
 }

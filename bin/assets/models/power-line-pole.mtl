@@ -1,0 +1,8 @@
+# Blender MTL File: 'power_line_pole.blend'
+# Material Count: 1
+
+newmtl power_line_pole
+Ns 0.05
+Ka 1.00 0.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.01 0.01 0.01
