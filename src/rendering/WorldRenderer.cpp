@@ -396,12 +396,23 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
   }
 
   // Electricity
-  glm::mat4 test_pole_transform = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 1));
-  rendering::Object test_pole(model_manager.get_model("power-line-pole"), test_pole_transform);
-  glm::mat4 test_cable_transform = glm::translate(glm::mat4(1.f), glm::vec3(2, 0, 2));
-  rendering::Object test_cable(model_manager.get_model("power-line-cable"), test_cable_transform);
-  renderer.draw_single(test_pole);
-  renderer.draw_single(test_cable);
+  glm::mat4 test_pole_transform_a = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 1));
+  glm::mat4 test_pole_transform_b = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 6));
+  glm::mat4 test_pole_transform_c = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 11));
+  glm::mat4 test_cable_a_translation = glm::translate(glm::mat4(1.f), glm::vec3(1, 2.375f, 3.5f));
+  glm::mat4 test_cable_a_transform = glm::scale(test_cable_a_translation, glm::vec3(1, 1, 5));
+  glm::mat4 test_cable_b_translation = glm::translate(glm::mat4(1.f), glm::vec3(1, 2.375f, 8.5f));
+  glm::mat4 test_cable_b_transform = glm::scale(test_cable_b_translation, glm::vec3(1, 1, 5));
+  rendering::Object test_pole_a(model_manager.get_model("power-line-pole"), test_pole_transform_a);
+  rendering::Object test_pole_b(model_manager.get_model("power-line-pole"), test_pole_transform_b);
+  rendering::Object test_pole_c(model_manager.get_model("power-line-pole"), test_pole_transform_c);
+  rendering::Object test_cable_a(model_manager.get_model("power-line-cable"), test_cable_a_transform);
+  rendering::Object test_cable_b(model_manager.get_model("power-line-cable"), test_cable_b_transform);
+  renderer.draw_single(test_pole_a);
+  renderer.draw_single(test_pole_b);
+  renderer.draw_single(test_pole_c);
+  renderer.draw_single(test_cable_a);
+  renderer.draw_single(test_cable_b);
 
   renderer.flush();
 }
