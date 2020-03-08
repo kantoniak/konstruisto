@@ -10,6 +10,7 @@
 
 #include "../data/Chunk.hpp"
 #include "../data/City.hpp"
+#include "../data/ElectricityGrid.hpp"
 #include "../data/Road.hpp"
 
 namespace world {
@@ -49,9 +50,15 @@ public:
   void add_tree(data::Tree::ptr tree_ptr) noexcept;
   bool remove_tree(const data::Tree& tree) noexcept;
 
+  // Electricity
+  [[nodiscard]] const data::ElectricityGrid& get_electricity_grid() const noexcept;
+  void add_power_pole(data::PowerLinePole::ptr pole_ptr) noexcept;
+  bool remove_power_pole(const data::PowerLinePole& pole) noexcept;
+
 protected:
   std::vector<data::Chunk*> chunks;
   data::City* currentCity;
+  data::ElectricityGrid electricity_grid;
 
   // Cached
   size_t building_count;

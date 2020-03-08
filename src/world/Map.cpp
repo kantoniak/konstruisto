@@ -193,6 +193,18 @@ bool Map::remove_tree(const data::Tree& tree) noexcept {
   return false;
 }
 
+const data::ElectricityGrid& Map::get_electricity_grid() const noexcept {
+  return electricity_grid;
+}
+
+void Map::add_power_pole(data::PowerLinePole::ptr pole_ptr) noexcept {
+  electricity_grid.add_pole(pole_ptr);
+}
+
+bool Map::remove_power_pole(const data::PowerLinePole& pole) noexcept {
+  return electricity_grid.remove_pole(pole);
+}
+
 data::Chunk& Map::getNonConstChunk(glm::ivec2 chunkPosition) const {
   for (auto chunk : chunks) {
     if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {

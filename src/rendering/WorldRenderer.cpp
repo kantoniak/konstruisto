@@ -1,6 +1,8 @@
 #include "WorldRenderer.hpp"
 
 #include "../data/Chunk.hpp"
+#include "../data/PowerLineCable.hpp"
+#include "../data/PowerLinePole.hpp"
 
 namespace rendering {
 WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world)
@@ -395,22 +397,29 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     }
   }
 
-  // Electricity
-  glm::mat4 test_pole_transform_a = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 1));
-  glm::mat4 test_pole_transform_b = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 6));
-  glm::mat4 test_pole_transform_c = glm::translate(glm::mat4(1.f), glm::vec3(1, 0, 11));
-  glm::mat4 test_cable_a_translation = glm::translate(glm::mat4(1.f), glm::vec3(1, 2.375f, 3.5f));
-  glm::mat4 test_cable_a_transform = glm::scale(test_cable_a_translation, glm::vec3(1, 1, 5));
-  glm::mat4 test_cable_b_translation = glm::translate(glm::mat4(1.f), glm::vec3(1, 2.375f, 8.5f));
-  glm::mat4 test_cable_b_transform = glm::scale(test_cable_b_translation, glm::vec3(1, 1, 5));
-  rendering::Object test_pole_a(model_manager.get_model("power-line-pole"), test_pole_transform_a);
-  rendering::Object test_pole_b(model_manager.get_model("power-line-pole"), test_pole_transform_b);
-  rendering::Object test_pole_c(model_manager.get_model("power-line-pole"), test_pole_transform_c);
-  rendering::Object test_cable_a(model_manager.get_model("power-line-cable"), test_cable_a_transform);
-  rendering::Object test_cable_b(model_manager.get_model("power-line-cable"), test_cable_b_transform);
-  renderer.draw_single(test_pole_a);
-  renderer.draw_single(test_pole_b);
-  renderer.draw_single(test_pole_c);
+  // Electricity poles
+  {
+    const Model& power_line_pole_model = model_manager.get_model("power-line-pole");
+
+    std::vector<glm::mat4> transforms(world.getMap().get_electricity_grid().get_pole_count());
+    for (const auto& pole_ptr : world.getMap().get_electricity_grid().get_poles()) {
+      transforms.push_back(pole_ptr->get_transform());
+    }
+
+    if (transforms.size() > 0) {
+      renderer.draw_instanced(power_line_pole_model, transforms);
+    }
+  }
+
+  data::PowerLinePole pole_a(glm::vec2(1, 1));
+  data::PowerLinePole pole_b(glm::vec2(1, 6));
+  data::PowerLinePole pole_c(glm::vec2(1, 11));
+
+  data::PowerLineCable cable_a(pole_a, pole_b);
+  data::PowerLineCable cable_b(pole_b, pole_c);
+
+  rendering::Object test_cable_a(model_manager.get_model("power-line-cable"), cable_a.get_transform());
+  rendering::Object test_cable_b(model_manager.get_model("power-line-cable"), cable_b.get_transform());
   renderer.draw_single(test_cable_a);
   renderer.draw_single(test_cable_b);
 

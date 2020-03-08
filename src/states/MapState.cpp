@@ -43,6 +43,10 @@ void MapState::init() {
 
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
+  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 1)));
+  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 6)));
+  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 11)));
+
   world.getTimer().start();
 };
 
