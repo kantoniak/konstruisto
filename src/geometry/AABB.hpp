@@ -18,11 +18,11 @@ public:
   [[nodiscard]] const glm::vec2& get_to() const noexcept;
 
   [[nodiscard]] bool test_collision_dd(const glm::vec2& transform, const Shape& other,
-                                               const glm::vec2& other_transform) const noexcept override;
+                                       const glm::vec2& other_transform) const noexcept override;
   [[nodiscard]] bool test_collision(const glm::vec2& transform, const AABB& other,
-                                            const glm::vec2& other_transform) const noexcept override;
+                                    const glm::vec2& other_transform) const noexcept override;
   [[nodiscard]] bool test_collision(const glm::vec2& transform, const Circle& other,
-                                            const glm::vec2& other_transform) const noexcept override;
+                                    const glm::vec2& other_transform) const noexcept override;
 
 private:
   using Shape::test_collision;
