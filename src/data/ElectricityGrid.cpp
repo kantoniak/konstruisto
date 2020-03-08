@@ -3,8 +3,7 @@
 #include <memory>
 
 namespace data {
-ElectricityGrid::ElectricityGrid() noexcept {
-}
+ElectricityGrid::ElectricityGrid() noexcept = default;
 
 void ElectricityGrid::add_pole(PowerLinePole::ptr pole) noexcept {
   poles.push_back(pole);
