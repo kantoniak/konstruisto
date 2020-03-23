@@ -20,6 +20,7 @@ public:
   [[nodiscard]] Position<float> get_position() const noexcept;
   [[nodiscard]] glm::mat4 get_transform() const noexcept;
 
+  void set_translation(Position<float> position) noexcept;
   void set_rotation(float rotation) noexcept;
 
 private:

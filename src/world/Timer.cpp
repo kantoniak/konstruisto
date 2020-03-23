@@ -6,7 +6,7 @@ namespace world {
 void Timer::init() {
   isPaused = true;
   turnNumber = 0;
-  sinceTurnStart = 0;
+  sinceTurnStart = std::chrono::milliseconds(0);
   currentSpeed = 3;
 
   time_t t = time(nullptr);
@@ -24,7 +24,7 @@ void Timer::update(std::chrono::milliseconds delta) {
   if (isPaused) {
     return;
   }
-  sinceTurnStart += delta.count();
+  sinceTurnStart += delta;
   while (sinceTurnStart >= getTurnLength()) {
     turnNumber++;
     sinceTurnStart -= getTurnLength();
@@ -61,26 +61,30 @@ const std::string Timer::getDate() {
 }
 
 void Timer::setSpeed(unsigned short speed) {
-  float currentTurnPassed = sinceTurnStart / (float)getTurnLength();
+  float currentTurnPassed = sinceTurnStart / getTurnLength();
   currentSpeed = speed;
-  sinceTurnStart = currentTurnPassed * getTurnLength();
+  sinceTurnStart = std::chrono::milliseconds(static_cast<long>(currentTurnPassed * getTurnLength().count()));
 }
 
 unsigned short Timer::getSpeed() {
   return currentSpeed;
 }
 
-float Timer::delta_to_turns(std::chrono::milliseconds delta) noexcept {
+double Timer::get_turn_number() const noexcept {
+  return static_cast<double>(turnNumber) + delta_to_turns(sinceTurnStart);
+}
+
+float Timer::delta_to_turns(std::chrono::milliseconds delta) const noexcept {
   if (isPaused) {
     return 0;
   }
-  return static_cast<float>(delta.count()) / static_cast<float>(getTurnLength());
+  return delta.count() / static_cast<double>(getTurnLength().count());
 }
 
-unsigned short Timer::getTurnLength() const {
+std::chrono::milliseconds Timer::getTurnLength() const {
   switch (currentSpeed) {
   default:
-    return 1;
+    return std::chrono::milliseconds(1);
   case 1:
     return Timer::SPEED_1_TURN_LENGTH;
   case 2:

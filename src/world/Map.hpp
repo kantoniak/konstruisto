@@ -55,6 +55,9 @@ public:
   void add_power_pole(data::PowerLinePole::ptr pole_ptr) noexcept;
   bool remove_power_pole(const data::PowerLinePole& pole) noexcept;
 
+  void add_power_cable(data::PowerLineCable::ptr cable_ptr) noexcept;
+  bool remove_power_cable(const data::PowerLineCable& cable) noexcept;
+
 protected:
   std::vector<data::Chunk*> chunks;
   data::City* currentCity;

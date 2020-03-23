@@ -205,6 +205,14 @@ bool Map::remove_power_pole(const data::PowerLinePole& pole) noexcept {
   return electricity_grid.remove_pole(pole);
 }
 
+void Map::add_power_cable(data::PowerLineCable::ptr cable_ptr) noexcept {
+  electricity_grid.add_cable(cable_ptr);
+}
+
+bool Map::remove_power_cable(const data::PowerLineCable& cable) noexcept {
+  return electricity_grid.remove_cable(cable);
+}
+
 data::Chunk& Map::getNonConstChunk(glm::ivec2 chunkPosition) const {
   for (auto chunk : chunks) {
     if (glm::all(glm::equal(chunk->getPosition(), chunkPosition))) {

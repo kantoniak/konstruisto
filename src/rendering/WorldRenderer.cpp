@@ -411,17 +411,20 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     }
   }
 
-  data::PowerLinePole pole_a(glm::vec2(1, 1));
-  data::PowerLinePole pole_b(glm::vec2(1, 6));
-  data::PowerLinePole pole_c(glm::vec2(1, 11));
+  {
+    const Model& model = model_manager.get_model("power-line-cable");
 
-  data::PowerLineCable cable_a(pole_a, pole_b);
-  data::PowerLineCable cable_b(pole_b, pole_c);
+    std::vector<glm::mat4> transforms(world.getMap().get_electricity_grid().get_cable_count());
+    for (const auto& cable_ptr : world.getMap().get_electricity_grid().get_cables()) {
+      // TODO(kantoniak): Update cable transform when pole changes
+      cable_ptr->update_transform();
+      transforms.push_back(cable_ptr->get_transform());
+    }
 
-  rendering::Object test_cable_a(model_manager.get_model("power-line-cable"), cable_a.get_transform());
-  rendering::Object test_cable_b(model_manager.get_model("power-line-cable"), cable_b.get_transform());
-  renderer.draw_single(test_cable_a);
-  renderer.draw_single(test_cable_b);
+    if (transforms.size() > 0) {
+      renderer.draw_instanced(model, transforms);
+    }
+  }
 
   renderer.flush();
 }

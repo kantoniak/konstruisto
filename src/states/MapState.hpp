@@ -100,6 +100,11 @@ private:
   // Pause screen
   MapPauseState pauseState;
   void switchToPauseState();
+
+  // Temporary
+  data::PowerLinePole::ptr pole_a;
+  data::PowerLinePole::ptr pole_b;
+  data::PowerLinePole::ptr pole_c;
 };
 }
 

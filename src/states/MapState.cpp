@@ -43,9 +43,16 @@ void MapState::init() {
 
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
-  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 1)));
-  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 6)));
-  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(1, 11)));
+  this->pole_a = std::make_shared<data::PowerLinePole>(glm::vec2(5, 5));
+  this->pole_b = std::make_shared<data::PowerLinePole>(glm::vec2(5, 10));
+  this->pole_c = std::make_shared<data::PowerLinePole>(glm::vec2(5, 15));
+
+  world.getMap().add_power_pole(pole_a);
+  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(5, 10)));
+  world.getMap().add_power_pole(pole_c);
+
+  world.getMap().add_power_cable(std::make_shared<data::PowerLineCable>(*pole_a, *pole_b));
+  world.getMap().add_power_cable(std::make_shared<data::PowerLineCable>(*pole_b, *pole_c));
 
   world.getTimer().start();
 };
@@ -132,6 +139,11 @@ void MapState::update(std::chrono::milliseconds delta) {
       }
     }
   }
+
+  float angle = (world.getTimer().get_turn_number() / 12.f) * M_PI * 2.f;
+  glm::vec2 pos_delta(cos(angle), sin(angle));
+  pole_a->set_translation(glm::vec2(5, 5) + pos_delta * 2.f);
+  pole_c->set_translation(glm::vec2(5, 15) + -pos_delta * 2.f);
 
   world.update(delta);
 };

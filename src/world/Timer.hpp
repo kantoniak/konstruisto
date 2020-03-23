@@ -23,22 +23,23 @@ public:
     return 3;
   }
 
-  float delta_to_turns(std::chrono::milliseconds delta) noexcept;
+  [[nodiscard]] double get_turn_number() const noexcept;
+  [[nodiscard]] float delta_to_turns(std::chrono::milliseconds delta) const noexcept;
 
   bool paused();
   const std::string getDate();
 
 protected:
-  static constexpr unsigned short SPEED_1_TURN_LENGTH = 2000;
-  static constexpr unsigned short SPEED_2_TURN_LENGTH = 500;
-  static constexpr unsigned short SPEED_3_TURN_LENGTH = 125;
+  const std::chrono::milliseconds SPEED_1_TURN_LENGTH = std::chrono::milliseconds(2000);
+  const std::chrono::milliseconds SPEED_2_TURN_LENGTH = std::chrono::milliseconds(500);
+  const std::chrono::milliseconds SPEED_3_TURN_LENGTH = std::chrono::milliseconds(125);
 
   bool isPaused;
   unsigned long turnNumber;
-  unsigned short sinceTurnStart;
+  std::chrono::milliseconds sinceTurnStart;
   unsigned short currentSpeed;
 
-  [[nodiscard]] unsigned short getTurnLength() const;
+  [[nodiscard]] std::chrono::milliseconds getTurnLength() const;
 
   tm dateToShow;
 };
