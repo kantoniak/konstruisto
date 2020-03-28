@@ -44,11 +44,11 @@ void MapState::init() {
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
   this->pole_a = std::make_shared<data::PowerLinePole>(glm::vec2(5, 5));
-  this->pole_b = std::make_shared<data::PowerLinePole>(glm::vec2(5, 10));
+  data::PowerLinePole::ptr pole_b = std::make_shared<data::PowerLinePole>(glm::vec2(5, 10));
   this->pole_c = std::make_shared<data::PowerLinePole>(glm::vec2(5, 15));
 
   world.getMap().add_power_pole(pole_a);
-  world.getMap().add_power_pole(std::make_shared<data::PowerLinePole>(glm::vec2(5, 10)));
+  world.getMap().add_power_pole(pole_b);
   world.getMap().add_power_pole(pole_c);
 
   world.getMap().add_power_cable(std::make_shared<data::PowerLineCable>(*pole_a, *pole_b));
