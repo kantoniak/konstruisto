@@ -16,6 +16,7 @@
 #include "../engine/Engine.hpp"
 #include "../input/Brush.hpp"
 #include "../input/Selection.hpp"
+#include "../input/Tool.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../opengl/ArrayBuffer.hpp"
 #include "../opengl/ElementArrayBuffer.hpp"
@@ -57,7 +58,8 @@ public:
   void markTileDataForUpdate();
   void mark_brush_dirty() noexcept;
 
-  void renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush);
+  void renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush,
+                   const std::shared_ptr<input::Tool>& tool);
   void renderDebug();
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()
@@ -65,6 +67,8 @@ public:
   void renderDebugUI();
 
   void setLeftMenuActiveIcon(int index);
+
+  const rendering::ModelManager& get_model_manager() const noexcept;
 
 protected:
   world::World& world;

@@ -197,6 +197,7 @@
     <ClCompile Include="src\geometry\CollisionTester.cpp" />
     <ClCompile Include="src\input\Brush.cpp" />
     <ClCompile Include="src\input\LineSelection.cpp" />
+    <ClCompile Include="src\input\PowerLineTool.cpp" />
     <ClCompile Include="src\input\Selection.cpp" />
     <ClCompile Include="src\input\WindowHandler.cpp" />
     <ClCompile Include="src\io\SaveFileHandler.cpp" />
@@ -264,8 +265,10 @@
     <ClInclude Include="src\input\Brush.hpp" />
     <ClInclude Include="src\input\callbacks.hpp" />
     <ClInclude Include="src\input\LineSelection.hpp" />
+    <ClInclude Include="src\input\PowerLineTool.hpp" />
     <ClInclude Include="src\input\Selection.hpp" />
     <ClInclude Include="src\input\settings.hpp" />
+    <ClInclude Include="src\input\Tool.hpp" />
     <ClInclude Include="src\input\WindowHandler.hpp" />
     <ClInclude Include="src\io\SaveFileHandler.hpp" />
     <ClInclude Include="src\io\serializers.hpp" />

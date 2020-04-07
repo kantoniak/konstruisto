@@ -300,7 +300,8 @@ void WorldRenderer::markTileDataForUpdate() {
   resendTileData = true;
 }
 
-void WorldRenderer::renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush) {
+void WorldRenderer::renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush,
+                                const std::shared_ptr<input::Tool>& tool) {
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_CULL_FACE);
@@ -411,6 +412,7 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     }
   }
 
+  // Electricity cables
   {
     const Model& model = model_manager.get_model("power-line-cable");
 
@@ -424,6 +426,11 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     if (transforms.size() > 0) {
       renderer.draw_instanced(model, transforms);
     }
+  }
+
+  // Tools
+  if (tool) {
+    tool->render(renderer);
   }
 
   renderer.flush();
@@ -526,36 +533,38 @@ void WorldRenderer::renderUI() {
 
   // Left menu
   {
-    const unsigned short optionsCount = 6;
-    const unsigned short buttonSide = 3 * UI::ICON_SIDE;
+    const unsigned short option_count = 7;
+    const unsigned short button_side = 3 * UI::ICON_SIDE;
     int x = 0;
-    int y = viewport.y / 2 - optionsCount * buttonSide / 2.f;
+    int y = viewport.y / 2 - option_count * button_side / 2.f;
 
     nvgBeginPath(context);
-    nvgRect(context, x, y, buttonSide, buttonSide * optionsCount);
+    nvgRect(context, x, y, button_side, button_side * option_count);
     nvgFillColor(context, engine.getUI().getBackgroundColor());
     nvgFill(context);
 
     if (leftMenuActiveIcon >= 0) {
       nvgBeginPath(context);
-      nvgRect(context, x, y + buttonSide * leftMenuActiveIcon, buttonSide, buttonSide);
+      nvgRect(context, x, y + button_side * leftMenuActiveIcon, button_side, button_side);
       nvgFillColor(context, iconBackgroundColor);
       nvgFill(context);
     }
 
-    x = (buttonSide - UI::ICON_SIDE_24) / 2;
+    x = (button_side - UI::ICON_SIDE_24) / 2;
     y += x;
 
     engine.getUI().renderIcon(UI::ICON_BUILDING, x, y, UI::ICON_SIDE_24);
-    y += buttonSide;
+    y += button_side;
     engine.getUI().renderIcon(UI::ICON_ZONES, x, y, UI::ICON_SIDE_24);
-    y += buttonSide;
+    y += button_side;
+    engine.getUI().renderIcon(UI::ICON_MORE, x, y, UI::ICON_SIDE_24);
+    y += button_side;
     engine.getUI().renderIcon(UI::ICON_ROAD, x, y, UI::ICON_SIDE_24);
-    y += buttonSide;
+    y += button_side;
     engine.getUI().renderIcon(UI::ICON_NATURE, x, y, UI::ICON_SIDE_24);
-    y += buttonSide;
+    y += button_side;
     engine.getUI().renderIcon(UI::ICON_BULDOZER, x, y, UI::ICON_SIDE_24);
-    y += buttonSide;
+    y += button_side;
     engine.getUI().renderIcon(UI::ICON_MORE, x, y, UI::ICON_SIDE_24);
   }
 }
@@ -592,6 +601,10 @@ void WorldRenderer::renderDebugUI() {
 
 void WorldRenderer::setLeftMenuActiveIcon(int index) {
   leftMenuActiveIcon = index;
+}
+
+const rendering::ModelManager& WorldRenderer::get_model_manager() const noexcept {
+  return model_manager;
 }
 
 void WorldRenderer::mark_brush_dirty() noexcept {

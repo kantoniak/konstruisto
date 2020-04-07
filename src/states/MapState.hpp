@@ -16,6 +16,7 @@
 #include "../geometry/Geometry.hpp"
 #include "../input/Brush.hpp"
 #include "../input/LineSelection.hpp"
+#include "../input/PowerLineTool.hpp"
 #include "../input/Selection.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../io/SaveFileHandler.hpp"
@@ -27,7 +28,14 @@
 
 namespace states {
 
-enum MapStateAction { PLACE_BUILDING = 0, PLACE_ZONE = 1, PLACE_ROAD = 2, PLACE_TREES = 3, BULDOZE = 4 };
+enum MapStateAction {
+  PLACE_BUILDING = 0,
+  PLACE_ZONE = 1,
+  PLACE_POWER_LINES = 2,
+  PLACE_ROAD = 3,
+  PLACE_TREES = 4,
+  BULDOZE = 5
+};
 
 class MapState : public engine::GameState {
 
@@ -59,6 +67,7 @@ private:
 
   std::unique_ptr<input::Selection> selection;
   std::shared_ptr<input::Brush> current_brush;
+  std::shared_ptr<input::Tool> current_tool;
 
   // Selection utils
   geometry::Collidable::ptr selection_to_AABB(const input::Selection& selection, data::CollisionLayer layer) const

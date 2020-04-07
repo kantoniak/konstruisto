@@ -18,7 +18,7 @@ void MapPauseState::render() {
   renderer.prepareFrame();
 
   input::Selection tmpSelection;
-  worldRenderer.renderWorld(tmpSelection, nullptr);
+  worldRenderer.renderWorld(tmpSelection, nullptr, nullptr);
   engine.getDebugInfo().onRenderWorldEnd();
 
   NVGcontext* context = engine.getUI().getContext();

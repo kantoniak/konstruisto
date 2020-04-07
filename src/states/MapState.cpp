@@ -140,6 +140,11 @@ void MapState::update(std::chrono::milliseconds delta) {
     }
   }
 
+  if (MapStateAction::PLACE_POWER_LINES == currentAction) {
+    this->current_tool->update();
+  }
+
+  // TODO(kantoniak): Remove temporary poles
   float angle = (world.getTimer().get_turn_number() / 12.f) * M_PI * 2.f;
   glm::vec2 pos_delta(cos(angle), sin(angle));
   pole_a->set_translation(glm::vec2(5, 5) + pos_delta * 2.f);
@@ -151,7 +156,7 @@ void MapState::update(std::chrono::milliseconds delta) {
 void MapState::render() {
   renderer.prepareFrame();
 
-  renderer.renderWorld(*selection, current_brush);
+  renderer.renderWorld(*selection, current_brush, current_tool);
 
 #ifdef _DEBUG
   renderer.renderDebug();
@@ -275,6 +280,11 @@ void MapState::onKey(int key, int, int action, int mods) {
     saveFileHandler.loadSave(world);
     renderer.markTileDataForUpdate();
     renderer.markBuildingDataForUpdate();
+  }
+
+  // Power lines
+  if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+    setCurrentAction(MapStateAction::PLACE_POWER_LINES);
   }
 
   if (currentAction == MapStateAction::PLACE_TREES) {
@@ -565,10 +575,11 @@ void MapState::setCurrentAction(MapStateAction action) {
   currentAction = action;
   renderer.setLeftMenuActiveIcon(currentAction - MapStateAction::PLACE_BUILDING);
 
-  // Reset brush and selection
+  // Reset brush, selection and tool
   engine.getSettings().rendering.renderSelection = false;
   current_brush = nullptr;
   renderer.mark_brush_dirty();
+  this->current_tool.reset();
 
   switch (action) {
   case MapStateAction::PLACE_BUILDING:
@@ -577,6 +588,10 @@ void MapState::setCurrentAction(MapStateAction action) {
     selection->setColors(glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 1, 0.f, 0.4f), glm::vec4(1, 0, 0, 0.4f));
     break;
   case MapStateAction::PLACE_ZONE:
+    break;
+  case MapStateAction::PLACE_POWER_LINES:
+    this->current_tool =
+        std::make_shared<input::PowerLineTool>(engine.getWindowHandler(), renderer.get_model_manager(), geometry);
     break;
   case MapStateAction::PLACE_ROAD:
     engine.getSettings().rendering.renderSelection = true;
