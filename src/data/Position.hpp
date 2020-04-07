@@ -23,6 +23,7 @@ private:
 
 public:
   Position();
+  Position(const Position& other) = default;
   Position(vec2 global);
 
   void setGlobal(vec2 global);

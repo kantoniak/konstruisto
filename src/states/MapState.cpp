@@ -319,7 +319,7 @@ void MapState::onKey(int key, int, int action, int mods) {
   }
 }
 
-void MapState::onMouseButton(int button, int action, int) {
+void MapState::onMouseButton(int button, int action, int mods) {
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
     selection->start(selection->getFrom());
@@ -409,6 +409,10 @@ void MapState::onMouseButton(int button, int action, int) {
       current_brush->set_active(false);
     }
     renderer.mark_brush_dirty();
+  }
+
+  if (current_tool) {
+    current_tool->on_mouse_button(button, action, mods);
   }
 }
 
@@ -590,8 +594,8 @@ void MapState::setCurrentAction(MapStateAction action) {
   case MapStateAction::PLACE_ZONE:
     break;
   case MapStateAction::PLACE_POWER_LINES:
-    this->current_tool =
-        std::make_shared<input::PowerLineTool>(engine.getWindowHandler(), renderer.get_model_manager(), geometry);
+    this->current_tool = std::make_shared<input::PowerLineTool>(engine.getWindowHandler(), world,
+                                                                renderer.get_model_manager(), geometry);
     break;
   case MapStateAction::PLACE_ROAD:
     engine.getSettings().rendering.renderSelection = true;

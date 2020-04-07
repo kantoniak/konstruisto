@@ -15,6 +15,7 @@ public:
   using ptr = std::shared_ptr<PowerLinePole>;
 
   PowerLinePole(Position<float> position) noexcept;
+  PowerLinePole(const PowerLinePole& other) noexcept = default;
   bool operator==(const PowerLinePole& other) const noexcept;
 
   [[nodiscard]] Position<float> get_position() const noexcept;
