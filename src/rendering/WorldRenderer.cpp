@@ -3,6 +3,7 @@
 #include "../data/Chunk.hpp"
 #include "../data/PowerLineCable.hpp"
 #include "../data/PowerLinePole.hpp"
+#include "../input/Tool.hpp"
 
 namespace rendering {
 WorldRenderer::WorldRenderer(engine::Engine& engine, world::World& world)
@@ -256,6 +257,18 @@ bool WorldRenderer::set_up_models() {
       } else {
         tree_model_orange.add_mesh(orig_mesh, orig_material);
       }
+    }
+  }
+
+  // Register red power line pole
+  const Model& power_line_pole = model_manager.get_model("power-line-pole");
+  Model& power_line_pole_invalid = model_manager.register_model("power-line-pole-invalid");
+  {
+    const Material& mat_invalid = model_manager.get_material("power_line_pole_invalid");
+    const size_t mesh_count = power_line_pole.get_meshes().size();
+    for (size_t i = 0; i < mesh_count; i++) {
+      const Mesh& orig_mesh = power_line_pole.get_meshes()[i];
+      power_line_pole_invalid.add_mesh(orig_mesh, mat_invalid);
     }
   }
 

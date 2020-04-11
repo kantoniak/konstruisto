@@ -156,6 +156,9 @@ void MapState::update(std::chrono::milliseconds delta) {
 void MapState::render() {
   renderer.prepareFrame();
 
+  if (current_tool) {
+    this->current_tool->pre_render(renderer);
+  }
   renderer.renderWorld(*selection, current_brush, current_tool);
 
 #ifdef _DEBUG
@@ -439,6 +442,7 @@ geometry::Collidable::ptr MapState::selection_to_AABB(const input::Selection& se
 }
 
 void MapState::delete_collidables(const std::vector<geometry::Collidable::ptr>& collidables) noexcept {
+  // TODO(kantoniak): Allow for reuse with different tools
   for (auto& collidable : collidables) {
 
     if (collidable->get_user_data() != nullptr) {
@@ -593,10 +597,13 @@ void MapState::setCurrentAction(MapStateAction action) {
     break;
   case MapStateAction::PLACE_ZONE:
     break;
-  case MapStateAction::PLACE_POWER_LINES:
-    this->current_tool = std::make_shared<input::PowerLineTool>(engine.getWindowHandler(), world,
-                                                                renderer.get_model_manager(), geometry);
+  case MapStateAction::PLACE_POWER_LINES: {
+    auto tool_ptr = std::make_shared<input::PowerLineTool>(engine.getWindowHandler(), world,
+                                                           renderer.get_model_manager(), geometry, current_brush);
+    this->current_tool = tool_ptr;
+    this->current_brush = tool_ptr->get_brush_ptr();
     break;
+  }
   case MapStateAction::PLACE_ROAD:
     engine.getSettings().rendering.renderSelection = true;
     selection = std::make_unique<input::LineSelection>(1);

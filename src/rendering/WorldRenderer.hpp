@@ -16,7 +16,6 @@
 #include "../engine/Engine.hpp"
 #include "../input/Brush.hpp"
 #include "../input/Selection.hpp"
-#include "../input/Tool.hpp"
 #include "../input/WindowHandler.hpp"
 #include "../opengl/ArrayBuffer.hpp"
 #include "../opengl/ElementArrayBuffer.hpp"
@@ -35,6 +34,10 @@
 #include "SceneRenderer.hpp"
 #include "UI.hpp"
 #include "stb_image.h"
+
+namespace input {
+class Tool;
+}
 
 namespace rendering {
 

@@ -3,6 +3,12 @@
 
 newmtl power_line_pole
 Ns 0.05
-Ka 1.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Kd 0.00 0.00 0.00
+Ks 0.01 0.01 0.01
+
+newmtl power_line_pole_invalid
+Ns 0.05
+Ka 0.84 0.24 0.24
 Kd 0.00 0.00 0.00
 Ks 0.01 0.01 0.01
