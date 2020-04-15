@@ -36,7 +36,8 @@ bool UI::init() {
 
   if (!loadIcon(ICON_BUILDING, ICON_PATH_BUILDING) || !loadIcon(ICON_ZONES, ICON_PATH_ZONES) ||
       !loadIcon(ICON_ROAD, ICON_PATH_ROAD) || !loadIcon(ICON_BULDOZER, ICON_PATH_BULDOZER) ||
-      !loadIcon(ICON_MORE, ICON_PATH_MORE) || !loadIcon(ICON_NATURE, ICON_PATH_NATURE)) {
+      !loadIcon(ICON_MORE, ICON_PATH_MORE) || !loadIcon(ICON_NATURE, ICON_PATH_NATURE) ||
+      !loadIcon(ICON_ELECTRICITY, ICON_PATH_ELECTRICITY)) {
     return false;
   }
 

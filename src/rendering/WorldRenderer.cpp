@@ -570,7 +570,7 @@ void WorldRenderer::renderUI() {
     y += button_side;
     engine.getUI().renderIcon(UI::ICON_ZONES, x, y, UI::ICON_SIDE_24);
     y += button_side;
-    engine.getUI().renderIcon(UI::ICON_MORE, x, y, UI::ICON_SIDE_24);
+    engine.getUI().renderIcon(UI::ICON_ELECTRICITY, x, y, UI::ICON_SIDE_24);
     y += button_side;
     engine.getUI().renderIcon(UI::ICON_ROAD, x, y, UI::ICON_SIDE_24);
     y += button_side;

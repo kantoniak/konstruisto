@@ -54,6 +54,7 @@ public:
   static constexpr const unsigned int ICON_BULDOZER = 8;
   static constexpr const unsigned int ICON_ZONES = 9;
   static constexpr const unsigned int ICON_NATURE = 10;
+  static constexpr const unsigned int ICON_ELECTRICITY = 11;
 
   static constexpr const char* ICON_PATH_SPEED_0 = "assets/textures/ui/icons/speed-0.png";
   static constexpr const char* ICON_PATH_SPEED_1 = "assets/textures/ui/icons/speed-1.png";
@@ -65,6 +66,7 @@ public:
   static constexpr const char* ICON_PATH_BULDOZER = "assets/textures/ui/icons/buldozer.png";
   static constexpr const char* ICON_PATH_ZONES = "assets/textures/ui/icons/zones.png";
   static constexpr const char* ICON_PATH_NATURE = "assets/textures/ui/icons/nature.png";
+  static constexpr const char* ICON_PATH_ELECTRICITY = "assets/textures/ui/icons/electricity.png";
 
 protected:
   engine::Engine& engine;
