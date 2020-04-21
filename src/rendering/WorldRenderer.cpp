@@ -260,15 +260,17 @@ bool WorldRenderer::set_up_models() {
     }
   }
 
-  // Register red power line pole
-  const Model& power_line_pole = model_manager.get_model("power-line-pole");
-  Model& power_line_pole_invalid = model_manager.register_model("power-line-pole-invalid");
+  // Register invalid power line pole
   {
-    const Material& mat_invalid = model_manager.get_material("power_line_pole_invalid");
-    const size_t mesh_count = power_line_pole.get_meshes().size();
+    const Model& model = model_manager.get_model("power-line-pole");
+    Model& model_invalid = model_manager.register_model(model.get_name() + "-invalid");
+    const size_t mesh_count = model.get_meshes().size();
     for (size_t i = 0; i < mesh_count; i++) {
-      const Mesh& orig_mesh = power_line_pole.get_meshes()[i];
-      power_line_pole_invalid.add_mesh(orig_mesh, mat_invalid);
+      const Mesh& mesh = model.get_meshes()[i];
+      const Material& material = model.get_materials()[i];
+      std::string invalid_material_name = material.get_name() + "_invalid";
+      const Material& material_invalid = model_manager.get_material(invalid_material_name);
+      model_invalid.add_mesh(mesh, material_invalid);
     }
   }
 
