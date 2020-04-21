@@ -11,6 +11,8 @@ namespace geometry {
 
 class Circle : public Shape {
 public:
+  using ptr = std::shared_ptr<Circle>;
+
   Circle(float radius) noexcept;
   virtual ~Circle() = default;
 

@@ -2,7 +2,7 @@
 
 namespace input {
 
-const geometry::Circle::ptr PowerLineTool::pole_shape = std::make_shared<geometry::Circle>(.5f);
+const geometry::Circle::ptr PowerLineTool::pole_shape = std::make_shared<geometry::Circle>(.6f);
 const geometry::Collidable::layer_key PowerLineTool::pole_colliders = collides_with(data::CollisionLayer::POWER_LINES);
 
 const glm::vec4 PowerLineTool::BRUSH_COLOR_VALID_BASE = glm::vec4(1, 1, 0, 0.05f);
@@ -17,7 +17,7 @@ PowerLineTool::PowerLineTool(input::WindowHandler& window_handler, world::World&
       state_brush_ptr(current_brush) {
   this->pole_model = std::make_shared<rendering::Model>(model_manager.get_model("power-line-pole"));
   this->pole_model_invalid = std::make_shared<rendering::Model>(model_manager.get_model("power-line-pole-invalid"));
-  this->brush_ptr = std::make_shared<Brush>(glm::vec2(0, 0), 0.5f, 0.05f);
+  this->brush_ptr = std::make_shared<Brush>(glm::vec2(0, 0), pole_shape->get_radius(), 0.05f);
   this->mark_valid(true);
 }
 
