@@ -2,6 +2,7 @@
 #define DATA_POWERLINEPOLE_HPP
 
 #include <memory>
+#include <vector>
 
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
@@ -24,12 +25,20 @@ public:
   void set_translation(Position<float> position) noexcept;
   void set_rotation(float rotation) noexcept;
 
+  // TODO(kantoniak): Docs
+  [[nodiscard]] size_t get_cable_snapping_points_count() const noexcept;
+  [[nodiscard]] const std::vector<glm::vec3>& get_cable_snapping_points() const noexcept;
+
 private:
   Position<float> position;
 
   glm::mat4 translation;
   glm::mat4 rotation;
   glm::mat4 transform;
+
+  const std::vector<glm::vec3> cable_snapping_points;
+  const size_t snapping_points_count;
+  std::vector<glm::vec3> transformed_cable_snapping_points;
 
   void init_matrices() noexcept;
   void update_transform() noexcept;

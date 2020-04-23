@@ -435,7 +435,8 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
     for (const auto& cable_ptr : world.getMap().get_electricity_grid().get_cables()) {
       // TODO(kantoniak): Update cable transform when pole changes
       cable_ptr->update_transform();
-      transforms.push_back(cable_ptr->get_transform());
+      const auto& cable_transforms = cable_ptr->get_transforms();
+      transforms.insert(transforms.end(), cable_transforms.begin(), cable_transforms.end());
     }
 
     if (transforms.size() > 0) {

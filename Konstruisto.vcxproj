@@ -195,6 +195,7 @@
     <ClCompile Include="src\geometry\Collidable.cpp" />
     <ClCompile Include="src\geometry\CollisionSpace.cpp" />
     <ClCompile Include="src\geometry\CollisionTester.cpp" />
+    <ClCompile Include="src\geometry\utils.cpp" />
     <ClCompile Include="src\input\Brush.cpp" />
     <ClCompile Include="src\input\LineSelection.cpp" />
     <ClCompile Include="src\input\PowerLineTool.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="src\geometry\CollisionSpace.hpp" />
     <ClInclude Include="src\geometry\CollisionTester.hpp" />
     <ClInclude Include="src\geometry\Shape.hpp" />
+    <ClInclude Include="src\geometry\utils.hpp" />
     <ClInclude Include="src\input\Brush.hpp" />
     <ClInclude Include="src\input\callbacks.hpp" />
     <ClInclude Include="src\input\LineSelection.hpp" />

@@ -195,6 +195,9 @@
     <ClCompile Include="src\input\PowerLineTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\geometry\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glad\include\glad\gl.h">
@@ -423,6 +426,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\input\PowerLineTool.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

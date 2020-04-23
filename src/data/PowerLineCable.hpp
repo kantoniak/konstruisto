@@ -2,10 +2,12 @@
 #define DATA_POWERLINECABLE_HPP
 
 #include <memory>
+#include <vector>
 
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 
+#include "../geometry/utils.hpp"
 #include "PowerLinePole.hpp"
 
 namespace data {
@@ -19,13 +21,14 @@ public:
 
   void update_transform() noexcept;
 
-  [[nodiscard]] glm::mat4 get_transform() const noexcept;
+  [[nodiscard]] const std::vector<glm::mat4>& get_transforms() const noexcept;
 
 private:
   const PowerLinePole& pole_a;
   const PowerLinePole& pole_b;
 
-  glm::mat4 transform;
+  const size_t cable_count;
+  std::vector<glm::mat4> transforms;
 };
 }
 

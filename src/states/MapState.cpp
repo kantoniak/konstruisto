@@ -44,7 +44,7 @@ void MapState::init() {
   setCurrentAction(MapStateAction::PLACE_BUILDING);
 
   this->pole_a = std::make_shared<data::PowerLinePole>(glm::vec2(5, 5));
-  data::PowerLinePole::ptr pole_b = std::make_shared<data::PowerLinePole>(glm::vec2(5, 10));
+  this->pole_b = std::make_shared<data::PowerLinePole>(glm::vec2(5, 10));
   this->pole_c = std::make_shared<data::PowerLinePole>(glm::vec2(5, 15));
 
   world.getMap().add_power_pole(pole_a);
@@ -149,6 +149,9 @@ void MapState::update(std::chrono::milliseconds delta) {
   glm::vec2 pos_delta(cos(angle), sin(angle));
   pole_a->set_translation(glm::vec2(5, 5) + pos_delta * 2.f);
   pole_c->set_translation(glm::vec2(5, 15) + -pos_delta * 2.f);
+  float mid_angle = (fmod(world.getTimer().get_turn_number(), 24.f) / 24.f) * M_PI * 2.f;
+  pole_b->set_rotation(mid_angle);
+  pole_a->set_rotation(2 * M_PI - mid_angle);
 
   world.update(delta);
 };
