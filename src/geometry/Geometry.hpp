@@ -1,5 +1,5 @@
-#ifndef WORLD_GEOMETRY_HPP
-#define WORLD_GEOMETRY_HPP
+#ifndef GEOMETRY_GEOMETRY_HPP
+#define GEOMETRY_GEOMETRY_HPP
 
 #include <algorithm>
 #include <random>
