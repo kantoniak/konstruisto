@@ -110,6 +110,7 @@ protected:
   AssimpLoader assimp_loader;
   SceneRenderer renderer;
   bool set_up_models();
+  void register_invalid_model_variant(const std::string& model_name) noexcept;
 
   // Buildings
   opengl::ShaderProgram building_shader_prog;

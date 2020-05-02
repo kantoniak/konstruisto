@@ -54,6 +54,7 @@ public:
   [[nodiscard]] const data::ElectricityGrid& get_electricity_grid() const noexcept;
   void add_power_pole(data::PowerLinePole::ptr pole_ptr) noexcept;
   bool remove_power_pole(const data::PowerLinePole& pole) noexcept;
+  [[nodiscard]] data::PowerLinePole::ptr find_power_line_pole_ptr(const data::PowerLinePole& pole) noexcept;
 
   void add_power_cable(data::PowerLineCable::ptr cable_ptr) noexcept;
   bool remove_power_cable(const data::PowerLineCable& cable) noexcept;

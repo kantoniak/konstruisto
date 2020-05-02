@@ -21,6 +21,7 @@ public:
 
   [[nodiscard]] size_t get_pole_count() const noexcept;
   [[nodiscard]] const std::list<PowerLinePole::ptr>& get_poles() const noexcept;
+  [[nodiscard]] PowerLinePole::ptr find_pole_ptr(const PowerLinePole& pole) noexcept;
 
   // Cables
   void add_cable(PowerLineCable::ptr cable) noexcept;

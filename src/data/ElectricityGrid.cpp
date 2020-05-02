@@ -29,6 +29,16 @@ const std::list<PowerLinePole::ptr>& ElectricityGrid::get_poles() const noexcept
   return poles;
 }
 
+PowerLinePole::ptr ElectricityGrid::find_pole_ptr(const PowerLinePole& pole) noexcept {
+  auto found_it = std::find_if(poles.begin(), poles.end(), [&](PowerLinePole::ptr& ptr) { return *ptr == pole; });
+
+  if (found_it == poles.end()) {
+    return nullptr;
+  }
+
+  return *found_it;
+}
+
 void ElectricityGrid::add_cable(PowerLineCable::ptr cable) noexcept {
   cables.push_back(cable);
 }

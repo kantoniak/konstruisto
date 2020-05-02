@@ -260,22 +260,25 @@ bool WorldRenderer::set_up_models() {
     }
   }
 
-  // Register invalid power line pole
-  {
-    const Model& model = model_manager.get_model("power-line-pole");
-    Model& model_invalid = model_manager.register_model(model.get_name() + "-invalid");
-    const size_t mesh_count = model.get_meshes().size();
-    for (size_t i = 0; i < mesh_count; i++) {
-      const Mesh& mesh = model.get_meshes()[i];
-      const Material& material = model.get_materials()[i];
-      std::string invalid_material_name = material.get_name() + "_invalid";
-      const Material& material_invalid = model_manager.get_material(invalid_material_name);
-      model_invalid.add_mesh(mesh, material_invalid);
-    }
-  }
+  // Register invalid variants
+  register_invalid_model_variant("power-line-pole");
+  register_invalid_model_variant("power-line-cable");
 
   renderer.submit_static_models(model_manager);
   return true;
+}
+
+void WorldRenderer::register_invalid_model_variant(const std::string& model_name) noexcept {
+  const Model& model = model_manager.get_model(model_name);
+  Model& model_invalid = model_manager.register_model(model.get_name() + "-invalid");
+  const size_t mesh_count = model.get_meshes().size();
+  for (size_t i = 0; i < mesh_count; i++) {
+    const Mesh& mesh = model.get_meshes()[i];
+    const Material& material = model.get_materials()[i];
+    std::string invalid_material_name = material.get_name() + "_invalid";
+    const Material& material_invalid = model_manager.get_material(invalid_material_name);
+    model_invalid.add_mesh(mesh, material_invalid);
+  }
 }
 
 void WorldRenderer::cleanup() {

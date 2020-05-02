@@ -205,6 +205,10 @@ bool Map::remove_power_pole(const data::PowerLinePole& pole) noexcept {
   return electricity_grid.remove_pole(pole);
 }
 
+data::PowerLinePole::ptr Map::find_power_line_pole_ptr(const data::PowerLinePole& pole) noexcept {
+  return electricity_grid.find_pole_ptr(pole);
+}
+
 void Map::add_power_cable(data::PowerLineCable::ptr cable_ptr) noexcept {
   electricity_grid.add_cable(cable_ptr);
 }

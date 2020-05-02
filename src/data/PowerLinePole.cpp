@@ -14,6 +14,10 @@ bool PowerLinePole::operator==(const PowerLinePole& other) const noexcept {
   return other.position == position;
 }
 
+bool PowerLinePole::operator!=(const PowerLinePole& other) const noexcept {
+  return !(other.position == position);
+}
+
 Position<float> PowerLinePole::get_position() const noexcept {
   return position;
 }
@@ -28,8 +32,13 @@ void PowerLinePole::set_translation(Position<float> position) noexcept {
 }
 
 void PowerLinePole::set_rotation(float rotation) noexcept {
-  this->rotation = glm::rotate(glm::mat4(1), rotation, glm::vec3(0, 1, 0));
+  this->rotation_angle = rotation;
+  this->rotation = glm::rotate(glm::mat4(1), rotation_angle, glm::vec3(0, 1, 0));
   update_transform();
+}
+
+float PowerLinePole::get_rotation() const noexcept {
+  return this->rotation_angle;
 }
 
 size_t PowerLinePole::get_cable_snapping_points_count() const noexcept {
@@ -40,8 +49,17 @@ const std::vector<glm::vec3>& PowerLinePole::get_cable_snapping_points() const n
   return transformed_cable_snapping_points;
 }
 
+bool PowerLinePole::add_neighbor(PowerLinePole::ptr neighbor) noexcept {
+  return neighbors.insert(neighbor).second;
+}
+
+const std::set<PowerLinePole::ptr>& PowerLinePole::get_neigbors() const noexcept {
+  return neighbors;
+}
+
 void PowerLinePole::init_matrices() noexcept {
-  rotation = glm::mat4(1.0f);
+  this->rotation_angle = 0;
+  this->rotation = glm::mat4(1.0f);
   update_transform();
 }
 
