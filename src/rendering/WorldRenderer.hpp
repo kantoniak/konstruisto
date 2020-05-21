@@ -1,9 +1,11 @@
 #ifndef RENDERING_WORLDRENDERER_HPP
 #define RENDERING_WORLDRENDERER_HPP
 
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include <nanovg.h>
 
@@ -11,6 +13,7 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 
+#include "../data/CollisionLayer.hpp"
 #include "../data/RoadGraph.hpp"
 #include "../engine/DebugInfo.hpp"
 #include "../engine/Engine.hpp"
@@ -63,6 +66,8 @@ public:
 
   void renderWorld(const input::Selection& selection, const std::shared_ptr<input::Brush>& brush,
                    const std::shared_ptr<input::Tool>& tool);
+  void renderWorldDebug();
+  void flushWorld();
   void renderDebug();
 
   // TODO(kantoniak): Get rid of Renderer::renderUI() and  Renderer::renderDebugUI()

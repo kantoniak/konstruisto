@@ -165,8 +165,10 @@ void MapState::render() {
   renderer.renderWorld(*selection, current_brush, current_tool);
 
 #ifdef _DEBUG
+  renderer.renderWorldDebug();
   renderer.renderDebug();
 #endif
+  renderer.flushWorld();
   engine.getDebugInfo().onRenderWorldEnd();
 
   engine.getUI().startFrame();

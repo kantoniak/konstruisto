@@ -1,0 +1,29 @@
+newmtl debug_white
+Ns 0.00
+Ka 1.00 1.00 1.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+
+newmtl debug_red
+Ns 0.00
+Ka 1.00 0.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+
+newmtl debug_green
+Ns 0.00
+Ka 0.00 1.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+
+newmtl debug_blue
+Ns 0.00
+Ka 0.00 0.00 1.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+
+newmtl debug_yellow
+Ns 0.00
+Ka 1.00 1.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00

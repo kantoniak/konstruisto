@@ -239,7 +239,9 @@ bool WorldRenderer::set_up_models() {
   if (!assimp_loader.load_model_from_file("assets/models/tree.obj", "tree-green") ||
       !assimp_loader.load_model_from_file("assets/models/tree-2.obj", "tree-2") ||
       !assimp_loader.load_model_from_file("assets/models/power-line-pole.obj") ||
-      !assimp_loader.load_model_from_file("assets/models/power-line-cable.obj")) {
+      !assimp_loader.load_model_from_file("assets/models/power-line-cable.obj") ||
+      !assimp_loader.load_model_from_file("assets/models/debug-aabb.obj") ||
+      !assimp_loader.load_model_from_file("assets/models/debug-cylinder.obj")) {
     return false;
   }
 
@@ -451,7 +453,42 @@ void WorldRenderer::renderWorld(const input::Selection& selection, const std::sh
   if (tool) {
     tool->render(renderer);
   }
+}
 
+void WorldRenderer::renderWorldDebug() {
+  std::unordered_map<geometry::Collidable::layer_key, std::unordered_set<geometry::Collidable::ptr>> objects;
+  const auto& collidables = world.get_collision_space().get_collidables();
+  for (auto ptr : collidables) {
+    auto it = objects.find(ptr->get_layer_key());
+
+    if (it == objects.end()) {
+      objects[ptr->get_layer_key()] = std::unordered_set<geometry::Collidable::ptr>();
+    }
+
+     objects[ptr->get_layer_key()].insert(ptr);
+  }
+
+
+  const glm::mat4 identity(1.f);
+  std::for_each(objects.begin(), objects.end(), [this, &identity](const auto& pair) {
+    std::vector<glm::mat4> transforms;
+    const Model& model = this->model_manager.get_model("debug-cylinder");
+
+    for (const auto& collidable : pair.second) {
+      switch (pair.first) {
+        case data::CollisionLayer::TREES: {
+          const glm::vec2 translation = collidable->get_transform();
+          transforms.push_back(glm::translate(identity, glm::vec3(translation.x, 0, translation.y)));
+          break;
+        }
+      }
+    }
+
+    this->renderer.draw_instanced(model, transforms);
+  });
+}
+
+void WorldRenderer::flushWorld() {
   renderer.flush();
 }
 

@@ -22,6 +22,8 @@ public:
       noexcept;
   [[nodiscard]] std::vector<Collidable::ptr> find_colliding_with(const Collidable& collidable) const noexcept;
 
+  [[nodiscard]] const std::vector<Collidable::ptr>& get_collidables() const noexcept;
+
 private:
   std::vector<Collidable::ptr> collidables;
 

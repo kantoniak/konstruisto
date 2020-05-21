@@ -67,4 +67,8 @@ std::vector<Collidable::ptr> CollisionSpace::find_colliding_with(const Collidabl
                });
   return result;
 }
+
+const std::vector<Collidable::ptr>& CollisionSpace::get_collidables() const noexcept {
+  return collidables;
+}
 }
